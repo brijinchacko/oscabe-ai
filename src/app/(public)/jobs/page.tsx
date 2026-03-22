@@ -1,0 +1,288 @@
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+import {
+  Search,
+  MapPin,
+  Briefcase,
+  SlidersHorizontal,
+  X,
+} from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Switch } from "@/components/ui/switch";
+import { Separator } from "@/components/ui/separator";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { INDUSTRIES } from "@/lib/constants";
+
+const CONTRACT_TYPES = ["Permanent", "Contract", "Temp to Perm"];
+
+export default function JobsPage() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [location, setLocation] = useState("");
+  const [selectedContracts, setSelectedContracts] = useState<string[]>([]);
+  const [salaryMin, setSalaryMin] = useState("");
+  const [salaryMax, setSalaryMax] = useState("");
+  const [remoteOnly, setRemoteOnly] = useState(false);
+  const [industry, setIndustry] = useState("");
+  const [showFilters, setShowFilters] = useState(false);
+
+  function toggleContract(contract: string) {
+    setSelectedContracts((prev) =>
+      prev.includes(contract)
+        ? prev.filter((c) => c !== contract)
+        : [...prev, contract]
+    );
+  }
+
+  function clearFilters() {
+    setSearchQuery("");
+    setLocation("");
+    setSelectedContracts([]);
+    setSalaryMin("");
+    setSalaryMax("");
+    setRemoteOnly(false);
+    setIndustry("");
+  }
+
+  const hasActiveFilters =
+    searchQuery ||
+    location ||
+    selectedContracts.length > 0 ||
+    salaryMin ||
+    salaryMax ||
+    remoteOnly ||
+    industry;
+
+  const filterSidebar = (
+    <div className="space-y-6">
+      <div>
+        <Label htmlFor="filter-search" className="mb-2 text-sm font-semibold text-white">
+          Search
+        </Label>
+        <div className="relative">
+          <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
+          <Input
+            id="filter-search"
+            placeholder="Job title, skills..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-9 bg-white/[0.05] border-white/[0.1] text-white placeholder:text-gray-500 focus:border-[#4540DB] focus:ring-[#4540DB]/20"
+          />
+        </div>
+      </div>
+
+      <div>
+        <Label htmlFor="filter-location" className="mb-2 text-sm font-semibold text-white">
+          Location
+        </Label>
+        <div className="relative">
+          <MapPin className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
+          <Input
+            id="filter-location"
+            placeholder="City, region..."
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            className="pl-9 bg-white/[0.05] border-white/[0.1] text-white placeholder:text-gray-500 focus:border-[#4540DB] focus:ring-[#4540DB]/20"
+          />
+        </div>
+      </div>
+
+      <Separator className="bg-white/[0.08]" />
+
+      <div>
+        <p className="mb-3 text-sm font-semibold text-white">Contract Type</p>
+        <div className="space-y-2.5">
+          {CONTRACT_TYPES.map((type) => (
+            <label key={type} className="flex cursor-pointer items-center gap-2.5">
+              <Checkbox
+                checked={selectedContracts.includes(type)}
+                onCheckedChange={() => toggleContract(type)}
+                className="border-white/[0.2] data-[state=checked]:bg-[#4540DB] data-[state=checked]:border-[#4540DB]"
+              />
+              <span className="text-sm text-gray-400">{type}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      <Separator className="bg-white/[0.08]" />
+
+      <div>
+        <p className="mb-3 text-sm font-semibold text-white">Salary Range</p>
+        <div className="flex items-center gap-2">
+          <Input
+            placeholder="Min"
+            type="number"
+            value={salaryMin}
+            onChange={(e) => setSalaryMin(e.target.value)}
+            className="w-full bg-white/[0.05] border-white/[0.1] text-white placeholder:text-gray-500 focus:border-[#4540DB] focus:ring-[#4540DB]/20"
+          />
+          <span className="text-sm text-gray-500">-</span>
+          <Input
+            placeholder="Max"
+            type="number"
+            value={salaryMax}
+            onChange={(e) => setSalaryMax(e.target.value)}
+            className="w-full bg-white/[0.05] border-white/[0.1] text-white placeholder:text-gray-500 focus:border-[#4540DB] focus:ring-[#4540DB]/20"
+          />
+        </div>
+      </div>
+
+      <Separator className="bg-white/[0.08]" />
+
+      <div className="flex items-center justify-between">
+        <Label htmlFor="remote-toggle" className="text-sm font-semibold text-white">
+          Remote Only
+        </Label>
+        <Switch
+          id="remote-toggle"
+          checked={remoteOnly}
+          onCheckedChange={setRemoteOnly}
+        />
+      </div>
+
+      <Separator className="bg-white/[0.08]" />
+
+      <div>
+        <Label className="mb-2 text-sm font-semibold text-white">Industry</Label>
+        <Select value={industry} onValueChange={(v) => setIndustry(v ?? "")}>
+          <SelectTrigger className="w-full bg-white/[0.05] border-white/[0.1] text-white focus:border-[#4540DB] focus:ring-[#4540DB]/20">
+            <SelectValue placeholder="All industries" />
+          </SelectTrigger>
+          <SelectContent className="bg-[#0a0a2e] border-white/[0.1] text-white">
+            {INDUSTRIES.map((ind) => (
+              <SelectItem key={ind} value={ind} className="text-gray-300 focus:bg-white/[0.08] focus:text-white">
+                {ind}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {hasActiveFilters && (
+        <Button variant="outline" className="w-full border-white/[0.1] text-gray-300 hover:bg-white/[0.06] hover:text-white" onClick={clearFilters}>
+          <X className="mr-1.5 h-4 w-4" />
+          Clear All Filters
+        </Button>
+      )}
+    </div>
+  );
+
+  return (
+    <div className="bg-[#02012B]">
+      {/* Hero Banner */}
+      <section className="relative overflow-hidden py-16 sm:py-20">
+        {/* Grid pattern */}
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)",
+            backgroundSize: "60px 60px",
+          }}
+        />
+        {/* Gradient orbs */}
+        <div className="pointer-events-none absolute -left-40 -top-40 h-[500px] w-[500px] rounded-full bg-[#4540DB]/20 blur-[120px]" />
+        <div className="pointer-events-none absolute -right-40 bottom-0 h-[400px] w-[400px] rounded-full bg-[#00D4FF]/15 blur-[120px]" />
+
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
+            Browse Automation Jobs
+          </h1>
+          <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-400">
+            Find your next role in PLC, SCADA, Controls, Robotics, and more.
+          </p>
+          <div className="mx-auto mt-8 max-w-xl">
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-500" />
+              <input
+                type="text"
+                placeholder="Search jobs by title, skill, or keyword..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="h-12 w-full rounded-xl border border-white/[0.1] bg-white/[0.05] pl-12 pr-4 text-sm text-white shadow-lg backdrop-blur-sm placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#4540DB] focus:border-[#4540DB]"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Main Content */}
+      <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <div className="flex gap-8">
+          {/* Sidebar - Desktop */}
+          <aside className="hidden w-72 shrink-0 md:block">
+            <div className="sticky top-24 rounded-xl border border-white/[0.08] bg-white/[0.03] p-5 backdrop-blur-sm">
+              <h2 className="mb-4 text-base font-semibold text-white">Filters</h2>
+              {filterSidebar}
+            </div>
+          </aside>
+
+          {/* Mobile Filter Toggle */}
+          <div className="mb-4 md:hidden w-full">
+            <Button
+              variant="outline"
+              className="w-full border-white/[0.1] text-gray-300 hover:bg-white/[0.06] hover:text-white"
+              onClick={() => setShowFilters(!showFilters)}
+            >
+              <SlidersHorizontal className="mr-2 h-4 w-4" />
+              {showFilters ? "Hide Filters" : "Show Filters"}
+            </Button>
+            {showFilters && (
+              <div className="mt-4 rounded-xl border border-white/[0.08] bg-white/[0.03] p-5 backdrop-blur-sm">
+                {filterSidebar}
+              </div>
+            )}
+          </div>
+
+          {/* Job Cards Area */}
+          <div className="min-w-0 flex-1">
+            <div className="mb-6 flex items-center justify-between">
+              <p className="text-sm text-gray-500">0 jobs found</p>
+            </div>
+
+            {/* Empty State */}
+            <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-white/[0.1] bg-white/[0.02] py-20 text-center">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#4540DB]/15">
+                <Briefcase className="h-8 w-8 text-[#4540DB]" />
+              </div>
+              <h3 className="mt-4 text-lg font-semibold text-white">
+                No jobs posted yet
+              </h3>
+              <p className="mt-2 max-w-sm text-sm text-gray-500">
+                Check back soon! We are constantly adding new automation and
+                controls engineering roles.
+              </p>
+              <Link href="/candidates">
+                <Button className="mt-6 bg-[#4540DB] hover:bg-[#4540DB]/80 text-white shadow-lg shadow-[#4540DB]/25">
+                  Register Your Interest
+                </Button>
+              </Link>
+            </div>
+
+            {/* Pagination Placeholder */}
+            <div className="mt-8 flex items-center justify-center gap-2">
+              <Button variant="outline" size="sm" disabled className="border-white/[0.1] text-gray-500">
+                Previous
+              </Button>
+              <span className="px-3 py-1 text-sm text-gray-500">Page 1 of 1</span>
+              <Button variant="outline" size="sm" disabled className="border-white/[0.1] text-gray-500">
+                Next
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}

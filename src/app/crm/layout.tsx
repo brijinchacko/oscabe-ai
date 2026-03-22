@@ -1,0 +1,183 @@
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { UserButton, useUser } from "@clerk/nextjs";
+import { Logo } from "@/components/shared/logo";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  LayoutDashboard,
+  Building2,
+  Users,
+  Briefcase,
+  Award,
+  Mail,
+  Megaphone,
+  BarChart3,
+  Shield,
+  Settings,
+  Menu,
+  X,
+  Search,
+  Bell,
+  Plus,
+} from "lucide-react";
+
+const NAV_ITEMS = [
+  { label: "Dashboard", href: "/crm", icon: LayoutDashboard },
+  { label: "Clients", href: "/crm/clients", icon: Building2 },
+  { label: "Candidates", href: "/crm/candidates", icon: Users },
+  { label: "Jobs", href: "/crm/jobs", icon: Briefcase },
+  { label: "Placements", href: "/crm/placements", icon: Award },
+  { label: "Emails", href: "/crm/emails", icon: Mail },
+  { label: "Outreach", href: "/crm/outreach", icon: Megaphone },
+  { label: "Compliance", href: "/crm/compliance", icon: Shield },
+  { label: "Reports", href: "/crm/reports", icon: BarChart3 },
+  { label: "Settings", href: "/crm/settings", icon: Settings },
+];
+
+export default function CRMLayout({ children }: { children: React.ReactNode }) {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const pathname = usePathname();
+  const { user } = useUser();
+
+  function isActive(href: string) {
+    if (href === "/crm") return pathname === "/crm";
+    return pathname.startsWith(href);
+  }
+
+  const sidebar = (
+    <div className="flex h-full flex-col bg-[#0f172a] text-white">
+      {/* Logo */}
+      <div className="flex h-16 items-center px-5">
+        <Logo variant="light" size="sm" linkTo="/crm" />
+      </div>
+
+      {/* Navigation */}
+      <nav className="flex-1 space-y-1 px-3 py-4">
+        {NAV_ITEMS.map((item) => {
+          const active = isActive(item.href);
+          const Icon = item.icon;
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              onClick={() => setSidebarOpen(false)}
+              className={`flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-colors ${
+                active
+                  ? "border-l-2 border-indigo-400 bg-indigo-500/20 text-white"
+                  : "text-gray-400 hover:bg-white/5 hover:text-white"
+              }`}
+            >
+              <Icon className="size-5 shrink-0" />
+              {item.label}
+            </Link>
+          );
+        })}
+      </nav>
+
+      {/* User section */}
+      <div className="border-t border-white/10 p-4">
+        <div className="flex items-center gap-3">
+          <UserButton
+            appearance={{
+              elements: {
+                avatarBox: "size-9",
+              },
+            }}
+          />
+          {user && (
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-sm font-medium text-white">
+                {user.firstName} {user.lastName}
+              </p>
+              <p className="truncate text-xs text-gray-400">
+                {user.primaryEmailAddress?.emailAddress}
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="flex h-screen overflow-hidden">
+      {/* Mobile overlay */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      {/* Mobile sidebar */}
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 w-64 transform transition-transform duration-200 ease-in-out lg:hidden ${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <button
+          onClick={() => setSidebarOpen(false)}
+          className="absolute right-2 top-4 rounded-md p-1 text-gray-400 hover:text-white"
+        >
+          <X className="size-5" />
+        </button>
+        {sidebar}
+      </aside>
+
+      {/* Desktop sidebar */}
+      <aside className="hidden w-64 shrink-0 lg:block">{sidebar}</aside>
+
+      {/* Main area */}
+      <div className="flex flex-1 flex-col overflow-hidden">
+        {/* Top header bar */}
+        <header className="flex h-16 shrink-0 items-center gap-4 border-b border-gray-200 bg-white px-4 sm:px-6">
+          {/* Mobile hamburger */}
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className="rounded-md p-1.5 text-gray-500 hover:bg-gray-100 hover:text-gray-700 lg:hidden"
+          >
+            <Menu className="size-5" />
+          </button>
+
+          {/* Search */}
+          <div className="relative flex-1 max-w-md">
+            <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-gray-400" />
+            <Input
+              placeholder="Search candidates, clients, jobs..."
+              className="pl-9"
+            />
+          </div>
+
+          {/* Quick actions - hidden on mobile */}
+          <div className="hidden items-center gap-2 sm:flex">
+            <Button variant="outline" size="sm">
+              <Plus className="size-3.5" />
+              Client
+            </Button>
+            <Button variant="outline" size="sm">
+              <Plus className="size-3.5" />
+              Candidate
+            </Button>
+            <Button variant="outline" size="sm">
+              <Plus className="size-3.5" />
+              Job
+            </Button>
+          </div>
+
+          {/* Notification bell */}
+          <button className="relative rounded-md p-1.5 text-gray-500 hover:bg-gray-100 hover:text-gray-700">
+            <Bell className="size-5" />
+            <span className="absolute right-1 top-1 size-2 rounded-full bg-indigo-500" />
+          </button>
+        </header>
+
+        {/* Page content */}
+        <main className="flex-1 overflow-y-auto bg-gray-50 p-6">{children}</main>
+      </div>
+    </div>
+  );
+}
