@@ -38,7 +38,7 @@ export default function SignUpPage() {
 
       {!selectedPortal ? (
         <div className="relative z-10 w-full max-w-lg">
-          <div className="mb-8 text-center">
+          <div className="mb-8 flex flex-col items-center text-center">
             <Logo variant="light" size="lg" />
             <h1 className="mt-6 text-2xl font-extrabold text-white">Create Your Account</h1>
             <p className="mt-2 text-sm text-gray-400">Select how you want to use OSCABE</p>
@@ -72,7 +72,7 @@ export default function SignUpPage() {
         </div>
       ) : (
         <div className="relative z-10 w-full max-w-md">
-          <div className="mb-6 text-center">
+          <div className="mb-6 flex flex-col items-center text-center">
             <Logo variant="light" size="md" />
             <div className="mt-4 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-semibold uppercase tracking-wider" style={{ borderColor: `${accent}40`, background: `${accent}15`, color: accent }}>
               {(() => { const P = PORTALS.find((p) => p.id === selectedPortal); return P ? <P.icon className="h-3.5 w-3.5" /> : null; })()}

@@ -17,8 +17,10 @@ import {
   Gift,
   Mail,
   Megaphone,
+  CalendarCheck,
   BarChart3,
   Shield,
+  ShieldCheck,
   Settings,
   Menu,
   X,
@@ -32,6 +34,7 @@ const NAV_ITEMS = [
   { label: "Clients", href: "/crm/clients", icon: Building2 },
   { label: "Candidates", href: "/crm/candidates", icon: Users },
   { label: "Jobs", href: "/crm/jobs", icon: Briefcase },
+  { label: "Interviews", href: "/crm/interviews", icon: CalendarCheck },
   { label: "Placements", href: "/crm/placements", icon: Award },
   { label: "Referrals", href: "/crm/referrals", icon: Gift },
   { label: "Emails", href: "/crm/emails", icon: Mail },
@@ -39,6 +42,7 @@ const NAV_ITEMS = [
   { label: "Compliance", href: "/crm/compliance", icon: Shield },
   { label: "Reports", href: "/crm/reports", icon: BarChart3 },
   { label: "Settings", href: "/crm/settings", icon: Settings },
+  { label: "Admin", href: "/crm/admin", icon: ShieldCheck },
 ];
 
 export default function CRMLayout({ children }: { children: React.ReactNode }) {

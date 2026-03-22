@@ -30,6 +30,7 @@ model User {
   assignedJobs  Job[]       @relation("AssignedRecruiter")
   assignedClients Client[]  @relation("AssignedSales")
   referrals     Referral[]  @relation("UserReferrals")
+  interviewerInterviews Interview[] @relation("InterviewerInterviews")
 }
 
 model Employer {
@@ -135,6 +136,7 @@ model Candidate {
   applications    Application[]
   placements      Placement[]
   activities      Activity[]
+  interviews      Interview[]
 }
 
 // ======== SKILLS ONTOLOGY ========
@@ -208,6 +210,7 @@ model Job {
   applications    Application[]
   placements      Placement[]
   activities      Activity[]
+  interviews      Interview[]
 }
 
 model JobSkill {
@@ -242,6 +245,7 @@ model Application {
   updatedAt     DateTime @updatedAt
 
   activities    Activity[]
+  interviews    Interview[]
 
   @@unique([candidateId, jobId])
 }
@@ -620,4 +624,30 @@ model Referral {
   updatedAt       DateTime  @updatedAt
 
   referrer        User?     @relation("UserReferrals", fields: [referrerUserId], references: [id])
+}
+
+// ======== INTERVIEWS ========
+
+model Interview {
+  id              String    @id @default(cuid())
+  applicationId   String
+  application     Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  candidateId     String
+  candidate       Candidate @relation(fields: [candidateId], references: [id])
+  jobId           String
+  job             Job       @relation(fields: [jobId], references: [id])
+  interviewerId   String?
+  interviewer     User?     @relation("InterviewerInterviews", fields: [interviewerId], references: [id])
+  scheduledAt     DateTime
+  duration        Int       @default(60)
+  type            String    @default("PHONE")
+  location        String?
+  meetingLink     String?
+  notes           String?
+  feedback        String?
+  rating          Int?
+  status          String    @default("SCHEDULED")
+  completedAt     DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 }

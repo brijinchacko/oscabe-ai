@@ -18,7 +18,7 @@ const PORTALS: Array<{
   { id: "employer", label: "Employer", description: "Hire automation engineers", icon: Building2, color: "#4540DB" },
   { id: "candidate", label: "Candidate", description: "Find your next role", icon: UserCheck, color: "#00D4FF" },
   { id: "agency", label: "Agency", description: "Partner with OSCABE", icon: Handshake, color: "#8B5CF6" },
-  { id: "employee", label: "Employee", description: "OSCABE team member", icon: ShieldCheck, color: "#22C55E" },
+  { id: "employee", label: "Employee", description: "OSCABE/Wartens email only", icon: ShieldCheck, color: "#22C55E" },
 ];
 
 export default function SignInPage() {
@@ -39,7 +39,7 @@ export default function SignInPage() {
 
       {!selectedPortal ? (
         <div className="relative z-10 w-full max-w-lg">
-          <div className="mb-8 text-center">
+          <div className="mb-8 flex flex-col items-center text-center">
             <Logo variant="light" size="lg" />
             <h1 className="mt-6 text-2xl font-extrabold text-white">Sign In to OSCABE</h1>
             <p className="mt-2 text-sm text-gray-400">Select your portal to continue</p>
@@ -73,7 +73,7 @@ export default function SignInPage() {
         </div>
       ) : (
         <div className="relative z-10 w-full max-w-md">
-          <div className="mb-6 text-center">
+          <div className="mb-6 flex flex-col items-center text-center">
             <Logo variant="light" size="md" />
             <div className="mt-4 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-semibold uppercase tracking-wider" style={{ borderColor: `${accent}40`, background: `${accent}15`, color: accent }}>
               {(() => { const P = PORTALS.find((p) => p.id === selectedPortal); return P ? <P.icon className="h-3.5 w-3.5" /> : null; })()}

@@ -29,6 +29,20 @@ export async function POST(request: Request) {
 
     const { role, companyName, agencyName } = parsed.data;
 
+    // Restrict RECRUITER (Employee) role to @oscabe.com or @wartens.com emails
+    if (role === "RECRUITER" || role === "ADMIN") {
+      const clerkUser = await currentUser();
+      const email = clerkUser?.emailAddresses[0]?.emailAddress || "";
+      const allowedDomains = ["oscabe.com", "wartens.com"];
+      const emailDomain = email.split("@")[1]?.toLowerCase();
+      if (!emailDomain || !allowedDomains.includes(emailDomain)) {
+        return NextResponse.json(
+          { error: "Employee access is restricted to @oscabe.com and @wartens.com email addresses" },
+          { status: 403 }
+        );
+      }
+    }
+
     // Find or create user
     let user = await prisma.user.findFirst({
       where: { clerkId: userId },
