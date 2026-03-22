@@ -448,6 +448,97 @@ export default function HomePage() {
       </Section>
 
       {/* ============================================================ */}
+      {/*  BUSINESS MODEL HIGHLIGHTS                                   */}
+      {/* ============================================================ */}
+      <Section className="border-y border-white/[0.06] bg-white/[0.02] py-16 sm:py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-3xl text-center">
+            <h2 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
+              {mode === "employers" && "Flexible Hiring Models"}
+              {mode === "candidates" && "Your Career, Your Way"}
+              {mode === "agencies" && "Partnership Revenue Streams"}
+            </h2>
+            <p className="mt-3 text-base text-gray-400">
+              {mode === "employers" && "Choose the pricing model that works for your business."}
+              {mode === "candidates" && "Free to join, with premium options to accelerate your career."}
+              {mode === "agencies" && "Multiple ways to grow your revenue with OSCABE."}
+            </p>
+          </div>
+
+          {mode === "employers" && (
+            <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {[
+                { title: "Flat-Fee Shortlists", price: "From \u00A31,500", desc: "One-off shortlist of verified candidates" },
+                { title: "Subscriptions", price: "From \u00A3999/mo", desc: "Ongoing access to verified talent" },
+                { title: "Hybrid Retainer", price: "\u00A3999/mo + 8%", desc: "Retained search with reduced fee" },
+                { title: "Contingency", price: "12\u201318% on hire", desc: "Pay only when you hire" },
+              ].map((item) => (
+                <div
+                  key={item.title}
+                  className="group rounded-xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm p-5 transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.06]"
+                >
+                  <h3 className="text-sm font-bold text-white">{item.title}</h3>
+                  <p className="mt-1 text-lg font-extrabold" style={{ color: colors.primary }}>{item.price}</p>
+                  <p className="mt-1 text-xs text-gray-500">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {mode === "candidates" && (
+            <div className="mt-10 grid gap-4 sm:grid-cols-3">
+              {[
+                { title: "Free Registration", price: "Free", desc: "Get verified, access premium roles" },
+                { title: "Premium Membership", price: "\u00A39.99/month", desc: "Priority access + career intelligence" },
+                { title: "Refer & Earn", price: "\u00A3200", desc: "Per successful referral placement" },
+              ].map((item) => (
+                <div
+                  key={item.title}
+                  className="group rounded-xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm p-5 transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.06]"
+                >
+                  <h3 className="text-sm font-bold text-white">{item.title}</h3>
+                  <p className="mt-1 text-lg font-extrabold" style={{ color: colors.primary }}>{item.price}</p>
+                  <p className="mt-1 text-xs text-gray-500">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {mode === "agencies" && (
+            <div className="mt-10 grid gap-4 sm:grid-cols-3">
+              {[
+                { title: "OSCABE Verify", price: "From \u00A330/assessment", desc: "White-label skill verification" },
+                { title: "Split-Fee Network", price: "Collaborate & earn", desc: "Transparent split-fee placements" },
+                { title: "Talent Radar", price: "\u00A3499/month", desc: "Market intel and first-look access" },
+              ].map((item) => (
+                <div
+                  key={item.title}
+                  className="group rounded-xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm p-5 transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.06]"
+                >
+                  <h3 className="text-sm font-bold text-white">{item.title}</h3>
+                  <p className="mt-1 text-lg font-extrabold" style={{ color: colors.primary }}>{item.price}</p>
+                  <p className="mt-1 text-xs text-gray-500">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div className="mt-8 text-center">
+            <Link
+              href={mode === "employers" ? "/pricing" : mode === "candidates" ? "/candidates" : "/agencies"}
+              className="inline-flex items-center gap-1 text-sm font-semibold transition-colors hover:underline"
+              style={{ color: colors.primary }}
+            >
+              {mode === "employers" && "View All Pricing"}
+              {mode === "candidates" && "Learn More"}
+              {mode === "agencies" && "View Partnership Options"}
+              <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
+          </div>
+        </div>
+      </Section>
+
+      {/* ============================================================ */}
       {/*  ROLES WE RECRUIT                                            */}
       {/* ============================================================ */}
       <Section className="border-y border-white/[0.06] bg-white/[0.02] py-24">

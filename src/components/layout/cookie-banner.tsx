@@ -70,7 +70,7 @@ export function CookieBanner() {
             <Button
               variant="outline"
               size="sm"
-              className="border-[#4540DB]/50 text-white hover:bg-[#4540DB]/10 hover:border-[#4540DB]"
+              className="border-2 border-white/60 bg-transparent text-white font-semibold hover:bg-white/20 hover:border-white"
               onClick={() => saveConsent("essential")}
             >
               Essential Only

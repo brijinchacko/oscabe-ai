@@ -4,7 +4,7 @@ module.exports = {
     {
       name: "oscabe-ai",
       script: "node_modules/.bin/next",
-      args: "start",
+      args: "start -p 3012",
       cwd: "/home/deploy/oscabe-ai",
       instances: 1,
       autorestart: true,
@@ -12,6 +12,7 @@ module.exports = {
       max_memory_restart: "1G",
       env: {
         NODE_ENV: "production",
+        PORT: "3012",
       },
     },
 

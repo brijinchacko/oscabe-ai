@@ -7,6 +7,13 @@ import {
   TrendingUp,
   ArrowRight,
   CheckCircle,
+  FileText,
+  Headphones,
+  Crown,
+  GraduationCap,
+  Gift,
+  Sparkles,
+  BookOpen,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PLATFORMS } from "@/lib/constants";
@@ -173,6 +180,161 @@ export default function CandidatesPage() {
                 {platform}
               </span>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Premium Services */}
+      <section className="py-16 sm:py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-white sm:text-3xl">
+              Premium Services
+            </h2>
+            <p className="mx-auto mt-3 max-w-2xl text-gray-400">
+              Invest in your career with expert-led services designed for automation professionals.
+            </p>
+          </div>
+
+          <div className="mt-12 grid gap-6 sm:grid-cols-3">
+            {/* AI CV Review */}
+            <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm p-6 transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.06]">
+              <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-[#00D4FF]/15">
+                <FileText className="h-5 w-5 text-[#00D4FF]" />
+              </div>
+              <h3 className="text-lg font-semibold text-white">AI CV Review</h3>
+              <p className="mt-2 text-2xl font-bold text-[#00D4FF]">
+                &pound;50<span className="text-sm font-normal text-gray-400"> one-time</span>
+              </p>
+              <p className="mt-3 text-sm leading-relaxed text-gray-400">
+                Professional CV optimisation for automation roles. AI-powered analysis with expert review to make your experience shine.
+              </p>
+            </div>
+
+            {/* Interview Prep */}
+            <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm p-6 transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.06]">
+              <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-[#00D4FF]/15">
+                <Headphones className="h-5 w-5 text-[#00D4FF]" />
+              </div>
+              <h3 className="text-lg font-semibold text-white">Interview Prep</h3>
+              <p className="mt-2 text-2xl font-bold text-[#00D4FF]">
+                &pound;50<span className="text-sm font-normal text-gray-400">/session</span>
+              </p>
+              <p className="mt-3 text-sm leading-relaxed text-gray-400">
+                1-hour coaching session with an industry expert. Technical interview practice tailored to your target role and platform.
+              </p>
+            </div>
+
+            {/* Premium Membership */}
+            <div className="relative rounded-2xl border border-[#00D4FF]/30 bg-white/[0.03] backdrop-blur-sm p-6 transition-all duration-300 hover:border-[#00D4FF]/50 hover:bg-white/[0.06]">
+              <span className="absolute -top-3 right-6 rounded-full bg-[#00D4FF] px-3 py-1 text-xs font-semibold text-[#02012B]">
+                Best Value
+              </span>
+              <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-[#00D4FF]/15">
+                <Crown className="h-5 w-5 text-[#00D4FF]" />
+              </div>
+              <h3 className="text-lg font-semibold text-white">Premium Membership</h3>
+              <p className="mt-2 text-2xl font-bold text-[#00D4FF]">
+                &pound;9.99<span className="text-sm font-normal text-gray-400">/month</span>
+              </p>
+              <p className="mt-3 text-sm leading-relaxed text-gray-400">
+                Priority job alerts, career intelligence reports, and exclusive access to premium roles before they go public.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Upskill Your Career */}
+      <section className="border-y border-white/[0.06] overflow-hidden">
+        <div
+          className="py-16 sm:py-20"
+          style={{
+            background: "linear-gradient(135deg, rgba(0,212,255,0.08) 0%, rgba(139,92,246,0.08) 50%, rgba(0,212,255,0.04) 100%)",
+          }}
+        >
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="text-center">
+              <div className="flex items-center justify-center gap-2">
+                <h2 className="text-2xl font-bold text-white sm:text-3xl">
+                  Upskill Your Career
+                </h2>
+                <span className="rounded-full border border-[#8B5CF6]/30 bg-[#8B5CF6]/10 px-3 py-1 text-xs font-semibold text-[#8B5CF6]">
+                  Powered by Wartens
+                </span>
+              </div>
+              <p className="mx-auto mt-3 max-w-2xl text-gray-400">
+                Level up your skills with AI-powered learning and expert-led training programmes.
+              </p>
+            </div>
+
+            <div className="mt-12 grid gap-6 sm:grid-cols-3">
+              <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm p-6 text-center transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.06]">
+                <div className="mx-auto mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-[#8B5CF6]/15">
+                  <GraduationCap className="h-5 w-5 text-[#8B5CF6]" />
+                </div>
+                <h3 className="text-lg font-semibold text-white">Platform Cross-Training</h3>
+                <p className="mt-2 text-sm leading-relaxed text-gray-400">
+                  Learn a new PLC platform in 4 weeks. Structured programmes for Siemens, Rockwell, Schneider and more.
+                </p>
+              </div>
+
+              <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm p-6 text-center transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.06]">
+                <div className="mx-auto mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-[#8B5CF6]/15">
+                  <Sparkles className="h-5 w-5 text-[#8B5CF6]" />
+                </div>
+                <h3 className="text-lg font-semibold text-white">nxtED AI Learning</h3>
+                <p className="mt-2 text-2xl font-bold text-[#8B5CF6]">
+                  &pound;9.99<span className="text-sm font-normal text-gray-400">/month</span>
+                </p>
+                <p className="mt-2 text-sm leading-relaxed text-gray-400">
+                  AI-powered microlearning tailored to your skill gaps and career goals.
+                </p>
+              </div>
+
+              <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm p-6 text-center transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.06]">
+                <div className="mx-auto mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-[#8B5CF6]/15">
+                  <BookOpen className="h-5 w-5 text-[#8B5CF6]" />
+                </div>
+                <h3 className="text-lg font-semibold text-white">Pre-Placement Training</h3>
+                <p className="mt-2 text-sm leading-relaxed text-gray-400">
+                  Get trained on your new employer&apos;s exact stack before day one. Hit the ground running.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Refer & Earn */}
+      <section className="py-16 sm:py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div
+            className="rounded-2xl border border-[#22C55E]/20 bg-white/[0.03] backdrop-blur-sm p-8 sm:p-10"
+            style={{ boxShadow: "0 0 40px rgba(34,197,94,0.08)" }}
+          >
+            <div className="flex flex-col items-center gap-6 text-center sm:flex-row sm:text-left">
+              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-[#22C55E]/15">
+                <Gift className="h-8 w-8 text-[#22C55E]" />
+              </div>
+              <div className="flex-1">
+                <h2 className="text-2xl font-bold text-white sm:text-3xl">
+                  Refer &amp; Earn &pound;200
+                </h2>
+                <p className="mt-2 text-gray-400">
+                  Know a talented automation engineer? Refer them and earn &pound;200 for every successful placement.
+                </p>
+              </div>
+              <Link href="/refer">
+                <button
+                  className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-[#22C55E] px-8 py-3 text-sm font-bold text-white shadow-xl transition-all hover:scale-105"
+                  style={{ boxShadow: "0 0 30px rgba(34,197,94,0.4)" }}
+                >
+                  <Gift className="h-4 w-4" />
+                  Start Referring
+                </button>
+              </Link>
+            </div>
           </div>
         </div>
       </section>

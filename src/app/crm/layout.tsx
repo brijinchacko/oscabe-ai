@@ -7,12 +7,14 @@ import { UserButton, useUser } from "@clerk/nextjs";
 import { Logo } from "@/components/shared/logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { CRMAuthGuard } from "@/components/crm/crm-auth-guard";
 import {
   LayoutDashboard,
   Building2,
   Users,
   Briefcase,
   Award,
+  Gift,
   Mail,
   Megaphone,
   BarChart3,
@@ -31,6 +33,7 @@ const NAV_ITEMS = [
   { label: "Candidates", href: "/crm/candidates", icon: Users },
   { label: "Jobs", href: "/crm/jobs", icon: Briefcase },
   { label: "Placements", href: "/crm/placements", icon: Award },
+  { label: "Referrals", href: "/crm/referrals", icon: Gift },
   { label: "Emails", href: "/crm/emails", icon: Mail },
   { label: "Outreach", href: "/crm/outreach", icon: Megaphone },
   { label: "Compliance", href: "/crm/compliance", icon: Shield },
@@ -176,7 +179,9 @@ export default function CRMLayout({ children }: { children: React.ReactNode }) {
         </header>
 
         {/* Page content */}
-        <main className="flex-1 overflow-y-auto bg-gray-50 p-6">{children}</main>
+        <main className="flex-1 overflow-y-auto bg-gray-50 p-6">
+          <CRMAuthGuard>{children}</CRMAuthGuard>
+        </main>
       </div>
     </div>
   );

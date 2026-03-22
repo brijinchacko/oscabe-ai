@@ -190,40 +190,116 @@ export default function EmployersPage() {
         </div>
       </section>
 
-      {/* Pricing */}
+      {/* Choose Your Hiring Model */}
       <section className="border-y border-white/[0.06] bg-white/[0.02] py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-3xl text-center">
+          <div className="text-center">
             <h2 className="text-2xl font-bold text-white sm:text-3xl">
-              Pricing That Works
+              Choose Your Hiring Model
             </h2>
-            <p className="mt-4 text-gray-400">
-              We operate on a simple percentage-based fee, charged only on
-              successful placement. No upfront costs, no retainers, no hidden
-              charges. You only pay when we deliver.
+            <p className="mx-auto mt-3 max-w-2xl text-gray-400">
+              Flexible pricing that fits your hiring volume and budget. No hidden fees.
             </p>
-            <div className="mt-8 inline-flex items-center gap-3 rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm px-6 py-5">
-              <div className="flex flex-col items-start gap-3">
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="h-5 w-5 text-[#4540DB]" />
-                  <span className="font-medium text-white">
-                    No upfront costs
+          </div>
+
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              {
+                title: "Contingency",
+                label: "Traditional",
+                price: "12–18%",
+                unit: "of salary",
+                best: "Best for standard roles",
+                popular: false,
+                features: [
+                  "Pay only when you hire",
+                  "90-day replacement guarantee",
+                  "Chartered engineer screening",
+                ],
+              },
+              {
+                title: "Shortlist Packages",
+                label: "Flat-Fee",
+                price: "£1,500–£4,000",
+                unit: "per curated shortlist",
+                best: "Best for specific needs",
+                popular: true,
+                features: [
+                  "Pre-screened candidate shortlists",
+                  "48-hour priority delivery",
+                  "Technical assessment included",
+                ],
+              },
+              {
+                title: "Subscription",
+                label: "Ongoing Access",
+                price: "From £999",
+                unit: "/month",
+                best: "Best for volume hiring",
+                popular: false,
+                features: [
+                  "Continuous talent pipeline",
+                  "Dedicated account manager",
+                  "Priority candidate access",
+                ],
+              },
+              {
+                title: "Hybrid Retainer",
+                label: "Best Value",
+                price: "£999/mo + 8%",
+                unit: "on hires",
+                best: "Best for predictable hiring",
+                popular: false,
+                features: [
+                  "Lower total cost per hire",
+                  "Ongoing partnership model",
+                  "Strongest traction in 2026",
+                ],
+              },
+            ].map((model) => (
+              <div
+                key={model.title}
+                className={`relative flex flex-col rounded-2xl border p-6 backdrop-blur-sm transition-all hover:border-white/20 ${
+                  model.popular
+                    ? "border-[#4540DB]/40 bg-[#4540DB]/[0.06] shadow-lg shadow-[#4540DB]/10"
+                    : "border-white/[0.08] bg-white/[0.03]"
+                }`}
+              >
+                {model.popular && (
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-[#4540DB] px-3 py-1 text-xs font-bold text-white">
+                    Most Popular
                   </span>
+                )}
+                <p className="text-xs font-semibold uppercase tracking-wider text-[#00D4FF]">
+                  {model.label}
+                </p>
+                <h3 className="mt-1 text-lg font-semibold text-white">{model.title}</h3>
+                <div className="mt-3">
+                  <span className="text-2xl font-bold text-white">{model.price}</span>
+                  <span className="ml-1 text-sm text-gray-500">{model.unit}</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="h-5 w-5 text-[#4540DB]" />
-                  <span className="font-medium text-white">
-                    Percentage-based placement fee
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="h-5 w-5 text-[#4540DB]" />
-                  <span className="font-medium text-white">
-                    Rebate period included
-                  </span>
-                </div>
+                <p className="mt-2 text-xs font-medium text-[#4540DB]">{model.best}</p>
+                <ul className="mt-4 flex-1 space-y-3">
+                  {model.features.map((f) => (
+                    <li key={f} className="flex items-start gap-2 text-sm text-gray-300">
+                      <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-[#00D4FF]" />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  href="/pricing"
+                  className={`mt-6 flex items-center justify-center gap-2 rounded-lg px-4 py-3 text-center text-sm font-semibold transition-all ${
+                    model.popular
+                      ? "bg-[#4540DB] text-white shadow-lg shadow-[#4540DB]/30 hover:bg-[#3632b5]"
+                      : "border border-white/10 bg-white/5 text-white hover:bg-white/10"
+                  }`}
+                >
+                  Learn More
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>

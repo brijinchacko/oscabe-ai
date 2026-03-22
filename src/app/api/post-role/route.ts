@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { auth } from "@clerk/nextjs/server";
 
 export async function POST(req: NextRequest) {
   try {
@@ -53,6 +54,44 @@ export async function POST(req: NextRequest) {
         notes: `Posted by: ${contactName} (${email}${phone ? `, ${phone}` : ""})`,
       },
     });
+
+    // Link job to employer if user is authenticated
+    try {
+      const { userId: clerkId } = await auth();
+      if (clerkId) {
+        const user = await prisma.user.findUnique({
+          where: { clerkId },
+          include: { employer: true },
+        });
+        if (user?.employer) {
+          // Find or create a Client record for this employer's company
+          let client = await prisma.client.findFirst({
+            where: { companyName: user.employer.companyName },
+          });
+          if (!client) {
+            client = await prisma.client.create({
+              data: {
+                companyName: user.employer.companyName,
+                industry: user.employer.industry || null,
+                website: user.employer.website || null,
+                source: "EMPLOYER_PORTAL",
+                pipelineStage: "CLIENT",
+              },
+            });
+          }
+          // Update job with employer and client links
+          await prisma.job.update({
+            where: { id: job.id },
+            data: {
+              employerId: user.employer.id,
+              clientId: client.id,
+            },
+          });
+        }
+      }
+    } catch {
+      // Auth not available or linking failed — non-critical, continue
+    }
 
     // Store GDPR consent
     await prisma.gdprConsent.create({

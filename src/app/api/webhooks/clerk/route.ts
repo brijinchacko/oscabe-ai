@@ -56,8 +56,16 @@ export async function POST(req: NextRequest) {
           return NextResponse.json({ error: "Missing email" }, { status: 400 });
         }
 
-        await prisma.user.create({
-          data: {
+        await prisma.user.upsert({
+          where: { clerkId: data.id },
+          update: {
+            email,
+            firstName: data.first_name || null,
+            lastName: data.last_name || null,
+            avatarUrl: data.image_url || null,
+            phone: getPrimaryPhone(data),
+          },
+          create: {
             clerkId: data.id,
             email,
             firstName: data.first_name || null,

@@ -3,7 +3,12 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, Building2, Users, Handshake, ChevronDown } from "lucide-react";
+import {
+  Menu, Building2, Users, Handshake, ChevronDown,
+  LayoutDashboard, LogOut, User, Settings, Briefcase,
+  FileText, Gift,
+} from "lucide-react";
+import { useUser, useClerk } from "@clerk/nextjs";
 import { Logo } from "@/components/shared/logo";
 import { Button } from "@/components/ui/button";
 import {
@@ -31,6 +36,7 @@ const MODE_CONFIG: Record<SiteMode, {
       { label: "Home", href: "/" },
       { label: "How It Works", href: "/employers" },
       { label: "Post a Role", href: "/post-a-role" },
+      { label: "Pricing", href: "/pricing" },
       { label: "Jobs", href: "/jobs" },
       { label: "About", href: "/about" },
       { label: "Contact", href: "/contact" },
@@ -46,10 +52,12 @@ const MODE_CONFIG: Record<SiteMode, {
       { label: "Home", href: "/" },
       { label: "Why OSCABE", href: "/candidates" },
       { label: "Browse Jobs", href: "/jobs" },
+      { label: "Register", href: "/register" },
+      { label: "Refer & Earn", href: "/refer" },
       { label: "About", href: "/about" },
       { label: "Contact", href: "/contact" },
     ],
-    cta: { label: "Browse Jobs", href: "/jobs" },
+    cta: { label: "Register Now", href: "/register" },
   },
   agencies: {
     label: "For Agencies",
@@ -75,7 +83,10 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [modeMenuOpen, setModeMenuOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
 
+  const { isSignedIn, user } = useUser();
+  const { signOut } = useClerk();
   const config = MODE_CONFIG[mode];
 
   useEffect(() => {
@@ -84,13 +95,13 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close mode menu on outside click
+  // Close dropdowns on outside click
   useEffect(() => {
-    if (!modeMenuOpen) return;
-    const close = () => setModeMenuOpen(false);
+    if (!modeMenuOpen && !userMenuOpen) return;
+    const close = () => { setModeMenuOpen(false); setUserMenuOpen(false); };
     document.addEventListener("click", close);
     return () => document.removeEventListener("click", close);
-  }, [modeMenuOpen]);
+  }, [modeMenuOpen, userMenuOpen]);
 
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/";
@@ -118,7 +129,7 @@ export function Navbar() {
           {/* Mode selector dropdown */}
           <div className="relative">
             <button
-              onClick={(e) => { e.stopPropagation(); setModeMenuOpen(!modeMenuOpen); }}
+              onClick={(e) => { e.stopPropagation(); setModeMenuOpen(!modeMenuOpen); setUserMenuOpen(false); }}
               className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-wider transition-all hover:bg-white/10"
               style={{
                 borderColor: `${config.color}50`,
@@ -192,12 +203,93 @@ export function Navbar() {
 
         {/* Desktop right side */}
         <div className="hidden items-center gap-3 lg:flex">
-          <Link
-            href="/sign-in"
-            className="text-sm font-medium text-gray-400 transition-colors hover:text-white"
-          >
-            Sign In
-          </Link>
+          {isSignedIn ? (
+            <div className="relative">
+              <button
+                onClick={(e) => { e.stopPropagation(); setUserMenuOpen(!userMenuOpen); setModeMenuOpen(false); }}
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 transition-all hover:border-white/40 hover:bg-white/10"
+              >
+                {user?.imageUrl ? (
+                  <img src={user.imageUrl} alt="" className="h-8 w-8 rounded-full" />
+                ) : (
+                  <User className="h-4 w-4 text-gray-400" />
+                )}
+              </button>
+
+              {userMenuOpen && (
+                <div className="absolute right-0 top-full mt-2 w-64 rounded-xl border border-white/10 bg-[#02012B] p-2 shadow-2xl shadow-black/40">
+                  {/* User info header */}
+                  <div className="mb-2 rounded-lg bg-white/5 px-3 py-2.5">
+                    <p className="text-sm font-semibold text-white">
+                      {user?.fullName || "User"}
+                    </p>
+                    <p className="mt-0.5 text-[11px] text-gray-500">
+                      {user?.primaryEmailAddress?.emailAddress}
+                    </p>
+                  </div>
+
+                  {/* Menu items */}
+                  <Link
+                    href="/dashboard"
+                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-400 transition-all hover:bg-white/5 hover:text-white"
+                    onClick={() => setUserMenuOpen(false)}
+                  >
+                    <LayoutDashboard className="h-4 w-4" />
+                    Dashboard
+                  </Link>
+                  <Link
+                    href="/portal/candidate/profile"
+                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-400 transition-all hover:bg-white/5 hover:text-white"
+                    onClick={() => setUserMenuOpen(false)}
+                  >
+                    <FileText className="h-4 w-4" />
+                    My Profile
+                  </Link>
+                  <Link
+                    href="/portal/candidate/applications"
+                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-400 transition-all hover:bg-white/5 hover:text-white"
+                    onClick={() => setUserMenuOpen(false)}
+                  >
+                    <Briefcase className="h-4 w-4" />
+                    My Applications
+                  </Link>
+                  <Link
+                    href="/refer"
+                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-400 transition-all hover:bg-white/5 hover:text-white"
+                    onClick={() => setUserMenuOpen(false)}
+                  >
+                    <Gift className="h-4 w-4 text-emerald-400" />
+                    <span>Refer & Earn <span className="text-[10px] text-emerald-400">£200</span></span>
+                  </Link>
+
+                  <div className="my-1.5 h-px bg-white/10" />
+
+                  <Link
+                    href="/portal/candidate/settings"
+                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-400 transition-all hover:bg-white/5 hover:text-white"
+                    onClick={() => setUserMenuOpen(false)}
+                  >
+                    <Settings className="h-4 w-4" />
+                    Settings
+                  </Link>
+                  <button
+                    onClick={() => { setUserMenuOpen(false); signOut({ redirectUrl: "/" }); }}
+                    className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-red-400 transition-all hover:bg-red-500/10 hover:text-red-300"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    Sign Out
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <Link
+              href="/sign-in"
+              className="text-sm font-medium text-gray-400 transition-colors hover:text-white"
+            >
+              Sign In
+            </Link>
+          )}
           <Link href={config.cta.href}>
             <Button
               className="text-white shadow-lg transition-all hover:shadow-xl"
@@ -229,8 +321,27 @@ export function Navbar() {
                 </SheetTitle>
               </SheetHeader>
 
+              {/* Mobile user info */}
+              {isSignedIn && (
+                <div className="mt-4 rounded-lg bg-white/5 px-3 py-3">
+                  <div className="flex items-center gap-3">
+                    {user?.imageUrl ? (
+                      <img src={user.imageUrl} alt="" className="h-9 w-9 rounded-full" />
+                    ) : (
+                      <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-sm font-bold text-white">
+                        {user?.firstName?.[0] || "U"}
+                      </span>
+                    )}
+                    <div>
+                      <p className="text-sm font-semibold text-white">{user?.fullName || "User"}</p>
+                      <p className="text-[11px] text-gray-500">{user?.primaryEmailAddress?.emailAddress}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* Mobile mode selector */}
-              <div className="mt-6 flex gap-1 rounded-xl bg-white/5 p-1">
+              <div className="mt-4 flex gap-1 rounded-xl bg-white/5 p-1">
                 {MODES.map((m) => {
                   const mColor = MODE_CONFIG[m].color;
                   return (
@@ -250,7 +361,7 @@ export function Navbar() {
                 })}
               </div>
 
-              <div className="mt-6 flex flex-col gap-1">
+              <div className="mt-4 flex flex-col gap-1">
                 {config.nav.map((link) => (
                   <Link
                     key={link.href}
@@ -265,14 +376,42 @@ export function Navbar() {
                     {link.label}
                   </Link>
                 ))}
-                <div className="my-4 h-px bg-white/10" />
-                <Link
-                  href="/sign-in"
-                  className="block rounded-lg px-3 py-2.5 text-sm font-medium text-gray-400 hover:bg-white/5 hover:text-white"
-                  onClick={() => setOpen(false)}
-                >
-                  Sign In
-                </Link>
+                <div className="my-3 h-px bg-white/10" />
+                {isSignedIn ? (
+                  <>
+                    <Link
+                      href="/dashboard"
+                      className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-400 hover:bg-white/5 hover:text-white"
+                      onClick={() => setOpen(false)}
+                    >
+                      <LayoutDashboard className="h-4 w-4" />
+                      Dashboard
+                    </Link>
+                    <Link
+                      href="/refer"
+                      className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium text-emerald-400 hover:bg-emerald-500/10"
+                      onClick={() => setOpen(false)}
+                    >
+                      <Gift className="h-4 w-4" />
+                      Refer & Earn £200
+                    </Link>
+                    <button
+                      onClick={() => { setOpen(false); signOut({ redirectUrl: "/" }); }}
+                      className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium text-red-400 hover:bg-red-500/10 hover:text-red-300"
+                    >
+                      <LogOut className="h-4 w-4" />
+                      Sign Out
+                    </button>
+                  </>
+                ) : (
+                  <Link
+                    href="/sign-in"
+                    className="block rounded-lg px-3 py-2.5 text-sm font-medium text-gray-400 hover:bg-white/5 hover:text-white"
+                    onClick={() => setOpen(false)}
+                  >
+                    Sign In
+                  </Link>
+                )}
                 <Link
                   href={config.cta.href}
                   className="mt-2 block w-full rounded-lg px-3 py-3 text-center text-sm font-semibold text-white transition-all"

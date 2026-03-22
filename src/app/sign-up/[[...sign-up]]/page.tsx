@@ -1,37 +1,102 @@
+"use client";
+
+import { useState } from "react";
 import { SignUp } from "@clerk/nextjs";
+import { dark } from "@clerk/themes";
+import { Building2, UserCheck, Handshake, ShieldCheck, type LucideIcon } from "lucide-react";
+import { Logo } from "@/components/shared/logo";
+
+type PortalType = "employer" | "candidate" | "agency" | "employee";
+
+const PORTALS: Array<{
+  id: PortalType;
+  label: string;
+  description: string;
+  icon: LucideIcon;
+  color: string;
+}> = [
+  { id: "employer", label: "Employer", description: "Hire automation engineers", icon: Building2, color: "#4540DB" },
+  { id: "candidate", label: "Candidate", description: "Find your next role", icon: UserCheck, color: "#00D4FF" },
+  { id: "agency", label: "Agency", description: "Partner with OSCABE", icon: Handshake, color: "#8B5CF6" },
+  { id: "employee", label: "Employee", description: "OSCABE team member", icon: ShieldCheck, color: "#22C55E" },
+];
 
 export default function SignUpPage() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-[#02012B] relative overflow-hidden">
-      <div className="pointer-events-none absolute -top-40 -left-40 h-[500px] w-[500px] rounded-full bg-[#4540DB]/15 blur-[120px]" />
-      <div className="pointer-events-none absolute -bottom-40 -right-40 h-[400px] w-[400px] rounded-full bg-[#00D4FF]/10 blur-[120px]" />
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage: "linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
-        }}
-      />
+  const [selectedPortal, setSelectedPortal] = useState<PortalType | null>(null);
 
-      <SignUp
-        appearance={{
-          elements: {
-            rootBox: "relative z-10",
-            card: "shadow-2xl shadow-black/40 border border-white/[0.08] bg-[#0a0a2e]",
-            headerTitle: "text-white",
-            headerSubtitle: "text-gray-400",
-            formButtonPrimary: "bg-[#4540DB] hover:bg-[#4540DB]/80 shadow-lg shadow-[#4540DB]/25",
-            formFieldInput: "bg-white/[0.05] border-white/[0.1] text-white",
-            formFieldLabel: "text-gray-300",
-            footerActionLink: "text-[#00D4FF] hover:text-[#4540DB]",
-            dividerLine: "bg-white/[0.1]",
-            dividerText: "text-gray-500",
-            socialButtonsBlockButton: "border-white/[0.1] bg-white/[0.05] text-white hover:bg-white/[0.1]",
-            socialButtonsBlockButtonText: "text-gray-300",
-          },
-        }}
-        forceRedirectUrl="/crm"
-      />
+  const accent = PORTALS.find((p) => p.id === selectedPortal)?.color || "#4540DB";
+
+  function handleSelect(portalId: PortalType) {
+    setSelectedPortal(portalId);
+    localStorage.setItem("oscabe-portal-selection", portalId);
+  }
+
+  return (
+    <div className="flex min-h-screen flex-col items-center justify-center bg-[#02012B] relative overflow-hidden px-4">
+      <div className="pointer-events-none absolute -top-40 -left-40 h-[500px] w-[500px] rounded-full blur-[120px]" style={{ background: `${accent}15` }} />
+      <div className="pointer-events-none absolute -bottom-40 -right-40 h-[400px] w-[400px] rounded-full bg-[#00D4FF]/10 blur-[120px]" />
+
+      {!selectedPortal ? (
+        <div className="relative z-10 w-full max-w-lg">
+          <div className="mb-8 text-center">
+            <Logo variant="light" size="lg" />
+            <h1 className="mt-6 text-2xl font-extrabold text-white">Create Your Account</h1>
+            <p className="mt-2 text-sm text-gray-400">Select how you want to use OSCABE</p>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            {PORTALS.map((portal) => (
+              <button
+                key={portal.id}
+                onClick={() => handleSelect(portal.id)}
+                className="group flex flex-col items-center gap-3 rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 text-center backdrop-blur-sm transition-all duration-200 hover:border-white/[0.2] hover:bg-white/[0.06]"
+              >
+                <div
+                  className="flex h-12 w-12 items-center justify-center rounded-xl transition-transform group-hover:scale-110"
+                  style={{ background: `${portal.color}20` }}
+                >
+                  <portal.icon className="h-6 w-6" style={{ color: portal.color }} />
+                </div>
+                <div>
+                  <p className="font-bold text-white">{portal.label}</p>
+                  <p className="mt-0.5 text-[11px] text-gray-500">{portal.description}</p>
+                </div>
+              </button>
+            ))}
+          </div>
+
+          <p className="mt-6 text-center text-xs text-gray-600">
+            Already have an account?{" "}
+            <a href="/sign-in" className="text-[#00D4FF] hover:underline">Sign in</a>
+          </p>
+        </div>
+      ) : (
+        <div className="relative z-10 w-full max-w-md">
+          <div className="mb-6 text-center">
+            <Logo variant="light" size="md" />
+            <div className="mt-4 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-semibold uppercase tracking-wider" style={{ borderColor: `${accent}40`, background: `${accent}15`, color: accent }}>
+              {(() => { const P = PORTALS.find((p) => p.id === selectedPortal); return P ? <P.icon className="h-3.5 w-3.5" /> : null; })()}
+              {PORTALS.find((p) => p.id === selectedPortal)?.label} Portal
+            </div>
+          </div>
+
+          <SignUp
+            appearance={{
+              baseTheme: dark,
+              variables: { colorPrimary: accent, borderRadius: "0.75rem" },
+              elements: { card: "shadow-2xl border border-white/10 bg-[#0a0a2e]" },
+            }}
+            forceRedirectUrl="/dashboard"
+          />
+
+          <button
+            onClick={() => setSelectedPortal(null)}
+            className="mt-4 block w-full text-center text-sm text-gray-500 hover:text-white transition-colors"
+          >
+            Back to portal selection
+          </button>
+        </div>
+      )}
     </div>
   );
 }

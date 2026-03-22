@@ -29,6 +29,7 @@ model User {
   emailsSent    EmailLog[]
   assignedJobs  Job[]       @relation("AssignedRecruiter")
   assignedClients Client[]  @relation("AssignedSales")
+  referrals     Referral[]  @relation("UserReferrals")
 }
 
 model Employer {
@@ -39,6 +40,7 @@ model Employer {
   industry  String?
   website   String?
   createdAt DateTime @default(now())
+  jobs      Job[]    @relation("EmployerJobs")
 }
 
 model Agency {
@@ -174,6 +176,8 @@ model Job {
   id              String   @id @default(cuid())
   clientId        String?
   client          Client?  @relation(fields: [clientId], references: [id])
+  employerId      String?
+  employer        Employer? @relation("EmployerJobs", fields: [employerId], references: [id])
   title           String
   description     String
   location        String?
@@ -591,4 +595,29 @@ model OutreachMetric {
   createdAt       DateTime @default(now())
 
   @@unique([date, campaignId])
+}
+
+// ======== REFERRALS ========
+
+model Referral {
+  id              String    @id @default(cuid())
+  referrerUserId  String?
+  referrerName    String
+  referrerEmail   String
+  referrerPhone   String?
+  candidateName   String
+  candidateEmail  String
+  candidatePhone  String?
+  candidateRole   String?
+  candidateSkills String?
+  notes           String?
+  referralCode    String    @unique
+  status          String    @default("PENDING")
+  rewardAmount    Int       @default(20000)
+  rewardPaid      Boolean   @default(false)
+  rewardPaidAt    DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  referrer        User?     @relation("UserReferrals", fields: [referrerUserId], references: [id])
 }
