@@ -31,13 +31,6 @@ const LEGAL_LINKS = [
   { label: "GDPR Rights", href: "/gdpr" },
 ];
 
-const INDUSTRY_LINKS = [
-  { label: "Engineering Council UK", href: "https://www.engc.org.uk/" },
-  { label: "IEC Standards", href: "https://www.iec.ch/" },
-  { label: "Make UK", href: "https://www.makeuk.org/" },
-  { label: "GAMBICA", href: "https://www.gambica.org.uk/" },
-  { label: "British Automation & Robot Association", href: "https://www.bara.org.uk/" },
-];
 
 const SOCIAL_ICONS = [
   { icon: Linkedin, href: SOCIAL_LINKS?.linkedin || "#", label: "LinkedIn" },
@@ -142,26 +135,6 @@ export function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
-        </div>
-
-        {/* Industry Partners & Standards */}
-        <div className="mt-10">
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500">
-            Industry Partners &amp; Standards
-          </h3>
-          <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2">
-            {INDUSTRY_LINKS.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-xs text-gray-500 transition-colors hover:text-gray-300"
-              >
-                {link.label}
-              </a>
-            ))}
           </div>
         </div>
 

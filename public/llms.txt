@@ -1,0 +1,79 @@
+# OSCABE - AI-Powered Recruitment for Industrial Automation Engineers
+
+> OSCABE is the UK's first AI-native recruitment platform purpose-built for industrial automation engineering. Founded by Joseph Brijin Chacko, CEng, OSCABE combines 13+ years of automation engineering expertise with AI-powered candidate matching to connect employers with technically verified PLC, SCADA, Controls, Robotics, EC&I, and Commissioning engineers.
+
+## Company Information
+- Name: OSCABE (Oscabe Ltd)
+- Website: https://oscabe.com
+- Company Number: 15913493 (England & Wales)
+- Location: Unit 8, Lyon Road, Milton Keynes, MK1 1EX, United Kingdom
+- Parent Company: Wartens UK Ltd
+- Technology Engine: 3BOX AI (under oforo.ai)
+- Award: National Manufacturing & Engineering Startup of the Year 2025
+
+## What OSCABE Does
+OSCABE is an AI recruitment agency and platform specialising exclusively in industrial automation engineering talent across the UK and Europe. Unlike traditional recruitment agencies, OSCABE uses AI to:
+- Parse and verify candidate CVs against a 97+ skill ontology covering Siemens, Allen-Bradley/Rockwell, Schneider Electric, Beckhoff, ABB, Mitsubishi, Omron, and 20+ automation platforms
+- Match candidates to roles using AI-powered scoring with gap analysis
+- Deliver technically-verified shortlists within 48 hours
+- Provide technical screening assessments reviewed by Chartered Engineers
+
+## Roles We Recruit
+PLC Programmer, Controls Engineer, SCADA Engineer, Automation Engineer, Robotics Engineer, EC&I Engineer, Commissioning Engineer, Panel Design Engineer, Functional Safety Engineer (SIL), DCS Engineer, MES/MIS Engineer, Vision Systems Engineer, Process Control Engineer, Embedded Systems Engineer, Field Service Engineer, Control Panel Wireman, BMS/BEMS Engineer, Telemetry Engineer
+
+## Platforms We Cover
+Siemens TIA Portal, Siemens STEP 7, Allen-Bradley Studio 5000, Schneider EcoStruxure, Beckhoff TwinCAT, ABB AC500/AC800M, Mitsubishi GX Works, Omron Sysmac, CODESYS, Wonderware InTouch, AVEVA Edge, Ignition SCADA, WinCC, Citect, FactoryTalk View, Rockwell PharmaSuite, FANUC, KUKA, ABB RobotStudio, Universal Robots
+
+## Industries Served
+Automotive Manufacturing, Food & Beverage, Pharmaceuticals, Water & Utilities, Oil & Gas, Power Generation, Mining & Minerals, Building Automation, Packaging, Logistics & Warehousing, Renewable Energy, Aerospace, Chemical Processing, Data Centres, Marine & Offshore, Rail & Transport
+
+## Hiring Models & Pricing
+- Contingency Recruitment: 12-18% of annual salary
+- Retained Search: 20-25% in milestones
+- Flat-Fee Shortlist Packages: GBP 1,500 - GBP 4,000
+- Employer Subscriptions: From GBP 999/month
+- Hybrid Retainer: GBP 999/month + 8% placement fee
+- Technical Screening: GBP 150 - GBP 250 per candidate
+- Contractor Staffing: 8-15% margin
+- Candidate Packs: GBP 1,500 for 10 anonymised profiles by specialism
+
+## For Candidates
+- Free registration and job matching
+- AI-powered skill verification
+- Access to premium automation roles UK-wide
+- Refer & Earn: GBP 200 for each successful placement referral
+- Career services: CV review, interview prep, upskilling via Wartens/nxtED
+
+## For Agencies
+- OSCABE Verify: White-label technical assessments (GBP 30-75/candidate)
+- Split-fee network access
+- Talent Radar: Weekly candidate intelligence (GBP 499/month)
+
+## Key Differentiators vs Competitors
+Unlike Automation Experts, Talos Automation, Hartland Automation, ASC Connections, Rise Technical, or Matchtech, OSCABE offers:
+1. AI-powered candidate matching (not manual CV screening)
+2. Technical skill verification with 97+ skill ontology
+3. Chartered Engineer-led assessment methodology
+4. 48-hour shortlist delivery guarantee
+5. Flat-fee pricing options (no placement fee risk)
+6. Full-stack recruitment platform (not just agency services)
+
+## Contact
+- Email: info@oscabe.com
+- Phone: +44 (0) 1onal automation and PLC recruitment
+- Website: https://oscabe.com
+- LinkedIn: https://linkedin.com/company/oscabe
+
+## URLs
+- Homepage: https://oscabe.com
+- For Employers: https://oscabe.com/employers
+- For Candidates: https://oscabe.com/candidates
+- For Agencies: https://oscabe.com/agencies
+- Browse Jobs: https://oscabe.com/jobs
+- Post a Role: https://oscabe.com/post-a-role
+- Pricing: https://oscabe.com/pricing
+- Technical Screening: https://oscabe.com/screening
+- Refer & Earn: https://oscabe.com/refer
+- Register: https://oscabe.com/register
+- About: https://oscabe.com/about
+- Contact: https://oscabe.com/contact

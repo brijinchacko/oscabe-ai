@@ -72,27 +72,26 @@ export default function SignInPage() {
           </p>
         </div>
       ) : (
-        <div className="relative z-10 w-full max-w-md">
-          <div className="mb-6 flex flex-col items-center text-center">
-            <Logo variant="light" size="md" />
-            <div className="mt-4 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-semibold uppercase tracking-wider" style={{ borderColor: `${accent}40`, background: `${accent}15`, color: accent }}>
-              {(() => { const P = PORTALS.find((p) => p.id === selectedPortal); return P ? <P.icon className="h-3.5 w-3.5" /> : null; })()}
-              {PORTALS.find((p) => p.id === selectedPortal)?.label} Portal
-            </div>
+        <div className="relative z-10 flex w-full max-w-md flex-col items-center">
+          <Logo variant="light" size="md" />
+          <div className="mt-4 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-semibold uppercase tracking-wider" style={{ borderColor: `${accent}40`, background: `${accent}15`, color: accent }}>
+            {(() => { const P = PORTALS.find((p) => p.id === selectedPortal); return P ? <P.icon className="h-3.5 w-3.5" /> : null; })()}
+            {PORTALS.find((p) => p.id === selectedPortal)?.label} Portal
           </div>
 
-          <SignIn
-            appearance={{
-              baseTheme: dark,
-              variables: { colorPrimary: accent, borderRadius: "0.75rem" },
-              elements: { card: "shadow-2xl border border-white/10 bg-[#0a0a2e]" },
-            }}
-            forceRedirectUrl="/dashboard"
-          />
+          <div className="mt-6 flex w-full justify-center [&_.cl-card]:border [&_.cl-card]:border-white/10 [&_.cl-card]:bg-[#0a0a2e] [&_.cl-card]:shadow-2xl">
+            <SignIn
+              appearance={{
+                baseTheme: dark,
+                variables: { colorPrimary: accent, borderRadius: "0.75rem" },
+              }}
+              forceRedirectUrl="/dashboard"
+            />
+          </div>
 
           <button
             onClick={() => setSelectedPortal(null)}
-            className="mt-4 block w-full text-center text-sm text-gray-500 hover:text-white transition-colors"
+            className="mt-4 text-center text-sm text-gray-500 hover:text-white transition-colors"
           >
             Back to portal selection
           </button>
