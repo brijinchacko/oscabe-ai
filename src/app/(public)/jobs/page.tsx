@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   Search,
   MapPin,
@@ -179,9 +180,21 @@ export default function JobsPage() {
   );
 
   return (
-    <div className="bg-[#02012B]">
+    <div className="bg-[#010118]">
       {/* Hero Banner */}
       <section className="relative overflow-hidden py-16 sm:py-20">
+        {/* Hero background image */}
+        <div className="absolute inset-0">
+          <Image
+            src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=1920&h=800&fit=crop"
+            alt="Professional working on laptop searching for career opportunities"
+            fill
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-[#010118]/85" />
+        </div>
+
         {/* Grid pattern */}
         <div
           className="pointer-events-none absolute inset-0 opacity-[0.03]"

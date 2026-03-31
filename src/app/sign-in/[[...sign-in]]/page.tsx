@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { SignIn } from "@clerk/nextjs";
-import { dark } from "@clerk/themes";
+import { signIn } from "next-auth/react";
 import { Building2, UserCheck, Handshake, ShieldCheck, type LucideIcon } from "lucide-react";
 import { Logo } from "@/components/shared/logo";
 
@@ -23,13 +22,33 @@ const PORTALS: Array<{
 
 export default function SignInPage() {
   const [selectedPortal, setSelectedPortal] = useState<PortalType | null>(null);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const accent = PORTALS.find((p) => p.id === selectedPortal)?.color || "#4540DB";
 
   function handleSelect(portalId: PortalType) {
     setSelectedPortal(portalId);
-    // Store selection so dashboard can auto-onboard
     localStorage.setItem("oscabe-portal-selection", portalId);
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    try {
+      await signIn("credentials", {
+        email,
+        password,
+        redirectTo: "/dashboard",
+      });
+    } catch (err: unknown) {
+      setError("Invalid email or password.");
+      setLoading(false);
+    }
   }
 
   return (
@@ -79,15 +98,51 @@ export default function SignInPage() {
             {PORTALS.find((p) => p.id === selectedPortal)?.label} Portal
           </div>
 
-          <div className="mt-6 flex w-full justify-center [&_.cl-card]:border [&_.cl-card]:border-white/10 [&_.cl-card]:bg-[#0a0a2e] [&_.cl-card]:shadow-2xl">
-            <SignIn
-              appearance={{
-                baseTheme: dark,
-                variables: { colorPrimary: accent, borderRadius: "0.75rem" },
-              }}
-              forceRedirectUrl="/dashboard"
-            />
-          </div>
+          <form onSubmit={handleSubmit} className="mt-6 w-full space-y-4 rounded-2xl border border-white/10 bg-[#0a0a2e] p-6 shadow-2xl">
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-300">Email</label>
+              <input
+                id="email"
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="mt-1 block w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-gray-500 outline-none focus:border-white/30 focus:ring-1 focus:ring-white/20"
+                placeholder="you@example.com"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-300">Password</label>
+              <input
+                id="password"
+                type="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="mt-1 block w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-gray-500 outline-none focus:border-white/30 focus:ring-1 focus:ring-white/20"
+                placeholder="Your password"
+              />
+            </div>
+
+            {error && (
+              <p className="text-sm text-red-400">{error}</p>
+            )}
+
+            <button
+              type="submit"
+              disabled={loading}
+              className={`w-full rounded-lg py-2.5 text-sm font-semibold text-white transition-all ${loading ? "opacity-60 cursor-not-allowed" : "hover:opacity-90"}`}
+              style={{ background: accent }}
+            >
+              {loading ? "Signing in..." : "Sign In"}
+            </button>
+
+            <p className="text-center text-xs text-gray-500">
+              Don&apos;t have an account?{" "}
+              <a href="/sign-up" className="text-[#00D4FF] hover:underline">Sign up</a>
+            </p>
+          </form>
 
           <button
             onClick={() => setSelectedPortal(null)}

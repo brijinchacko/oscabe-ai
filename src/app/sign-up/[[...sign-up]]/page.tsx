@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { SignUp } from "@clerk/nextjs";
-import { dark } from "@clerk/themes";
+import { signIn } from "next-auth/react";
 import { Building2, UserCheck, Handshake, ShieldCheck, type LucideIcon } from "lucide-react";
 import { Logo } from "@/components/shared/logo";
 
@@ -23,6 +22,15 @@ const PORTALS: Array<{
 
 export default function SignUpPage() {
   const [selectedPortal, setSelectedPortal] = useState<PortalType | null>(null);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [companyName, setCompanyName] = useState("");
+  const [agencyName, setAgencyName] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const accent = PORTALS.find((p) => p.id === selectedPortal)?.color || "#4540DB";
 
@@ -30,6 +38,66 @@ export default function SignUpPage() {
     setSelectedPortal(portalId);
     localStorage.setItem("oscabe-portal-selection", portalId);
   }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setError("");
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters.");
+      return;
+    }
+
+    setLoading(true);
+
+    const roleMap: Record<string, string> = {
+      employer: "EMPLOYER",
+      candidate: "CANDIDATE",
+      agency: "AGENCY",
+      employee: "RECRUITER",
+    };
+
+    try {
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          email,
+          password,
+          role: roleMap[selectedPortal!],
+          companyName: selectedPortal === "employer" ? companyName : undefined,
+          agencyName: selectedPortal === "agency" ? agencyName : undefined,
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setError(data.error || "Registration failed. Please try again.");
+        setLoading(false);
+        return;
+      }
+
+      // Auto-login after registration
+      await signIn("credentials", {
+        email,
+        password,
+        redirectTo: "/dashboard",
+      });
+    } catch {
+      setError("Something went wrong. Please try again.");
+      setLoading(false);
+    }
+  }
+
+  const inputClass =
+    "mt-1 block w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-gray-500 outline-none focus:border-white/30 focus:ring-1 focus:ring-white/20";
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-[#02012B] relative overflow-hidden px-4">
@@ -80,14 +148,124 @@ export default function SignUpPage() {
             </div>
           </div>
 
-          <SignUp
-            appearance={{
-              baseTheme: dark,
-              variables: { colorPrimary: accent, borderRadius: "0.75rem" },
-              elements: { card: "shadow-2xl border border-white/10 bg-[#0a0a2e]" },
-            }}
-            forceRedirectUrl="/dashboard"
-          />
+          <form onSubmit={handleSubmit} className="w-full space-y-4 rounded-2xl border border-white/10 bg-[#0a0a2e] p-6 shadow-2xl">
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label htmlFor="firstName" className="block text-sm font-medium text-gray-300">First Name</label>
+                <input
+                  id="firstName"
+                  type="text"
+                  required
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  className={inputClass}
+                  placeholder="First name"
+                />
+              </div>
+              <div>
+                <label htmlFor="lastName" className="block text-sm font-medium text-gray-300">Last Name</label>
+                <input
+                  id="lastName"
+                  type="text"
+                  required
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  className={inputClass}
+                  placeholder="Last name"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-300">Email</label>
+              <input
+                id="email"
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className={inputClass}
+                placeholder="you@example.com"
+              />
+              {selectedPortal === "employee" && (
+                <p className="mt-1 text-[11px] text-amber-400">Must be an @oscabe.com or @wartens.com email</p>
+              )}
+            </div>
+
+            {selectedPortal === "employer" && (
+              <div>
+                <label htmlFor="companyName" className="block text-sm font-medium text-gray-300">Company Name</label>
+                <input
+                  id="companyName"
+                  type="text"
+                  required
+                  value={companyName}
+                  onChange={(e) => setCompanyName(e.target.value)}
+                  className={inputClass}
+                  placeholder="Your company"
+                />
+              </div>
+            )}
+
+            {selectedPortal === "agency" && (
+              <div>
+                <label htmlFor="agencyName" className="block text-sm font-medium text-gray-300">Agency Name</label>
+                <input
+                  id="agencyName"
+                  type="text"
+                  required
+                  value={agencyName}
+                  onChange={(e) => setAgencyName(e.target.value)}
+                  className={inputClass}
+                  placeholder="Your agency"
+                />
+              </div>
+            )}
+
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-300">Password</label>
+              <input
+                id="password"
+                type="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className={inputClass}
+                placeholder="Min. 6 characters"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-300">Confirm Password</label>
+              <input
+                id="confirmPassword"
+                type="password"
+                required
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className={inputClass}
+                placeholder="Confirm your password"
+              />
+            </div>
+
+            {error && (
+              <p className="text-sm text-red-400">{error}</p>
+            )}
+
+            <button
+              type="submit"
+              disabled={loading}
+              className={`w-full rounded-lg py-2.5 text-sm font-semibold text-white transition-all ${loading ? "opacity-60 cursor-not-allowed" : "hover:opacity-90"}`}
+              style={{ background: accent }}
+            >
+              {loading ? "Creating account..." : "Register"}
+            </button>
+
+            <p className="text-center text-xs text-gray-500">
+              Already have an account?{" "}
+              <a href="/sign-in" className="text-[#00D4FF] hover:underline">Sign in</a>
+            </p>
+          </form>
 
           <button
             onClick={() => setSelectedPortal(null)}

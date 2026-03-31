@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
 import {
   generateTalentRadarDigest,
@@ -11,10 +11,11 @@ import { wrapEmailHtml } from "@/lib/email-html";
 
 // GET - returns a preview digest for a subscriber
 export async function GET(req: NextRequest) {
-  const { userId: clerkId } = await auth();
-  if (!clerkId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    const userId = session.user.id;
 
   const subscriberId = req.nextUrl.searchParams.get("subscriberId");
   if (!subscriberId) {
@@ -52,10 +53,11 @@ export async function GET(req: NextRequest) {
 
 // POST - trigger sending digests
 export async function POST(req: NextRequest) {
-  const { userId: clerkId } = await auth();
-  if (!clerkId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    const userId = session.user.id;
 
   let body: { subscriberIds?: string[] | "all" } = {};
   try {

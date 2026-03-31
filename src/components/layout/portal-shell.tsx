@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useClerk, useUser } from "@clerk/nextjs";
+import { useSession, signOut } from "next-auth/react";
 import { Logo } from "@/components/shared/logo";
 import { Menu, X, LogOut, Bell } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
@@ -29,11 +29,10 @@ export function PortalShell({
 }: PortalShellProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
-  const { signOut } = useClerk();
-  const { user } = useUser();
+  const { data: session } = useSession();
+  const user = session?.user;
 
   function isActive(href: string) {
-    // Exact match for the root portal page
     const portalRoot = navItems[0]?.href;
     if (href === portalRoot) return pathname === portalRoot;
     return pathname.startsWith(href);
@@ -87,9 +86,9 @@ export function PortalShell({
       <div className="border-t border-white/10 p-4">
         {user && (
           <div className="mb-3 flex items-center gap-3">
-            {user.imageUrl ? (
+            {user.image ? (
               <img
-                src={user.imageUrl}
+                src={user.image}
                 alt=""
                 className="size-9 rounded-full"
               />
@@ -98,21 +97,21 @@ export function PortalShell({
                 className="flex size-9 items-center justify-center rounded-full text-sm font-bold text-white"
                 style={{ backgroundColor: accentColor }}
               >
-                {user.firstName?.[0] ?? "U"}
+                {user.name?.[0] ?? "U"}
               </div>
             )}
             <div className="min-w-0 flex-1">
               <p className="truncate text-sm font-medium text-white">
-                {user.firstName} {user.lastName}
+                {user.name || "User"}
               </p>
               <p className="truncate text-xs text-gray-400">
-                {user.primaryEmailAddress?.emailAddress}
+                {user.email}
               </p>
             </div>
           </div>
         )}
         <button
-          onClick={() => signOut({ redirectUrl: "/" })}
+          onClick={() => signOut({ callbackUrl: "/" })}
           className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-gray-400 transition-colors hover:bg-white/5 hover:text-white"
         >
           <LogOut className="size-4" />

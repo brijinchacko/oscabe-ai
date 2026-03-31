@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import {
   Clock,
   ArrowRight,
@@ -62,6 +63,8 @@ const ROLE_CATEGORIES = [
     icon: Briefcase,
     title: "Business & Operations",
     color: "#4540DB",
+    image:
+      "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=600&h=400&fit=crop",
     roles: [
       "Office & Admin",
       "Business Analysts",
@@ -74,6 +77,8 @@ const ROLE_CATEGORIES = [
     icon: Code2,
     title: "Technology",
     color: "#00D4FF",
+    image:
+      "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&h=400&fit=crop",
     roles: [
       "Software Developers",
       "QA Engineers",
@@ -86,6 +91,8 @@ const ROLE_CATEGORIES = [
     icon: Cpu,
     title: "Engineering",
     color: "#22C55E",
+    image:
+      "https://images.unsplash.com/photo-1581091226033-d5c48150dbaa?w=600&h=400&fit=crop",
     roles: [
       "Automation Engineers",
       "PLC / SCADA / Controls",
@@ -182,13 +189,41 @@ const PRICING_MODELS = [
   },
 ];
 
+const SECTOR_IMAGES = [
+  {
+    src: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=400&h=300&fit=crop",
+    alt: "Business meeting",
+    label: "Operations",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=400&h=300&fit=crop",
+    alt: "Team collaboration",
+    label: "Technology",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1581091226033-d5c48150dbaa?w=400&h=300&fit=crop",
+    alt: "Engineering work",
+    label: "Engineering",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1560472355-536de3962603?w=400&h=300&fit=crop",
+    alt: "Interview session",
+    label: "Hiring",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400&h=300&fit=crop",
+    alt: "Office building",
+    label: "Workplaces",
+  },
+];
+
 /* ------------------------------------------------------------------ */
 /*  PAGE                                                               */
 /* ------------------------------------------------------------------ */
 
 export default function EmployersPage() {
   return (
-    <div className="bg-[#02012B]">
+    <div className="bg-[#010118]">
       {/* ============================================================ */}
       {/*  HERO                                                        */}
       {/* ============================================================ */}
@@ -207,34 +242,110 @@ export default function EmployersPage() {
         <div className="pointer-events-none absolute -bottom-40 -right-40 h-[400px] w-[400px] rounded-full bg-[#4540DB]/15 blur-[120px]" />
         <div className="pointer-events-none absolute top-1/2 left-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#4540DB]/10 blur-[120px]" />
 
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
-            Hire High-Performing Talent, Fast
-          </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-400">
-            Pre-qualified candidates across operations, technology, and
-            engineering — delivered in 72 hours, with no upfront fees.
-          </p>
-          <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Link href="/post-a-role">
-              <Button
-                size="lg"
-                className="bg-[#4540DB] hover:bg-[#4540DB]/90 text-white px-8 transition-transform hover:scale-105"
-                style={{ boxShadow: "0 0 30px rgba(69,64,219,0.4)" }}
-              >
-                Submit a Role
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
-            <Link href="/pricing">
-              <Button
-                variant="outline"
-                size="lg"
-                className="border border-white/20 bg-white/5 backdrop-blur-sm text-white hover:bg-white/10 hover:text-white"
-              >
-                View Pricing
-              </Button>
-            </Link>
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid items-center gap-12 lg:grid-cols-2">
+            {/* Left column - text */}
+            <div className="text-center lg:text-left">
+              <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
+                Hire High-Performing Talent, Fast
+              </h1>
+              <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-400 lg:mx-0">
+                Pre-qualified candidates across operations, technology, and
+                engineering — delivered in 72 hours, with no upfront fees.
+              </p>
+              <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row lg:justify-start">
+                <Link href="/post-a-role">
+                  <Button
+                    size="lg"
+                    className="bg-[#4540DB] hover:bg-[#4540DB]/90 text-white px-8 transition-transform hover:scale-105"
+                    style={{ boxShadow: "0 0 30px rgba(69,64,219,0.4)" }}
+                  >
+                    Submit a Role
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
+                <Link href="/pricing">
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="border border-white/20 bg-white/5 backdrop-blur-sm text-white hover:bg-white/10 hover:text-white"
+                  >
+                    View Pricing
+                  </Button>
+                </Link>
+              </div>
+            </div>
+
+            {/* Right column - image grid */}
+            <div className="hidden lg:block">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-4">
+                  <div className="overflow-hidden rounded-2xl border border-white/[0.08]">
+                    <Image
+                      src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=600&h=400&fit=crop"
+                      alt="Business meeting"
+                      width={600}
+                      height={400}
+                      className="h-48 w-full object-cover transition-transform duration-500 hover:scale-105"
+                    />
+                  </div>
+                  <div className="overflow-hidden rounded-2xl border border-white/[0.08]">
+                    <Image
+                      src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=600&h=400&fit=crop"
+                      alt="Office discussion"
+                      width={600}
+                      height={400}
+                      className="h-32 w-full object-cover transition-transform duration-500 hover:scale-105"
+                    />
+                  </div>
+                </div>
+                <div className="space-y-4 pt-8">
+                  <div className="overflow-hidden rounded-2xl border border-white/[0.08]">
+                    <Image
+                      src="https://images.unsplash.com/photo-1542744173-8e7e91415657?w=600&h=400&fit=crop"
+                      alt="Professional at work"
+                      width={600}
+                      height={400}
+                      className="h-32 w-full object-cover transition-transform duration-500 hover:scale-105"
+                    />
+                  </div>
+                  <div className="overflow-hidden rounded-2xl border border-white/[0.08]">
+                    <Image
+                      src="https://images.unsplash.com/photo-1560472355-536de3962603?w=600&h=400&fit=crop"
+                      alt="Interview session"
+                      width={600}
+                      height={400}
+                      className="h-48 w-full object-cover transition-transform duration-500 hover:scale-105"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================================ */}
+      {/*  SECTOR IMAGE STRIP                                           */}
+      {/* ============================================================ */}
+      <section className="border-y border-white/[0.06] bg-white/[0.02] py-10">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+            {SECTOR_IMAGES.map((img) => (
+              <div key={img.label} className="group relative overflow-hidden rounded-xl border border-white/[0.08]">
+                <Image
+                  src={img.src}
+                  alt={img.alt}
+                  width={400}
+                  height={300}
+                  className="h-36 w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                <span className="absolute bottom-3 left-3 text-sm font-semibold text-white">
+                  {img.label}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -242,7 +353,7 @@ export default function EmployersPage() {
       {/* ============================================================ */}
       {/*  WHY OSCABE                                                   */}
       {/* ============================================================ */}
-      <section className="border-y border-white/[0.06] bg-white/[0.02] py-16 sm:py-20">
+      <section className="py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h2 className="text-2xl font-bold text-white sm:text-3xl">
@@ -288,7 +399,7 @@ export default function EmployersPage() {
       {/* ============================================================ */}
       {/*  ROLES WE FILL                                                */}
       {/* ============================================================ */}
-      <section className="py-16 sm:py-20">
+      <section className="border-y border-white/[0.06] bg-white/[0.02] py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h2 className="text-2xl font-bold text-white sm:text-3xl">
@@ -303,7 +414,7 @@ export default function EmployersPage() {
             {ROLE_CATEGORIES.map((cat) => (
               <div
                 key={cat.title}
-                className="rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm p-6 transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.06]"
+                className="group rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm overflow-hidden transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.06]"
                 style={{
                   transition:
                     "box-shadow 0.3s, border-color 0.3s, background 0.3s",
@@ -315,29 +426,49 @@ export default function EmployersPage() {
                   (e.currentTarget as HTMLDivElement).style.boxShadow = "none";
                 }}
               >
-                <div
-                  className="mb-4 flex h-11 w-11 items-center justify-center rounded-lg"
-                  style={{ backgroundColor: `${cat.color}20` }}
-                >
-                  <cat.icon className="h-5 w-5" style={{ color: cat.color }} />
-                </div>
-                <h3 className="text-lg font-semibold text-white">
-                  {cat.title}
-                </h3>
-                <ul className="mt-4 space-y-2">
-                  {cat.roles.map((role) => (
-                    <li
-                      key={role}
-                      className="flex items-center gap-2 text-sm text-gray-400"
+                {/* Category image */}
+                <div className="relative h-40 w-full overflow-hidden">
+                  <Image
+                    src={cat.image}
+                    alt={cat.title}
+                    width={600}
+                    height={400}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#010118] via-[#010118]/40 to-transparent" />
+                  <div className="absolute bottom-3 left-4 flex items-center gap-2">
+                    <div
+                      className="flex h-9 w-9 items-center justify-center rounded-lg"
+                      style={{ backgroundColor: `${cat.color}30` }}
                     >
-                      <CheckCircle
-                        className="h-3.5 w-3.5 shrink-0"
+                      <cat.icon
+                        className="h-4 w-4"
                         style={{ color: cat.color }}
                       />
-                      {role}
-                    </li>
-                  ))}
-                </ul>
+                    </div>
+                    <h3 className="text-lg font-semibold text-white">
+                      {cat.title}
+                    </h3>
+                  </div>
+                </div>
+
+                {/* Roles list */}
+                <div className="p-6 pt-4">
+                  <ul className="space-y-2">
+                    {cat.roles.map((role) => (
+                      <li
+                        key={role}
+                        className="flex items-center gap-2 text-sm text-gray-400"
+                      >
+                        <CheckCircle
+                          className="h-3.5 w-3.5 shrink-0"
+                          style={{ color: cat.color }}
+                        />
+                        {role}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             ))}
           </div>
@@ -347,34 +478,74 @@ export default function EmployersPage() {
       {/* ============================================================ */}
       {/*  HOW IT WORKS                                                 */}
       {/* ============================================================ */}
-      <section className="border-y border-white/[0.06] bg-white/[0.02] py-16 sm:py-20">
+      <section className="py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h2 className="text-2xl font-bold text-white sm:text-3xl">
-              How It Works
-            </h2>
-            <p className="mx-auto mt-3 max-w-2xl text-gray-400">
-              From brief to hire in four simple steps.
-            </p>
-          </div>
-          <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {STEPS.map((step) => (
-              <div key={step.step} className="relative text-center">
-                <div
-                  className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#4540DB] text-white"
-                  style={{ boxShadow: "0 0 25px rgba(69,64,219,0.35)" }}
-                >
-                  <step.icon className="h-6 w-6" />
+          <div className="grid items-center gap-12 lg:grid-cols-2">
+            {/* Left - image */}
+            <div className="hidden lg:block">
+              <div className="relative overflow-hidden rounded-2xl border border-white/[0.08]">
+                <Image
+                  src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&h=600&fit=crop"
+                  alt="Team working together"
+                  width={800}
+                  height={600}
+                  className="h-[420px] w-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#010118]/60 to-transparent" />
+                <div className="absolute bottom-6 left-6 right-6">
+                  <div className="rounded-xl border border-white/10 bg-[#010118]/80 backdrop-blur-sm p-4">
+                    <p className="text-sm font-medium text-white">
+                      From brief to hire in four simple steps
+                    </p>
+                    <p className="mt-1 text-xs text-gray-400">
+                      Our streamlined process keeps things moving fast
+                    </p>
+                  </div>
                 </div>
-                <div className="absolute -top-2 left-1/2 flex h-6 w-6 -translate-x-[calc(50%-24px)] items-center justify-center rounded-full bg-[#02012B] border border-[#4540DB] text-xs font-bold text-white">
-                  {step.step}
-                </div>
-                <h3 className="mt-4 text-base font-semibold text-white">
-                  {step.title}
-                </h3>
-                <p className="mt-2 text-sm text-gray-500">{step.description}</p>
               </div>
-            ))}
+            </div>
+
+            {/* Right - steps */}
+            <div>
+              <h2 className="text-center text-2xl font-bold text-white sm:text-3xl lg:text-left">
+                How It Works
+              </h2>
+              <p className="mx-auto mt-3 max-w-2xl text-center text-gray-400 lg:mx-0 lg:text-left">
+                From brief to hire in four simple steps.
+              </p>
+              <div className="mt-10 space-y-8">
+                {STEPS.map((step) => (
+                  <div key={step.step} className="flex gap-4">
+                    <div className="flex flex-col items-center">
+                      <div
+                        className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#4540DB] text-white"
+                        style={{
+                          boxShadow: "0 0 25px rgba(69,64,219,0.35)",
+                        }}
+                      >
+                        <step.icon className="h-5 w-5" />
+                      </div>
+                      {step.step < 4 && (
+                        <div className="mt-2 h-full w-px bg-gradient-to-b from-[#4540DB]/40 to-transparent" />
+                      )}
+                    </div>
+                    <div className="pb-2">
+                      <div className="flex items-center gap-2">
+                        <span className="flex h-5 w-5 items-center justify-center rounded-full border border-[#4540DB] text-[10px] font-bold text-white">
+                          {step.step}
+                        </span>
+                        <h3 className="text-base font-semibold text-white">
+                          {step.title}
+                        </h3>
+                      </div>
+                      <p className="mt-1.5 text-sm text-gray-500">
+                        {step.description}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -382,7 +553,7 @@ export default function EmployersPage() {
       {/* ============================================================ */}
       {/*  PRICING MODELS                                               */}
       {/* ============================================================ */}
-      <section className="py-16 sm:py-20">
+      <section className="border-y border-white/[0.06] bg-white/[0.02] py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h2 className="text-2xl font-bold text-white sm:text-3xl">
@@ -457,8 +628,8 @@ export default function EmployersPage() {
       {/* ============================================================ */}
       {/*  CASE STUDY                                                   */}
       {/* ============================================================ */}
-      <section className="border-y border-white/[0.06] bg-white/[0.02] py-16 sm:py-20">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+      <section className="py-16 sm:py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <span className="inline-flex items-center gap-2 rounded-full border border-[#4540DB]/40 bg-[#4540DB]/10 px-4 py-1.5 text-xs font-medium tracking-wide text-[#4540DB]">
               Case Study
@@ -468,51 +639,65 @@ export default function EmployersPage() {
             </h2>
           </div>
 
-          <div className="mt-12 grid gap-6 sm:grid-cols-3">
-            <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 backdrop-blur-sm">
-              <h3 className="text-sm font-semibold uppercase tracking-wider text-red-400">
-                Challenge
-              </h3>
-              <p className="mt-3 text-sm leading-relaxed text-gray-400">
-                Client needed urgent hiring support with limited time and budget
-                constraints for critical technical positions.
-              </p>
+          <div className="mt-12 grid items-stretch gap-6 lg:grid-cols-4">
+            {/* Case study image */}
+            <div className="hidden overflow-hidden rounded-2xl border border-white/[0.08] lg:block">
+              <Image
+                src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=600&h=800&fit=crop"
+                alt="Professional in office"
+                width={600}
+                height={800}
+                className="h-full w-full object-cover"
+              />
             </div>
-            <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 backdrop-blur-sm">
-              <h3 className="text-sm font-semibold uppercase tracking-wider text-[#00D4FF]">
-                Solution
-              </h3>
-              <ul className="mt-3 space-y-2 text-sm text-gray-400">
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 text-[#00D4FF]" />
-                  Rapid sourcing
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 text-[#00D4FF]" />
-                  Pre-screening & validation
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 text-[#00D4FF]" />
-                  Delivered shortlist in 3 days
-                </li>
-              </ul>
-            </div>
-            <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 backdrop-blur-sm">
-              <h3 className="text-sm font-semibold uppercase tracking-wider text-[#22C55E]">
-                Result
-              </h3>
-              <div className="mt-3 space-y-3">
-                <div>
-                  <p className="text-2xl font-bold text-[#22C55E]">
-                    2 positions
-                  </p>
-                  <p className="text-sm text-gray-400">Filled within 10 days</p>
-                </div>
-                <div>
-                  <p className="text-2xl font-bold text-[#22C55E]">40%</p>
-                  <p className="text-sm text-gray-400">
-                    Reduction in hiring time
-                  </p>
+
+            {/* Case study cards */}
+            <div className="grid gap-6 sm:grid-cols-3 lg:col-span-3">
+              <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 backdrop-blur-sm">
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-red-400">
+                  Challenge
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-gray-400">
+                  Client needed urgent hiring support with limited time and budget
+                  constraints for critical technical positions.
+                </p>
+              </div>
+              <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 backdrop-blur-sm">
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-[#00D4FF]">
+                  Solution
+                </h3>
+                <ul className="mt-3 space-y-2 text-sm text-gray-400">
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-[#00D4FF]" />
+                    Rapid sourcing
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-[#00D4FF]" />
+                    Pre-screening & validation
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-[#00D4FF]" />
+                    Delivered shortlist in 3 days
+                  </li>
+                </ul>
+              </div>
+              <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 backdrop-blur-sm">
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-[#22C55E]">
+                  Result
+                </h3>
+                <div className="mt-3 space-y-3">
+                  <div>
+                    <p className="text-2xl font-bold text-[#22C55E]">
+                      2 positions
+                    </p>
+                    <p className="text-sm text-gray-400">Filled within 10 days</p>
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold text-[#22C55E]">40%</p>
+                    <p className="text-sm text-gray-400">
+                      Reduction in hiring time
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>

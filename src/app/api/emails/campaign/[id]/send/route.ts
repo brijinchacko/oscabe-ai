@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "@/auth";
 import { sendEmail } from "@/lib/resend";
 import { replaceTokens, generateUnsubscribeLink } from "@/lib/email-tokens";
 import { wrapEmailHtml } from "@/lib/email-html";
@@ -47,10 +47,11 @@ function sleep(ms: number): Promise<void> {
 
 export async function POST(request: NextRequest, context: RouteContext) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
+    const session = await auth();
+    if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+    const userId = session.user.id;
 
     const { id } = await context.params;
 
@@ -66,7 +67,7 @@ export async function POST(request: NextRequest, context: RouteContext) {
       return NextResponse.json({ error: "Campaign has already been sent" }, { status: 400 });
     }
 
-    const user = await prisma.user.findUnique({ where: { clerkId: userId } });
+    const user = await prisma.user.findUnique({ where: { id: userId } });
     const senderName = user ? `${user.firstName || ""} ${user.lastName || ""}`.trim() : "OSCABE";
     const senderEmail = user?.email || "info@oscabe.com";
 

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
-import { ClerkProvider } from "@clerk/nextjs";
+import { AuthProvider } from "@/components/providers/session-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { GoogleAnalytics } from "@/components/shared/google-analytics";
@@ -140,7 +140,7 @@ const jsonLd = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <ClerkProvider>
+    <AuthProvider>
       <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
         <head>
           <script
@@ -156,6 +156,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Toaster position="top-right" />
         </body>
       </html>
-    </ClerkProvider>
+    </AuthProvider>
   );
 }

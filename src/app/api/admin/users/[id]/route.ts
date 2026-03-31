@@ -1,11 +1,11 @@
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "@/auth";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 async function getAdmin() {
-  const { userId } = await auth();
-  if (!userId) return null;
-  const user = await prisma.user.findFirst({ where: { clerkId: userId } });
+  const session = await auth();
+  if (!session?.user?.id) return null;
+  const user = await prisma.user.findUnique({ where: { id: session.user.id } });
   if (!user || user.role !== "ADMIN") return null;
   return user;
 }

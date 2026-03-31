@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "@/auth";
 import { z } from "zod/v4";
 import prisma from "@/lib/prisma";
 import { createShortlistCheckout, SHORTLIST_PACKAGES, isStripeConfigured } from "@/lib/stripe";
@@ -11,10 +11,11 @@ const checkoutSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
+    const session = await auth();
+    if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+    const userId = session.user.id;
 
     const body = await request.json();
     const parsed = checkoutSchema.safeParse(body);
@@ -32,7 +33,7 @@ export async function POST(request: NextRequest) {
 
     // Find the employer record
     const user = await prisma.user.findUnique({
-      where: { clerkId: userId },
+      where: { id: userId },
       include: { employer: true },
     });
 

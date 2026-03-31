@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "@/auth";
 
 const TEMPLATES: Record<string, string[]> = {
   clients: [
@@ -82,10 +82,11 @@ const TEMPLATES: Record<string, string[]> = {
 };
 
 export async function GET(request: NextRequest) {
-  const { userId } = await auth();
-  if (!userId) {
+  const session = await auth();
+  if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+  const userId = session.user.id;
 
   const { searchParams } = new URL(request.url);
   const module = searchParams.get("module");

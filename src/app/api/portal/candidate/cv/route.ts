@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "@/auth";
 import { writeFile, mkdir, unlink, stat } from "fs/promises";
 import path from "path";
 
@@ -14,7 +14,7 @@ const ALLOWED_MIMES = [
 
 async function getCandidate(userId: string) {
   const user = await prisma.user.findUnique({
-    where: { clerkId: userId },
+    where: { id: userId },
     include: { candidate: true },
   });
   return user?.candidate ?? null;
@@ -22,10 +22,11 @@ async function getCandidate(userId: string) {
 
 export async function POST(request: NextRequest) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
+    const session = await auth();
+    if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+    const userId = session.user.id;
 
     const candidate = await getCandidate(userId);
     if (!candidate) {
@@ -117,10 +118,11 @@ export async function POST(request: NextRequest) {
 
 export async function GET() {
   try {
-    const { userId } = await auth();
-    if (!userId) {
+    const session = await auth();
+    if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+    const userId = session.user.id;
 
     const candidate = await getCandidate(userId);
     if (!candidate) {
@@ -163,10 +165,11 @@ export async function GET() {
 
 export async function DELETE() {
   try {
-    const { userId } = await auth();
-    if (!userId) {
+    const session = await auth();
+    if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+    const userId = session.user.id;
 
     const candidate = await getCandidate(userId);
     if (!candidate) {

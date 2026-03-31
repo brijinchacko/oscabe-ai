@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import Image from "next/image";
 import { toast } from "sonner";
 import {
   Mail,
@@ -92,7 +93,7 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="bg-[#02012B]">
+    <div className="bg-[#010118]">
       {/* Hero */}
       <section className="relative overflow-hidden py-16 sm:py-20">
         {/* Grid pattern */}
@@ -116,6 +117,16 @@ export default function ContactPage() {
             Have a question, want to post a role, or interested in partnering
             with us? We would love to hear from you.
           </p>
+          <div className="mx-auto mt-8 max-w-3xl overflow-hidden rounded-2xl border border-white/[0.08]">
+            <Image
+              src="https://images.unsplash.com/photo-1423666639041-f56000c27a9a?w=800&h=300&fit=crop"
+              alt="Professional business meeting"
+              width={800}
+              height={300}
+              className="h-48 w-full object-cover sm:h-56"
+              priority
+            />
+          </div>
         </div>
       </section>
 

@@ -2,31 +2,30 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useUser } from "@clerk/nextjs";
+import { useSession } from "next-auth/react";
 import { Loader2 } from "lucide-react";
 import { Logo } from "@/components/shared/logo";
 
 export default function DashboardPage() {
-  const { isLoaded, isSignedIn, user: clerkUser } = useUser();
+  const { data: session, status } = useSession();
   const router = useRouter();
-  const [status, setStatus] = useState("Loading your dashboard...");
+  const [statusText, setStatusText] = useState("Loading your dashboard...");
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    if (!isLoaded) return;
-    if (!isSignedIn) {
+    if (status === "loading") return;
+    if (status !== "authenticated") {
       router.replace("/sign-in");
       return;
     }
 
     async function route() {
       try {
-        // /api/user/me auto-creates user if not in DB
         const meRes = await fetch("/api/user/me");
 
         if (!meRes.ok) {
           setError(true);
-          setStatus("Failed to load account. Please try again.");
+          setStatusText("Failed to load account. Please try again.");
           return;
         }
 
@@ -37,13 +36,12 @@ export default function DashboardPage() {
           return;
         }
 
-        // Not onboarded yet - use portal selection from localStorage
-        setStatus("Setting up your portal...");
+        setStatusText("Setting up your portal...");
         await onboardUser(data);
       } catch (err) {
         console.error("Dashboard routing error:", err);
         setError(true);
-        setStatus("Something went wrong. Please try again.");
+        setStatusText("Something went wrong. Please try again.");
       }
     }
 
@@ -62,8 +60,8 @@ export default function DashboardPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           role,
-          companyName: role === "EMPLOYER" ? (clerkUser?.fullName || "My Company") : undefined,
-          agencyName: role === "AGENCY" ? (clerkUser?.fullName || "My Agency") : undefined,
+          companyName: role === "EMPLOYER" ? (session?.user?.name || "My Company") : undefined,
+          agencyName: role === "AGENCY" ? (session?.user?.name || "My Agency") : undefined,
         }),
       });
 
@@ -73,7 +71,6 @@ export default function DashboardPage() {
         const data = await res.json();
         redirectByRole(data.role);
       } else {
-        // Onboard failed, but user exists - redirect based on current role
         redirectByRole(userData.role || role);
       }
     }
@@ -99,7 +96,7 @@ export default function DashboardPage() {
     }
 
     route();
-  }, [isLoaded, isSignedIn, router, clerkUser]);
+  }, [status, router, session]);
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-[#02012B] relative overflow-hidden">
@@ -108,11 +105,11 @@ export default function DashboardPage() {
         <Logo variant="light" size="lg" />
         <div className="mt-8 flex flex-col items-center gap-3">
           {!error && <Loader2 className="h-5 w-5 animate-spin text-[#4540DB]" />}
-          <p className="text-sm text-gray-400">{status}</p>
+          <p className="text-sm text-gray-400">{statusText}</p>
           {error && (
             <div className="mt-4 flex gap-3">
               <button
-                onClick={() => { setError(false); setStatus("Retrying..."); window.location.reload(); }}
+                onClick={() => { setError(false); setStatusText("Retrying..."); window.location.reload(); }}
                 className="rounded-lg bg-[#4540DB] px-6 py-2 text-sm font-medium text-white hover:bg-[#4540DB]/80"
               >
                 Try Again

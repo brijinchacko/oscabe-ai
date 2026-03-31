@@ -1,38 +1,32 @@
-import { auth, currentUser } from "@clerk/nextjs/server";
+import { auth } from "@/auth";
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
 export async function GET() {
   try {
-    const { userId } = await auth();
-
-    if (!userId) {
+    const session = await auth();
+    if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+    const userId = session.user.id;
 
-    let user = await prisma.user.findFirst({
-      where: { clerkId: userId },
+    let user = await prisma.user.findUnique({
+      where: { id: userId },
       include: { candidate: true, employer: true, agency: true },
     });
 
-    // Auto-create user record if not found (webhook may not have fired)
+    // Auto-create user record if not found (session exists but no DB record yet)
     if (!user) {
-      const clerkUser = await currentUser();
-      if (!clerkUser) {
-        return NextResponse.json({ error: "Could not fetch user data" }, { status: 500 });
-      }
-
-      const email = clerkUser.emailAddresses[0]?.emailAddress || `${userId}@placeholder.local`;
+      const email = session.user.email || `${userId}@placeholder.local`;
 
       // Try create, fall back to upsert on conflict
       try {
         user = await prisma.user.create({
           data: {
-            clerkId: userId,
             email,
-            firstName: clerkUser.firstName || null,
-            lastName: clerkUser.lastName || null,
-            avatarUrl: clerkUser.imageUrl || null,
+            firstName: session.user.name?.split(" ")[0] || null,
+            lastName: session.user.name?.split(" ").slice(1).join(" ") || null,
+            avatarUrl: session.user.image || null,
             role: "CANDIDATE",
           },
           include: { candidate: true, employer: true, agency: true },
@@ -44,19 +38,18 @@ export async function GET() {
           user = await prisma.user.update({
             where: { id: existingByEmail.id },
             data: {
-              clerkId: userId,
-              firstName: clerkUser.firstName || existingByEmail.firstName,
-              lastName: clerkUser.lastName || existingByEmail.lastName,
-              avatarUrl: clerkUser.imageUrl || existingByEmail.avatarUrl,
+              firstName: session.user.name?.split(" ")[0] || existingByEmail.firstName,
+              lastName: session.user.name?.split(" ").slice(1).join(" ") || existingByEmail.lastName,
+              avatarUrl: session.user.image || existingByEmail.avatarUrl,
             },
             include: { candidate: true, employer: true, agency: true },
           });
         } else {
-          // Last resort upsert by clerkId
+          // Last resort upsert by id
           user = await prisma.user.upsert({
-            where: { clerkId: userId },
-            update: { email, firstName: clerkUser.firstName, lastName: clerkUser.lastName },
-            create: { clerkId: userId, email, firstName: clerkUser.firstName, lastName: clerkUser.lastName, role: "CANDIDATE" },
+            where: { id: userId },
+            update: { email, firstName: session.user.name?.split(" ")[0], lastName: session.user.name?.split(" ").slice(1).join(" ") },
+            create: { email, firstName: session.user.name?.split(" ")[0], lastName: session.user.name?.split(" ").slice(1).join(" "), role: "CANDIDATE" },
             include: { candidate: true, employer: true, agency: true },
           });
         }

@@ -8,7 +8,7 @@ import {
   LayoutDashboard, LogOut, User, Settings, Briefcase,
   FileText, Gift,
 } from "lucide-react";
-import { useUser, useClerk } from "@clerk/nextjs";
+import { useSession, signOut } from "next-auth/react";
 import { Logo } from "@/components/shared/logo";
 import { Button } from "@/components/ui/button";
 import {
@@ -36,8 +36,7 @@ const MODE_CONFIG: Record<SiteMode, {
       { label: "Home", href: "/" },
       { label: "How It Works", href: "/employers" },
       { label: "Industries", href: "/industries" },
-      { label: "Post a Role", href: "/post-a-role" },
-      { label: "Pricing", href: "/pricing" },
+      { label: "Case Studies", href: "/pricing" },
       { label: "About", href: "/about" },
       { label: "Contact", href: "/contact" },
     ],
@@ -53,7 +52,6 @@ const MODE_CONFIG: Record<SiteMode, {
       { label: "Why OSCABE", href: "/candidates" },
       { label: "Industries", href: "/industries" },
       { label: "Browse Jobs", href: "/jobs" },
-      { label: "Register", href: "/register" },
       { label: "Refer & Earn", href: "/refer" },
       { label: "Contact", href: "/contact" },
     ],
@@ -86,8 +84,9 @@ export function Navbar() {
   const [modeMenuOpen, setModeMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
 
-  const { isSignedIn, user } = useUser();
-  const { signOut } = useClerk();
+  const { data: session, status } = useSession();
+  const isSignedIn = status === "authenticated";
+  const user = session?.user;
   const config = MODE_CONFIG[mode];
 
   useEffect(() => {
@@ -210,8 +209,8 @@ export function Navbar() {
                 onClick={(e) => { e.stopPropagation(); setUserMenuOpen(!userMenuOpen); setModeMenuOpen(false); }}
                 className="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 transition-all hover:border-white/40 hover:bg-white/10"
               >
-                {user?.imageUrl ? (
-                  <img src={user.imageUrl} alt="" className="h-8 w-8 rounded-full" />
+                {user?.image ? (
+                  <img src={user.image} alt="" className="h-8 w-8 rounded-full" />
                 ) : (
                   <User className="h-4 w-4 text-gray-400" />
                 )}
@@ -222,10 +221,10 @@ export function Navbar() {
                   {/* User info header */}
                   <div className="mb-2 rounded-lg bg-white/5 px-3 py-2.5">
                     <p className="text-sm font-semibold text-white">
-                      {user?.fullName || "User"}
+                      {user?.name || "User"}
                     </p>
                     <p className="mt-0.5 text-[11px] text-gray-500">
-                      {user?.primaryEmailAddress?.emailAddress}
+                      {user?.email}
                     </p>
                   </div>
 
@@ -274,7 +273,7 @@ export function Navbar() {
                     Settings
                   </Link>
                   <button
-                    onClick={() => { setUserMenuOpen(false); signOut({ redirectUrl: "/" }); }}
+                    onClick={() => { setUserMenuOpen(false); signOut({ callbackUrl: "/" }); }}
                     className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-red-400 transition-all hover:bg-red-500/10 hover:text-red-300"
                   >
                     <LogOut className="h-4 w-4" />
@@ -326,16 +325,16 @@ export function Navbar() {
               {isSignedIn && (
                 <div className="mt-4 rounded-lg bg-white/5 px-3 py-3">
                   <div className="flex items-center gap-3">
-                    {user?.imageUrl ? (
-                      <img src={user.imageUrl} alt="" className="h-9 w-9 rounded-full" />
+                    {user?.image ? (
+                      <img src={user.image} alt="" className="h-9 w-9 rounded-full" />
                     ) : (
                       <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-sm font-bold text-white">
-                        {user?.firstName?.[0] || "U"}
+                        {user?.name?.[0] || "U"}
                       </span>
                     )}
                     <div>
-                      <p className="text-sm font-semibold text-white">{user?.fullName || "User"}</p>
-                      <p className="text-[11px] text-gray-500">{user?.primaryEmailAddress?.emailAddress}</p>
+                      <p className="text-sm font-semibold text-white">{user?.name || "User"}</p>
+                      <p className="text-[11px] text-gray-500">{user?.email}</p>
                     </div>
                   </div>
                 </div>
@@ -397,7 +396,7 @@ export function Navbar() {
                       Refer & Earn £200
                     </Link>
                     <button
-                      onClick={() => { setOpen(false); signOut({ redirectUrl: "/" }); }}
+                      onClick={() => { setOpen(false); signOut({ callbackUrl: "/" }); }}
                       className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium text-red-400 hover:bg-red-500/10 hover:text-red-300"
                     >
                       <LogOut className="h-4 w-4" />

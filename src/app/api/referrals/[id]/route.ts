@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "@/auth";
 import { z } from "zod/v4";
 
 const updateReferralSchema = z.object({
@@ -11,15 +11,16 @@ type RouteContext = { params: Promise<{ id: string }> };
 
 export async function GET(request: NextRequest, context: RouteContext) {
   try {
-    const { userId: clerkId } = await auth();
-    if (!clerkId) {
+    const session = await auth();
+    if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+    const userId = session.user.id;
 
     const { id } = await context.params;
 
     const user = await prisma.user.findUnique({
-      where: { clerkId },
+      where: { id: userId },
     });
 
     if (!user) {
@@ -53,15 +54,16 @@ export async function GET(request: NextRequest, context: RouteContext) {
 
 export async function PUT(request: NextRequest, context: RouteContext) {
   try {
-    const { userId: clerkId } = await auth();
-    if (!clerkId) {
+    const session = await auth();
+    if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+    const userId = session.user.id;
 
     const { id } = await context.params;
 
     const user = await prisma.user.findUnique({
-      where: { clerkId },
+      where: { id: userId },
     });
 
     if (!user) {

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "@/auth";
 
 export async function POST(req: NextRequest) {
   try {
@@ -57,10 +57,10 @@ export async function POST(req: NextRequest) {
 
     // Link job to employer if user is authenticated
     try {
-      const { userId: clerkId } = await auth();
-      if (clerkId) {
+      const session = await auth();
+      if (session?.user?.id) {
         const user = await prisma.user.findUnique({
-          where: { clerkId },
+          where: { id: session.user.id },
           include: { employer: true },
         });
         if (user?.employer) {

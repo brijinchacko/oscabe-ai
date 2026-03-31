@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod/v4";
 import prisma from "@/lib/prisma";
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "@/auth";
 
 const registerSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
@@ -53,10 +53,10 @@ export async function POST(req: NextRequest) {
     // Optionally check auth — if user is signed in, link the candidate
     let linkedUserId: string | undefined;
     try {
-      const { userId: clerkId } = await auth();
-      if (clerkId) {
+      const session = await auth();
+      if (session?.user?.id) {
         const user = await prisma.user.findUnique({
-          where: { clerkId },
+          where: { id: session.user.id },
         });
         if (user) {
           linkedUserId = user.id;

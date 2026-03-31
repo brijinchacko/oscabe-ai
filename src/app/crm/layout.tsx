@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { UserButton, useUser } from "@clerk/nextjs";
+import { useSession, signOut } from "next-auth/react";
 import { Logo } from "@/components/shared/logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -27,6 +27,7 @@ import {
   Search,
   Bell,
   Plus,
+  LogOut,
 } from "lucide-react";
 
 const NAV_ITEMS = [
@@ -48,7 +49,8 @@ const NAV_ITEMS = [
 export default function CRMLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
-  const { user } = useUser();
+  const { data: session } = useSession();
+  const user = session?.user;
 
   function isActive(href: string) {
     if (href === "/crm") return pathname === "/crm";
@@ -88,24 +90,31 @@ export default function CRMLayout({ children }: { children: React.ReactNode }) {
       {/* User section */}
       <div className="border-t border-white/10 p-4">
         <div className="flex items-center gap-3">
-          <UserButton
-            appearance={{
-              elements: {
-                avatarBox: "size-9",
-              },
-            }}
-          />
+          {user?.image ? (
+            <img src={user.image} alt="" className="size-9 rounded-full" />
+          ) : (
+            <div className="flex size-9 items-center justify-center rounded-full bg-indigo-500 text-sm font-bold text-white">
+              {user?.name?.[0] || "U"}
+            </div>
+          )}
           {user && (
             <div className="min-w-0 flex-1">
               <p className="truncate text-sm font-medium text-white">
-                {user.firstName} {user.lastName}
+                {user.name || "User"}
               </p>
               <p className="truncate text-xs text-gray-400">
-                {user.primaryEmailAddress?.emailAddress}
+                {user.email}
               </p>
             </div>
           )}
         </div>
+        <button
+          onClick={() => signOut({ callbackUrl: "/" })}
+          className="mt-2 flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-gray-400 transition-colors hover:bg-white/5 hover:text-white"
+        >
+          <LogOut className="size-4" />
+          Sign Out
+        </button>
       </div>
     </div>
   );

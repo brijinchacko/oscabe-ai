@@ -32,7 +32,7 @@ const WARTENS_BRANDS = [
 
 export default function AboutPage() {
   return (
-    <div className="bg-[#02012B]">
+    <div className="bg-[#010118]">
       {/* Hero */}
       <section className="relative overflow-hidden py-20 sm:py-24">
         <div
@@ -46,17 +46,69 @@ export default function AboutPage() {
         <div className="pointer-events-none absolute -left-40 -top-40 h-[500px] w-[500px] rounded-full bg-[#4540DB]/20 blur-[120px]" />
         <div className="pointer-events-none absolute -right-40 bottom-0 h-[400px] w-[400px] rounded-full bg-[#00D4FF]/15 blur-[120px]" />
 
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#4540DB]/40 bg-[#4540DB]/10 px-5 py-2 text-xs font-semibold uppercase tracking-wider text-[#4540DB]">
-            <Globe className="h-3.5 w-3.5" />
-            Part of the Wartens Ecosystem
-          </span>
-          <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-white sm:text-4xl lg:text-5xl">
-            About OSCABE
-          </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-400">
-            The AI recruiter built for industrial automation. Part of Wartens, a global automation ecosystem serving 30,000+ companies across the UK, USA, UAE, and India.
-          </p>
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+            <div className="text-center lg:text-left">
+              <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#4540DB]/40 bg-[#4540DB]/10 px-5 py-2 text-xs font-semibold uppercase tracking-wider text-[#4540DB]">
+                <Globe className="h-3.5 w-3.5" />
+                Part of the Wartens Ecosystem
+              </span>
+              <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-white sm:text-4xl lg:text-5xl">
+                About OSCABE
+              </h1>
+              <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-400 lg:mx-0">
+                The AI recruiter built for industrial automation. Part of Wartens, a global automation ecosystem serving 30,000+ companies across the UK, USA, UAE, and India.
+              </p>
+            </div>
+            <div className="relative mx-auto w-full max-w-lg lg:mx-0">
+              <div className="overflow-hidden rounded-2xl border border-white/[0.08]">
+                <Image
+                  src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&h=400&fit=crop"
+                  alt="Modern office workspace"
+                  width={600}
+                  height={400}
+                  className="h-auto w-full object-cover"
+                  priority
+                />
+              </div>
+              <div className="pointer-events-none absolute -inset-4 rounded-3xl bg-[#4540DB]/10 blur-2xl" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Image Strip */}
+      <section className="border-y border-white/[0.06] bg-white/[0.02] py-8">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <div className="overflow-hidden rounded-xl border border-white/[0.08]">
+              <Image
+                src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=250&fit=crop"
+                alt="Office environment"
+                width={400}
+                height={250}
+                className="h-48 w-full object-cover transition-transform duration-300 hover:scale-105"
+              />
+            </div>
+            <div className="overflow-hidden rounded-xl border border-white/[0.08]">
+              <Image
+                src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&h=250&fit=crop"
+                alt="Team collaboration"
+                width={400}
+                height={250}
+                className="h-48 w-full object-cover transition-transform duration-300 hover:scale-105"
+              />
+            </div>
+            <div className="overflow-hidden rounded-xl border border-white/[0.08]">
+              <Image
+                src="https://images.unsplash.com/photo-1560472355-536de3962603?w=400&h=250&fit=crop"
+                alt="Corporate building"
+                width={400}
+                height={250}
+                className="h-48 w-full object-cover transition-transform duration-300 hover:scale-105"
+              />
+            </div>
+          </div>
         </div>
       </section>
 

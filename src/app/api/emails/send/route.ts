@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "@/auth";
 import { z } from "zod";
 import { sendEmail } from "@/lib/resend";
 import { wrapEmailHtml } from "@/lib/email-html";
@@ -16,10 +16,11 @@ const sendEmailSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
+    const session = await auth();
+    if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+    const userId = session.user.id;
 
     const reqBody = await request.json();
     const parsed = sendEmailSchema.safeParse(reqBody);
@@ -29,7 +30,7 @@ export async function POST(request: NextRequest) {
 
     const { to, subject, body, candidateId, clientId, jobId } = parsed.data;
 
-    const user = await prisma.user.findUnique({ where: { clerkId: userId } });
+    const user = await prisma.user.findUnique({ where: { id: userId } });
 
     // Wrap body in HTML email template
     const html = wrapEmailHtml(body, subject);

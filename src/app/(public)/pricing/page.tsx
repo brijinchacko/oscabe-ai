@@ -1,742 +1,312 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
+  ArrowRight,
   CheckCircle,
-  Zap,
-  Shield,
-  Award,
-  Star,
-  ChevronDown,
-  Globe,
-  Briefcase,
+  Clock,
   Users,
   TrendingUp,
-  BarChart3,
-  BookOpen,
-  GraduationCap,
-  Sparkles,
-  Target,
+  Building2,
+  Monitor,
+  Cpu,
+  Briefcase,
+  Landmark,
+  Truck,
+  Phone,
 } from "lucide-react";
-import {
-  SHORTLIST_PACKAGES,
-  SUBSCRIPTION_TIERS,
-  SCREENING_PRICES,
-  CANDIDATE_SERVICES,
-} from "@/lib/stripe";
 
-function formatPrice(pence: number): string {
-  const pounds = pence / 100;
-  return pounds.toLocaleString("en-GB", {
-    style: "currency",
-    currency: "GBP",
-    minimumFractionDigits: pounds % 1 === 0 ? 0 : 2,
-    maximumFractionDigits: 2,
-  });
-}
-
-const FAQ_ITEMS = [
+const CASE_STUDIES = [
   {
-    q: "How does the shortlist process work?",
-    a: "Once you purchase a shortlist package, our team of chartered engineers sources, screens, and technically assesses candidates from our verified talent pool. You receive a curated shortlist within the specified delivery timeframe, complete with skill profiles and availability details.",
+    id: "engineering-technical",
+    clientType: "Engineering / Technical Hiring",
+    industry: "Manufacturing",
+    icon: Cpu,
+    color: "#8B5CF6",
+    image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=600&h=400&fit=crop",
+    challenge:
+      "A large manufacturing firm needed two specialist PLC engineers urgently to keep a major commissioning project on track. Previous agencies had taken 6+ weeks to deliver unsuitable candidates, putting the project timeline at risk.",
+    solution: [
+      "Rapid sourcing from our verified engineering talent pool",
+      "Technical pre-screening against specific PLC platform requirements",
+      "Delivered a shortlist of 5 qualified candidates in 3 days",
+    ],
+    results: [
+      { metric: "2 positions", detail: "Filled within 10 days" },
+      { metric: "40%", detail: "Reduction in hiring time" },
+    ],
   },
   {
-    q: "What is the replacement guarantee?",
-    a: "If a candidate from your shortlist does not meet expectations or leaves within the guarantee period (30 days for Pro, 90 days for Enterprise), we will provide a replacement candidate at no additional cost.",
+    id: "financial-services",
+    clientType: "Insurance & Financial Services",
+    industry: "Insurance",
+    icon: Landmark,
+    color: "#4540DB",
+    image: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=600&h=400&fit=crop",
+    challenge:
+      "A mid-size insurance company was scaling its claims team and needed 4 experienced claims handlers within a tight deadline. Internal HR was overwhelmed and traditional agencies were sending unvetted CVs that wasted interview time.",
+    solution: [
+      "Targeted sourcing of candidates with claims handling experience",
+      "Pre-qualification interviews assessing technical knowledge and soft skills",
+      "Shortlist of 8 candidates delivered within 72 hours",
+    ],
+    results: [
+      { metric: "4 hires", detail: "Made within 3 weeks" },
+      { metric: "60%", detail: "Less time spent on interviews" },
+    ],
   },
   {
-    q: "Can I upgrade my subscription later?",
-    a: "Yes, you can upgrade or downgrade your subscription at any time. When upgrading, you will be charged the prorated difference for the remainder of your billing cycle.",
+    id: "technology-startup",
+    clientType: "Technology / Software Development",
+    industry: "SaaS / Technology",
+    icon: Monitor,
+    color: "#00D4FF",
+    image: "https://images.unsplash.com/photo-1573164713988-8665fc963095?w=600&h=400&fit=crop",
+    challenge:
+      "A fast-growing SaaS startup needed 3 full-stack developers to meet product launch deadlines. The founder had spent 2 months trying to hire through job boards with no success, receiving hundreds of irrelevant applications.",
+    solution: [
+      "Sourced candidates with specific tech stack experience (React, Node.js, AWS)",
+      "Technical screening with coding assessment and architecture discussion",
+      "Delivered 6 pre-qualified candidates in 4 days",
+    ],
+    results: [
+      { metric: "3 developers", detail: "Hired within 2 weeks" },
+      { metric: "100%", detail: "Retention after 6 months" },
+    ],
   },
   {
-    q: "What does the technical screening include?",
-    a: "Standard screening is a 60-minute structured technical interview covering core automation engineering competencies. Advanced screening is a 90-minute deep-dive that includes a practical hands-on assessment with detailed reporting.",
+    id: "operations-admin",
+    clientType: "Business Operations / Admin",
+    industry: "Professional Services",
+    icon: Briefcase,
+    color: "#22C55E",
+    image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=600&h=400&fit=crop",
+    challenge:
+      "A professional services firm opening a new regional office needed an Office Manager, HR Coordinator, and two Admin Assistants. They had no local recruitment presence and needed the team ready before the office launch date.",
+    solution: [
+      "Local talent mapping and targeted outreach",
+      "Behavioural and competency-based screening for cultural fit",
+      "Staggered delivery of shortlists over 5 days to match onboarding schedule",
+    ],
+    results: [
+      { metric: "4 roles", detail: "Filled before office launch" },
+      { metric: "50%", detail: "Cost saving vs traditional agency fees" },
+    ],
   },
   {
-    q: "Do you cover all automation engineering specialisms?",
-    a: "We specialise in industrial automation including PLC programming (Siemens, Allen-Bradley, Mitsubishi), SCADA, DCS, robotics, controls engineering, and related disciplines. Our Candidate Packs can be filtered by specialism.",
+    id: "supply-chain",
+    clientType: "Supply Chain & Logistics",
+    industry: "Logistics",
+    icon: Truck,
+    color: "#F59E0B",
+    image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600&h=400&fit=crop",
+    challenge:
+      "A national logistics company was experiencing rapid growth and needed a Supply Chain Manager and two Warehouse Supervisors across multiple sites. High turnover in the sector made finding reliable, experienced candidates extremely difficult.",
+    solution: [
+      "Industry-specific sourcing targeting candidates with multi-site experience",
+      "Reference verification and background checks included",
+      "Delivered shortlist of 7 candidates across all 3 roles in 5 days",
+    ],
+    results: [
+      { metric: "3 hires", detail: "Completed within 18 days" },
+      { metric: "0%", detail: "Turnover in first 12 months" },
+    ],
   },
   {
-    q: "What payment methods do you accept?",
-    a: "We accept all major credit and debit cards via our secure Stripe payment gateway. For Enterprise plans, we also offer invoicing with NET-30 payment terms.",
+    id: "data-ai",
+    clientType: "Data & AI Recruitment",
+    industry: "Technology / Enterprise",
+    icon: Building2,
+    color: "#EC4899",
+    image: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=600&h=400&fit=crop",
+    challenge:
+      "An enterprise software company was building a new AI/ML team from scratch. They needed a Data Engineering Lead and two Data Scientists with specific NLP experience. The niche skill requirement made traditional recruitment channels ineffective.",
+    solution: [
+      "Specialist sourcing through AI/ML professional communities",
+      "Technical assessment covering machine learning fundamentals and NLP expertise",
+      "Delivered 5 strong candidates in 6 days with detailed skill profiles",
+    ],
+    results: [
+      { metric: "3 hires", detail: "Team built in under 4 weeks" },
+      { metric: "35%", detail: "Below market rate agency fees" },
+    ],
   },
 ];
 
-export default function PricingPage() {
+export default function CaseStudiesPage() {
   return (
-    <div className="min-h-screen bg-[#02012B]">
+    <div className="bg-[#010118]">
       {/* Hero */}
-      <section className="relative overflow-hidden px-4 pb-16 pt-24 sm:px-6 lg:px-8">
-        <div className="absolute inset-0 bg-gradient-to-b from-[#4540DB]/10 to-transparent" />
-        <div className="relative mx-auto max-w-4xl text-center">
-          <span className="mb-4 inline-block rounded-full border border-[#4540DB]/30 bg-[#4540DB]/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-[#4540DB]">
-            Pricing
+      <section className="relative overflow-hidden">
+        <div className="pointer-events-none absolute -top-40 -left-40 h-[500px] w-[500px] rounded-full bg-[#4540DB]/15 blur-[120px]" />
+        <div className="pointer-events-none absolute -bottom-32 -right-32 h-[400px] w-[400px] rounded-full bg-[#00D4FF]/10 blur-[120px]" />
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage: "linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)",
+            backgroundSize: "60px 60px",
+          }}
+        />
+
+        <div className="relative mx-auto max-w-7xl px-4 py-20 text-center sm:px-6 sm:py-28 lg:px-8">
+          <span className="inline-flex items-center gap-2 rounded-full border border-[#4540DB]/40 bg-[#4540DB]/10 px-4 py-1.5 text-xs font-medium tracking-wide text-[#4540DB]">
+            <TrendingUp className="h-3.5 w-3.5" />
+            Real Results
           </span>
-          <h1 className="text-4xl font-bold text-white sm:text-5xl lg:text-6xl">
-            Transparent pricing for{" "}
-            <span className="bg-gradient-to-r from-[#4540DB] to-[#00D4FF] bg-clip-text text-transparent">
-              quality talent
-            </span>
+          <h1 className="mt-6 text-4xl font-bold tracking-tight text-white sm:text-5xl">
+            Case Studies
           </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-400">
-            Whether you need a single shortlist or an ongoing talent pipeline, we have a plan that
-            fits. All packages include technically-screened automation engineers.
+          <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-400">
+            See how we help organisations hire high-performing talent quickly and cost-effectively across every sector.
           </p>
         </div>
       </section>
 
-      {/* Shortlist Packages */}
-      <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
-        <div className="mb-12 text-center">
-          <h2 className="text-3xl font-bold text-white">Shortlist Packages</h2>
-          <p className="mt-3 text-gray-400">
-            One-off curated shortlists of pre-screened automation engineers
-          </p>
-        </div>
-
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {SHORTLIST_PACKAGES.map((pkg) => {
-            const isPopular = "popular" in pkg && pkg.popular;
-            return (
-              <div
-                key={pkg.id}
-                className={`relative flex flex-col rounded-2xl border p-6 backdrop-blur-sm transition-all hover:border-white/20 ${
-                  isPopular
-                    ? "border-[#4540DB]/40 bg-[#4540DB]/[0.06] shadow-lg shadow-[#4540DB]/10"
-                    : "border-white/[0.08] bg-white/[0.03]"
-                }`}
-              >
-                {isPopular && (
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-[#4540DB] px-3 py-1 text-xs font-bold text-white">
-                    Popular
-                  </span>
-                )}
-                <h3 className="text-lg font-semibold text-white">{pkg.name}</h3>
-                <p className="mt-1 text-sm text-gray-400">{pkg.description}</p>
-                <div className="mt-4">
-                  <span className="text-3xl font-bold text-white">{formatPrice(pkg.price)}</span>
-                  <span className="ml-1 text-sm text-gray-500">one-off</span>
-                </div>
-                <div className="mb-2 mt-1 text-sm text-[#00D4FF]">
-                  {pkg.candidates} candidates
-                </div>
-                <ul className="mt-4 flex-1 space-y-3">
-                  {pkg.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2 text-sm text-gray-300">
-                      <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-[#00D4FF]" />
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  href="/sign-in"
-                  className={`mt-6 block w-full rounded-lg px-4 py-3 text-center text-sm font-semibold transition-all ${
-                    isPopular
-                      ? "bg-[#4540DB] text-white shadow-lg shadow-[#4540DB]/30 hover:bg-[#3632b5]"
-                      : "border border-white/10 bg-white/5 text-white hover:bg-white/10"
-                  }`}
-                >
-                  Get Started
-                </Link>
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* Employer Subscriptions */}
-      <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
-        <div className="mb-12 text-center">
-          <h2 className="text-3xl font-bold text-white">Employer Subscriptions</h2>
-          <p className="mt-3 text-gray-400">
-            Monthly plans for ongoing access to our talent pipeline and tools
-          </p>
-        </div>
-
-        <div className="grid gap-6 md:grid-cols-3">
-          {SUBSCRIPTION_TIERS.map((tier) => {
-            const isPopular = "popular" in tier && tier.popular;
-            const isEnterprise = tier.id === "employer_enterprise";
-            return (
-              <div
-                key={tier.id}
-                className={`relative flex flex-col rounded-2xl border p-8 backdrop-blur-sm transition-all hover:border-white/20 ${
-                  isPopular
-                    ? "border-[#4540DB]/40 bg-[#4540DB]/[0.06] shadow-lg shadow-[#4540DB]/10"
-                    : "border-white/[0.08] bg-white/[0.03]"
-                }`}
-              >
-                {isPopular && (
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-[#4540DB] px-3 py-1 text-xs font-bold text-white">
-                    Popular
-                  </span>
-                )}
-                <h3 className="text-xl font-semibold text-white">{tier.name}</h3>
-                <p className="mt-1 text-sm text-gray-400">{tier.description}</p>
-                <div className="mt-6">
-                  <span className="text-4xl font-bold text-white">{formatPrice(tier.price)}</span>
-                  <span className="ml-1 text-sm text-gray-500">/month</span>
-                </div>
-                <ul className="mt-8 flex-1 space-y-3">
-                  {tier.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2 text-sm text-gray-300">
-                      <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-[#00D4FF]" />
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  href={isEnterprise ? "/contact" : "/sign-in"}
-                  className={`mt-8 block w-full rounded-lg px-4 py-3 text-center text-sm font-semibold transition-all ${
-                    isPopular
-                      ? "bg-[#4540DB] text-white shadow-lg shadow-[#4540DB]/30 hover:bg-[#3632b5]"
-                      : "border border-white/10 bg-white/5 text-white hover:bg-white/10"
-                  }`}
-                >
-                  {isEnterprise ? "Contact Sales" : "Get Started"}
-                </Link>
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* Additional Services */}
-      <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
-        <div className="mb-12 text-center">
-          <h2 className="text-3xl font-bold text-white">Additional Services</h2>
-          <p className="mt-3 text-gray-400">
-            Standalone services for employers and candidates
-          </p>
-        </div>
-
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {/* Technical Screening - Standard */}
-          <div className="flex flex-col rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 backdrop-blur-sm transition-all hover:border-white/20">
-            <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-[#4540DB]/20">
-              <Shield className="h-5 w-5 text-[#4540DB]" />
-            </div>
-            <h3 className="text-lg font-semibold text-white">
-              {SCREENING_PRICES.standard.label}
-            </h3>
-            <p className="mt-1 text-sm text-gray-400">
-              {SCREENING_PRICES.standard.description}
-            </p>
-            <div className="mt-4 text-2xl font-bold text-white">
-              {formatPrice(SCREENING_PRICES.standard.price)}
-              <span className="ml-1 text-sm font-normal text-gray-500">per candidate</span>
-            </div>
-            <Link
-              href="/sign-in"
-              className="mt-6 block w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-center text-sm font-semibold text-white transition-all hover:bg-white/10"
-            >
-              Order Screening
-            </Link>
-          </div>
-
-          {/* Technical Screening - Advanced */}
-          <div className="flex flex-col rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 backdrop-blur-sm transition-all hover:border-white/20">
-            <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-[#00D4FF]/20">
-              <Zap className="h-5 w-5 text-[#00D4FF]" />
-            </div>
-            <h3 className="text-lg font-semibold text-white">
-              {SCREENING_PRICES.advanced.label}
-            </h3>
-            <p className="mt-1 text-sm text-gray-400">
-              {SCREENING_PRICES.advanced.description}
-            </p>
-            <div className="mt-4 text-2xl font-bold text-white">
-              {formatPrice(SCREENING_PRICES.advanced.price)}
-              <span className="ml-1 text-sm font-normal text-gray-500">per candidate</span>
-            </div>
-            <Link
-              href="/sign-in"
-              className="mt-6 block w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-center text-sm font-semibold text-white transition-all hover:bg-white/10"
-            >
-              Order Screening
-            </Link>
-          </div>
-
-          {/* Candidate Premium */}
-          <div className="flex flex-col rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 backdrop-blur-sm transition-all hover:border-white/20">
-            <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-[#8B5CF6]/20">
-              <Star className="h-5 w-5 text-[#8B5CF6]" />
-            </div>
-            <h3 className="text-lg font-semibold text-white">Candidate Premium</h3>
-            <p className="mt-1 text-sm text-gray-400">
-              {CANDIDATE_SERVICES.premium_monthly.description}
-            </p>
-            <div className="mt-4 text-2xl font-bold text-white">
-              {formatPrice(CANDIDATE_SERVICES.premium_monthly.price)}
-              <span className="ml-1 text-sm font-normal text-gray-500">/mo</span>
-            </div>
-            <Link
-              href="/sign-in"
-              className="mt-6 block w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-center text-sm font-semibold text-white transition-all hover:bg-white/10"
-            >
-              Go Premium
-            </Link>
-          </div>
-
-          {/* Agency Verify */}
-          <div className="flex flex-col rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 backdrop-blur-sm transition-all hover:border-white/20 md:col-span-2 lg:col-span-3">
-            <div className="flex items-center gap-4">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#10B981]/20">
-                <Award className="h-5 w-5 text-[#10B981]" />
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold text-white">Agency Verify</h3>
-                <p className="text-sm text-gray-400">
-                  Partner with OSCABE to access verified candidates and co-sell our screening
-                  services. Custom pricing based on volume.
-                </p>
-              </div>
-              <Link
-                href="/contact"
-                className="ml-auto shrink-0 rounded-lg border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-white transition-all hover:bg-white/10"
-              >
-                Partner With Us
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Traditional Recruitment */}
-      <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
-        <div className="mb-12 text-center">
-          <h2 className="text-3xl font-bold text-white">Traditional Recruitment</h2>
-          <p className="mt-3 text-gray-400">
-            Proven placement models tailored to your hiring needs
-          </p>
-        </div>
-
-        <div className="grid gap-6 md:grid-cols-2">
+      {/* Stats bar */}
+      <section className="border-y border-white/[0.06] py-10">
+        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-center gap-12 px-4">
           {[
-            {
-              icon: Briefcase,
-              title: "Contingency Placements",
-              price: "12–18% of salary",
-              description: "Pay only when you hire. Our standard success-based model with built-in protection.",
-              features: [
-                "Fee based on candidate annual salary",
-                "90-day replacement guarantee",
-                "Chartered engineer screening included",
-              ],
-            },
-            {
-              icon: Shield,
-              title: "Retained Search",
-              price: "20–25% in milestones",
-              description: "Dedicated search for senior and hard-to-fill roles like Engineering Managers, Lead Controls, and Safety PLC.",
-              features: [
-                "Milestone payments: 30% / 30% / 40%",
-                "Exclusive dedicated search team",
-                "Ideal for senior & niche automation roles",
-              ],
-            },
-            {
-              icon: Users,
-              title: "Contractor Staffing",
-              price: "8–15% margin on day rates",
-              description: "Flexible contractor supply at £300–£500/day typical rates, fully compliant and audit-ready.",
-              features: [
-                "IR35 compliant engagements",
-                "FCSA-accredited umbrella companies",
-                "Rapid deployment for project peaks",
-              ],
-            },
-            {
-              icon: Globe,
-              title: "International Placement",
-              price: "£3,000–£8,000 flat fee",
-              description: "Global talent sourcing with visa support, powered by our Dubai and Bangalore offices.",
-              features: [
-                "End-to-end visa & relocation support",
-                "Dubai and Bangalore sourcing hubs",
-                "Cross-border compliance handled",
-              ],
-            },
-          ].map((item) => (
-            <div
-              key={item.title}
-              className="flex flex-col rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 backdrop-blur-sm transition-all hover:border-white/20"
-            >
-              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-[#4540DB]/20">
-                <item.icon className="h-5 w-5 text-[#4540DB]" />
-              </div>
-              <h3 className="text-lg font-semibold text-white">{item.title}</h3>
-              <p className="mt-1 text-sm text-gray-400">{item.description}</p>
-              <div className="mt-4 text-xl font-bold text-[#00D4FF]">{item.price}</div>
-              <ul className="mt-4 flex-1 space-y-3">
-                {item.features.map((f) => (
-                  <li key={f} className="flex items-start gap-2 text-sm text-gray-300">
-                    <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-[#00D4FF]" />
-                    {f}
-                  </li>
-                ))}
-              </ul>
+            { value: "72hrs", label: "Average time to shortlist" },
+            { value: "40%", label: "Avg reduction in hiring time" },
+            { value: "95%", label: "Client satisfaction rate" },
+            { value: "0", label: "Upfront fees" },
+          ].map((stat) => (
+            <div key={stat.label} className="text-center">
+              <p className="text-2xl font-bold text-[#00D4FF] sm:text-3xl">{stat.value}</p>
+              <p className="mt-1 text-xs text-gray-500">{stat.label}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Hybrid Retainer Model */}
-      <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
-        <div className="mb-12 text-center">
-          <h2 className="text-3xl font-bold text-white">Hybrid Retainer Model</h2>
-          <p className="mt-3 text-gray-400">
-            De-risk your hiring while lowering total cost per hire
-          </p>
-        </div>
-
-        <div className="mx-auto max-w-3xl">
-          <div className="relative rounded-2xl border border-[#4540DB]/40 bg-gradient-to-br from-[#4540DB]/[0.08] to-[#00D4FF]/[0.04] p-8 backdrop-blur-sm shadow-lg shadow-[#4540DB]/10">
-            <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-r from-[#4540DB] to-[#00D4FF] px-4 py-1 text-xs font-bold text-white">
-              Most Flexible
-            </span>
-            <div className="text-center">
-              <div className="mt-2 flex items-baseline justify-center gap-2">
-                <span className="text-4xl font-bold text-white">£999</span>
-                <span className="text-gray-400">/month retainer</span>
-                <span className="text-2xl font-bold text-white">+ 8%</span>
-                <span className="text-gray-400">on successful hires</span>
-              </div>
-              <p className="mx-auto mt-4 max-w-lg text-gray-400">
-                Gaining strongest traction in 2026. Combines predictable monthly investment with significantly reduced placement fees.
-              </p>
-            </div>
-
-            <div className="mt-8 grid gap-6 sm:grid-cols-2">
-              <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-5">
-                <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">Industry Standard</p>
-                <p className="mt-2 text-2xl font-bold text-gray-400">0% retainer + 15–25% fee</p>
-                <p className="mt-1 text-sm text-gray-500">High placement cost, no commitment</p>
-              </div>
-              <div className="rounded-xl border border-[#00D4FF]/30 bg-[#00D4FF]/[0.05] p-5">
-                <p className="text-xs font-semibold uppercase tracking-wider text-[#00D4FF]">OSCABE Hybrid</p>
-                <p className="mt-2 text-2xl font-bold text-white">£999/mo + 8% fee</p>
-                <p className="mt-1 text-sm text-[#00D4FF]/70">Lower total cost, ongoing partnership</p>
-              </div>
-            </div>
-
-            <div className="mt-6 flex justify-center">
-              <Link
-                href="/contact"
-                className="rounded-lg bg-[#4540DB] px-8 py-3 text-sm font-semibold text-white shadow-lg shadow-[#4540DB]/30 transition-all hover:bg-[#3632b5]"
-              >
-                Discuss Hybrid Retainer
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Market Intelligence */}
-      <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
-        <div className="mb-12 text-center">
-          <h2 className="text-3xl font-bold text-white">Market Intelligence</h2>
-          <p className="mt-3 text-gray-400">
-            Stay ahead of the competition with real-time talent data
-          </p>
-        </div>
-
-        <div className="mx-auto max-w-2xl">
-          <div className="relative rounded-2xl border border-white/[0.08] bg-white/[0.03] p-8 backdrop-blur-sm transition-all hover:border-white/20">
-            <span className="absolute -top-3 right-6 rounded-full bg-[#00D4FF] px-3 py-1 text-xs font-bold text-[#02012B]">
-              New
-            </span>
-            <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-[#00D4FF]/20">
-              <BarChart3 className="h-5 w-5 text-[#00D4FF]" />
-            </div>
-            <h3 className="text-xl font-semibold text-white">Talent Radar</h3>
-            <div className="mt-2 flex items-baseline gap-2">
-              <span className="text-3xl font-bold text-white">£499</span>
-              <span className="text-gray-400">/month subscription</span>
-            </div>
-            <p className="mt-3 text-sm text-gray-400">
-              Weekly intelligence delivered to your inbox — know who is available before your competitors do.
-            </p>
-            <ul className="mt-6 space-y-3">
-              {[
-                "Weekly email: 5 new automation candidates in your region",
-                "Salary movement data and market trends",
-                "First-look access before competitors",
-                "Regional talent supply and demand insights",
-              ].map((f) => (
-                <li key={f} className="flex items-start gap-2 text-sm text-gray-300">
-                  <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-[#00D4FF]" />
-                  {f}
-                </li>
-              ))}
-            </ul>
-            <Link
-              href="/contact"
-              className="mt-6 block w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-center text-sm font-semibold text-white transition-all hover:bg-white/10"
-            >
-              Subscribe to Talent Radar
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Advisory & Consulting */}
-      <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
-        <div className="mb-12 text-center">
-          <h2 className="text-3xl font-bold text-white">Advisory &amp; Consulting</h2>
-          <p className="mt-3 text-gray-400">
-            Expert guidance to optimise your automation workforce strategy
-          </p>
-        </div>
-
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {[
-            {
-              icon: TrendingUp,
-              title: "Automation Workforce Audit",
-              price: "£2,000–£5,000",
-              description: "Full review of your current team structure, skills gaps, and hiring roadmap.",
-            },
-            {
-              icon: Target,
-              title: "12-Month Talent Strategy",
-              price: "£3,000–£5,000",
-              description: "Bespoke workforce plan aligned to your project pipeline and growth targets.",
-            },
-            {
-              icon: BarChart3,
-              title: "Salary Benchmarking Report",
-              price: "£1,500–£2,500",
-              description: "Detailed compensation analysis by role, region, and specialism.",
-            },
-            {
-              icon: Shield,
-              title: "IR35 Compliance Assessment",
-              price: "£500–£1,500",
-              description: "Status determination statements and compliance review for your contractor engagements.",
-            },
-          ].map((item) => (
-            <div
-              key={item.title}
-              className="flex flex-col rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 backdrop-blur-sm transition-all hover:border-white/20"
-            >
-              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-[#4540DB]/20">
-                <item.icon className="h-5 w-5 text-[#4540DB]" />
-              </div>
-              <h3 className="text-base font-semibold text-white">{item.title}</h3>
-              <p className="mt-1 text-sm text-gray-400">{item.description}</p>
-              <div className="mt-auto pt-4 text-lg font-bold text-[#00D4FF]">{item.price}</div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Training & Upskilling */}
-      <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
-        <div className="mb-12 text-center">
-          <h2 className="text-3xl font-bold text-white">Training &amp; Upskilling</h2>
-          <p className="mt-3 text-sm font-medium uppercase tracking-wider text-[#4540DB]">
-            Powered by Wartens
-          </p>
-          <p className="mt-3 text-gray-400">
-            Bridge the skill gap — we train near-match candidates on your exact stack
-          </p>
-        </div>
-
-        <div className="grid gap-6 md:grid-cols-3">
-          {[
-            {
-              icon: BookOpen,
-              title: "Pre-Placement Upskilling",
-              price: "£2,000",
-              unit: "/placement",
-              description: "Targeted training for near-match candidates to fill specific skill gaps before they start on your site.",
-              features: [
-                "Customised to your PLC/SCADA stack",
-                "Practical hands-on training",
-                "Completion certification included",
-              ],
-            },
-            {
-              icon: GraduationCap,
-              title: "Platform Cross-Training Bootcamp",
-              price: "£4,750",
-              unit: "/person",
-              description: "4-week intensive programme to cross-train engineers on new automation platforms.",
-              features: [
-                "4-week intensive programme",
-                "Siemens, Allen-Bradley, Mitsubishi",
-                "Real-world project simulations",
-              ],
-            },
-            {
-              icon: Sparkles,
-              title: "nxtED AI Candidate Subscriptions",
-              price: "£9.99",
-              unit: "/month",
-              description: "AI-powered continuous learning platform for automation engineers to stay current.",
-              features: [
-                "AI-personalised learning paths",
-                "Micro-certifications on completion",
-                "Employer dashboard for team progress",
-              ],
-            },
-          ].map((item) => (
-            <div
-              key={item.title}
-              className="flex flex-col rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 backdrop-blur-sm transition-all hover:border-white/20"
-            >
-              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-[#4540DB]/20">
-                <item.icon className="h-5 w-5 text-[#4540DB]" />
-              </div>
-              <h3 className="text-lg font-semibold text-white">{item.title}</h3>
-              <p className="mt-1 text-sm text-gray-400">{item.description}</p>
-              <div className="mt-4 flex items-baseline gap-1">
-                <span className="text-2xl font-bold text-white">{item.price}</span>
-                <span className="text-sm text-gray-500">{item.unit}</span>
-              </div>
-              <ul className="mt-4 flex-1 space-y-3">
-                {item.features.map((f) => (
-                  <li key={f} className="flex items-start gap-2 text-sm text-gray-300">
-                    <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-[#00D4FF]" />
-                    {f}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Comparison Table */}
-      <section className="mx-auto max-w-5xl px-4 pb-20 sm:px-6 lg:px-8">
-        <div className="mb-12 text-center">
-          <h2 className="text-3xl font-bold text-white">OSCABE vs Traditional Recruiter</h2>
-          <p className="mt-3 text-gray-400">
-            See how we compare on cost, speed, and quality
-          </p>
-        </div>
-
-        <div className="overflow-hidden rounded-2xl border border-white/[0.08] backdrop-blur-sm">
-          <table className="w-full text-left text-sm">
-            <thead>
-              <tr className="border-b border-white/[0.08] bg-white/[0.05]">
-                <th className="px-6 py-4 font-semibold text-white">Feature</th>
-                <th className="px-6 py-4 font-semibold text-gray-400">Traditional Recruiter</th>
-                <th className="px-6 py-4 font-semibold text-[#00D4FF]">OSCABE</th>
-              </tr>
-            </thead>
-            <tbody>
-              {[
-                { feature: "Fee", traditional: "15–25% of salary", oscabe: "From £1,500 flat fee" },
-                { feature: "Screening", traditional: "Keyword matching", oscabe: "Chartered Engineer verification" },
-                { feature: "Speed", traditional: "2–4 weeks", oscabe: "48 hours" },
-                { feature: "Guarantee", traditional: "Often none", oscabe: "90-day replacement" },
-                { feature: "Model Options", traditional: "Contingency only", oscabe: "6 flexible models" },
-                { feature: "AI Matching", traditional: "No", oscabe: "Yes (3BOX AI)" },
-                { feature: "Training", traditional: "No", oscabe: "Wartens upskilling pipeline" },
-              ].map((row, i) => (
-                <tr
-                  key={row.feature}
-                  className={`border-b border-white/[0.05] ${
-                    i % 2 === 0 ? "bg-white/[0.02]" : "bg-white/[0.04]"
-                  }`}
-                >
-                  <td className="px-6 py-4 font-medium text-white">{row.feature}</td>
-                  <td className="px-6 py-4 text-gray-500">{row.traditional}</td>
-                  <td className="px-6 py-4 font-medium text-[#00D4FF]">{row.oscabe}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      {/* Trust Bar */}
-      <section className="border-y border-white/[0.08] bg-white/[0.02] py-12">
+      {/* Case Studies */}
+      <section className="py-20 sm:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
-            {[
-              { icon: Shield, label: "Chartered Engineer Led" },
-              { icon: Award, label: "Startup of the Year 2025" },
-              { icon: Zap, label: "48hr Priority Delivery" },
-              { icon: Star, label: "90-Day Guarantee" },
-            ].map((item) => (
-              <div key={item.label} className="flex flex-col items-center gap-2 text-center">
-                <item.icon className="h-6 w-6 text-[#00D4FF]" />
-                <span className="text-sm font-medium text-gray-300">{item.label}</span>
+          <div className="space-y-16">
+            {CASE_STUDIES.map((study, index) => (
+              <div
+                key={study.id}
+                className="overflow-hidden rounded-3xl border border-white/[0.08] bg-white/[0.02] backdrop-blur-sm"
+              >
+                {/* Case study image */}
+                <div className="relative h-56 w-full sm:h-64">
+                  <Image
+                    src={study.image}
+                    alt={`${study.clientType} - ${study.industry}`}
+                    fill
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#010118]/50 to-[#010118]" />
+                  <div className="absolute bottom-6 left-8 flex items-center gap-4 sm:left-10">
+                    <div
+                      className="flex h-14 w-14 items-center justify-center rounded-xl"
+                      style={{ background: `${study.color}20` }}
+                    >
+                      <study.icon className="h-7 w-7" style={{ color: study.color }} />
+                    </div>
+                    <div>
+                      <span className="text-xs font-medium uppercase tracking-wider text-gray-400">
+                        Case Study {index + 1}
+                      </span>
+                      <h2 className="text-xl font-bold text-white sm:text-2xl">
+                        {study.clientType}
+                      </h2>
+                    </div>
+                  </div>
+                  <span
+                    className="absolute right-8 bottom-6 inline-block rounded-full px-3 py-0.5 text-[11px] font-medium sm:right-10"
+                    style={{ background: `${study.color}15`, color: study.color }}
+                  >
+                    {study.industry}
+                  </span>
+                </div>
+
+                {/* Content grid */}
+                <div className="p-8 sm:p-10">
+                  <div className="grid gap-6 sm:grid-cols-3">
+                    {/* Challenge */}
+                    <div className="rounded-2xl border border-red-500/15 bg-red-500/[0.03] p-6">
+                      <h3 className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-red-400">
+                        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-red-500/20 text-[10px]">!</span>
+                        Challenge
+                      </h3>
+                      <p className="mt-4 text-sm leading-relaxed text-gray-400">
+                        {study.challenge}
+                      </p>
+                    </div>
+
+                    {/* Solution */}
+                    <div
+                      className="rounded-2xl border p-6"
+                      style={{ borderColor: `${study.color}20`, background: `${study.color}03` }}
+                    >
+                      <h3 className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider" style={{ color: study.color }}>
+                        <Clock className="h-4 w-4" />
+                        Solution
+                      </h3>
+                      <ul className="mt-4 space-y-3">
+                        {study.solution.map((item) => (
+                          <li key={item} className="flex items-start gap-2 text-sm text-gray-400">
+                            <CheckCircle className="mt-0.5 h-4 w-4 shrink-0" style={{ color: study.color }} />
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {/* Results */}
+                    <div className="rounded-2xl border border-[#22C55E]/20 bg-[#22C55E]/[0.03] p-6">
+                      <h3 className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-[#22C55E]">
+                        <TrendingUp className="h-4 w-4" />
+                        Result
+                      </h3>
+                      <div className="mt-4 space-y-4">
+                        {study.results.map((result) => (
+                          <div key={result.detail}>
+                            <p className="text-2xl font-bold text-[#22C55E]">{result.metric}</p>
+                            <p className="text-sm text-gray-400">{result.detail}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* FAQ */}
-      <section className="mx-auto max-w-3xl px-4 py-20 sm:px-6 lg:px-8">
-        <div className="mb-12 text-center">
-          <h2 className="text-3xl font-bold text-white">Frequently Asked Questions</h2>
-          <p className="mt-3 text-gray-400">
-            Everything you need to know about our pricing and services
-          </p>
-        </div>
-
-        <div className="space-y-3">
-          {FAQ_ITEMS.map((item) => (
-            <FaqItem key={item.q} question={item.q} answer={item.a} />
-          ))}
-        </div>
-      </section>
-
-      {/* Bottom CTA */}
-      <section className="pb-20">
+      {/* CTA */}
+      <section className="py-20 border-t border-white/[0.06]">
         <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-          <div className="rounded-2xl border border-[#4540DB]/30 bg-gradient-to-r from-[#4540DB]/10 to-[#00D4FF]/10 p-12 backdrop-blur-sm">
-            <h2 className="text-3xl font-bold text-white">Ready to find your next engineer?</h2>
-            <p className="mx-auto mt-4 max-w-xl text-gray-400">
-              Get started today with a shortlist package or speak to our team about a tailored
-              solution for your hiring needs.
+          <div className="rounded-3xl border border-white/[0.08] bg-white/[0.03] px-8 py-16 backdrop-blur-sm sm:px-16">
+            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+              Ready to be our next success story?
+            </h2>
+            <p className="mx-auto mt-4 max-w-xl text-lg text-gray-400">
+              Join the growing number of organisations that trust OSCABE for fast, reliable recruitment.
             </p>
-            <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
               <Link
-                href="/sign-in"
-                className="rounded-lg bg-[#4540DB] px-8 py-3 text-sm font-semibold text-white shadow-lg shadow-[#4540DB]/30 transition-all hover:bg-[#3632b5]"
+                href="/post-a-role"
+                className="inline-flex items-center gap-2 rounded-xl bg-[#4540DB] px-8 py-4 text-sm font-semibold text-white shadow-lg shadow-[#4540DB]/25 transition-all hover:bg-[#4540DB]/90 hover:scale-105"
               >
-                Get Started
+                Submit a Requirement
+                <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/contact"
-                className="rounded-lg border border-white/10 bg-white/5 px-8 py-3 text-sm font-semibold text-white transition-all hover:bg-white/10"
+                className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/5 px-8 py-4 text-sm font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/10"
               >
-                Talk to Sales
+                <Phone className="h-4 w-4" />
+                Book a Call
               </Link>
             </div>
           </div>
         </div>
       </section>
-    </div>
-  );
-}
-
-function FaqItem({ question, answer }: { question: string; answer: string }) {
-  const [open, setOpen] = useState(false);
-
-  return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm">
-      <button
-        onClick={() => setOpen(!open)}
-        className="flex w-full items-center justify-between px-6 py-4 text-left"
-      >
-        <span className="text-sm font-medium text-white">{question}</span>
-        <ChevronDown
-          className={`h-4 w-4 shrink-0 text-gray-400 transition-transform ${open ? "rotate-180" : ""}`}
-        />
-      </button>
-      {open && (
-        <div className="px-6 pb-4">
-          <p className="text-sm leading-relaxed text-gray-400">{answer}</p>
-        </div>
-      )}
     </div>
   );
 }

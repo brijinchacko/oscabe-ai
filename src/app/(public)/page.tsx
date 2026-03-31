@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, type RefObject } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   ArrowRight,
   CheckCircle,
@@ -57,7 +58,7 @@ export default function HomePage() {
   const [heroRef, heroVisible] = useInView(0.05);
 
   return (
-    <div className="overflow-x-hidden bg-[#02012B]">
+    <div className="overflow-x-hidden bg-[#010118]">
       {/* ============================================================ */}
       {/*  SECTION 1 - HERO                                            */}
       {/* ============================================================ */}
@@ -66,47 +67,108 @@ export default function HomePage() {
         className="relative overflow-hidden"
       >
         {/* Background effects */}
-        <div className="pointer-events-none absolute -top-40 -left-40 h-[500px] w-[500px] rounded-full bg-[#4540DB]/15 blur-[120px]" />
-        <div className="pointer-events-none absolute -bottom-32 -right-32 h-[400px] w-[400px] rounded-full bg-[#00D4FF]/10 blur-[120px]" />
+        <div className="pointer-events-none absolute -top-40 -left-40 h-[600px] w-[600px] rounded-full bg-[#4540DB]/10 blur-[150px]" />
+        <div className="pointer-events-none absolute -bottom-40 -right-40 h-[500px] w-[500px] rounded-full bg-[#00D4FF]/8 blur-[150px]" />
         <div
-          className="pointer-events-none absolute inset-0 opacity-[0.03]"
+          className="pointer-events-none absolute inset-0 opacity-[0.02]"
           style={{
             backgroundImage: "linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)",
-            backgroundSize: "60px 60px",
+            backgroundSize: "80px 80px",
           }}
         />
 
-        <div className="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 sm:py-32 lg:px-8 lg:py-40">
-          <div
-            className={`mx-auto max-w-3xl text-center transition-all duration-700 ease-out ${
-              heroVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            }`}
-          >
-            <h1 className="text-4xl font-bold leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl">
-              Helping organisations hire high-performing talent across{" "}
-              <span className="bg-gradient-to-r from-[#4540DB] to-[#00D4FF] bg-clip-text text-transparent">
-                operations, technology, and engineering
-              </span>
-            </h1>
+        <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8 lg:py-36">
+          <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+            {/* Left - Text */}
+            <div
+              className={`transition-all duration-700 ease-out ${
+                heroVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+              }`}
+            >
+              <h1 className="text-3xl font-bold leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl">
+                Hire top talent across<br />
+                <span className="bg-gradient-to-r from-[#4540DB] to-[#00D4FF] bg-clip-text text-transparent">
+                  operations, technology,
+                </span><br />
+                <span className="bg-gradient-to-r from-[#00D4FF] to-[#8B5CF6] bg-clip-text text-transparent">
+                  and engineering.
+                </span>
+              </h1>
 
-            <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-gray-400 sm:text-xl">
-              Fast, cost-effective recruitment with pre-qualified candidates - without traditional agency overhead.
-            </p>
+              <p className="mt-6 max-w-lg text-base leading-relaxed text-gray-400 sm:text-lg">
+                Fast, cost-effective recruitment with pre-qualified candidates - without traditional agency overhead.
+              </p>
 
-            <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-              <Link
-                href="/post-a-role"
-                className="inline-flex items-center gap-2 rounded-xl bg-[#4540DB] px-8 py-4 text-sm font-semibold text-white shadow-lg shadow-[#4540DB]/25 transition-all hover:bg-[#4540DB]/90 hover:scale-105"
-              >
-                Hire Talent
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-              <Link
-                href="/contact"
-                className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/5 px-8 py-4 text-sm font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/10"
-              >
-                Submit a Role
-              </Link>
+              <div className="mt-8 flex flex-wrap gap-4">
+                <Link
+                  href="/post-a-role"
+                  className="inline-flex items-center gap-2 rounded-xl bg-[#4540DB] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#4540DB]/25 transition-all hover:bg-[#4540DB]/90 hover:scale-105"
+                >
+                  Hire Talent
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+                <Link
+                  href="/contact"
+                  className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/5 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/10"
+                >
+                  Submit a Role
+                </Link>
+              </div>
+
+              {/* Trust indicators */}
+              <div className="mt-10 flex flex-wrap items-center gap-6 text-sm text-gray-500">
+                <span className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-[#22C55E]" />72hr shortlists</span>
+                <span className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-[#22C55E]" />No upfront fees</span>
+                <span className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-[#22C55E]" />Pre-screened candidates</span>
+              </div>
+            </div>
+
+            {/* Right - Image grid */}
+            <div
+              className={`hidden lg:grid grid-cols-2 gap-4 transition-all delay-200 duration-700 ease-out ${
+                heroVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+              }`}
+            >
+              <div className="space-y-4">
+                <div className="overflow-hidden rounded-2xl border border-white/[0.08]">
+                  <Image
+                    src="https://images.unsplash.com/photo-1553877522-43269d4ea984?w=400&h=300&fit=crop"
+                    alt="Business operations team meeting"
+                    width={400}
+                    height={300}
+                    className="h-48 w-full object-cover"
+                  />
+                </div>
+                <div className="overflow-hidden rounded-2xl border border-white/[0.08]">
+                  <Image
+                    src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=400&fit=crop"
+                    alt="Engineering and technology"
+                    width={400}
+                    height={400}
+                    className="h-56 w-full object-cover"
+                  />
+                </div>
+              </div>
+              <div className="mt-8 space-y-4">
+                <div className="overflow-hidden rounded-2xl border border-white/[0.08]">
+                  <Image
+                    src="https://images.unsplash.com/photo-1531482615713-2afd69097998?w=400&h=400&fit=crop"
+                    alt="Team collaboration"
+                    width={400}
+                    height={400}
+                    className="h-56 w-full object-cover"
+                  />
+                </div>
+                <div className="overflow-hidden rounded-2xl border border-white/[0.08]">
+                  <Image
+                    src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=400&h=300&fit=crop"
+                    alt="Industrial automation engineer"
+                    width={400}
+                    height={300}
+                    className="h-48 w-full object-cover"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -116,6 +178,34 @@ export default function HomePage() {
       {/*  AWARDS BANNER                                                */}
       {/* ============================================================ */}
       <AwardsBanner />
+
+      {/* ============================================================ */}
+      {/*  IMAGE STRIP - Industry sectors                               */}
+      {/* ============================================================ */}
+      <Section className="border-y border-white/[0.04] py-12">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+            {[
+              { src: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=600&h=400&fit=crop", label: "Business & Operations" },
+              { src: "https://images.unsplash.com/photo-1573164713988-8665fc963095?w=600&h=400&fit=crop", label: "Technology & Digital" },
+              { src: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&h=400&fit=crop", label: "Engineering" },
+              { src: "https://images.unsplash.com/photo-1551434678-e076c223a692?w=600&h=400&fit=crop", label: "Professional Services" },
+            ].map((item) => (
+              <div key={item.label} className="group relative overflow-hidden rounded-xl">
+                <Image
+                  src={item.src}
+                  alt={item.label}
+                  width={600}
+                  height={400}
+                  className="h-40 w-full object-cover transition-transform duration-500 group-hover:scale-110 sm:h-48"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                <p className="absolute bottom-3 left-3 text-xs font-semibold text-white sm:text-sm">{item.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Section>
 
       {/* ============================================================ */}
       {/*  SECTION 2 - ROLES WE SUPPORT                                */}
@@ -133,7 +223,7 @@ export default function HomePage() {
 
           <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {/* Business & Operations */}
-            <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-8 backdrop-blur-sm transition-all hover:border-[#4540DB]/30 hover:bg-white/[0.06]">
+            <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-8 backdrop-blur-sm transition-all hover:border-[#4540DB]/30 hover:bg-white/[0.04]">
               <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-[#4540DB]/15">
                 <Briefcase className="h-7 w-7 text-[#4540DB]" />
               </div>
@@ -149,7 +239,7 @@ export default function HomePage() {
             </div>
 
             {/* Technology & Digital */}
-            <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-8 backdrop-blur-sm transition-all hover:border-[#00D4FF]/30 hover:bg-white/[0.06]">
+            <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-8 backdrop-blur-sm transition-all hover:border-[#00D4FF]/30 hover:bg-white/[0.04]">
               <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-[#00D4FF]/15">
                 <Monitor className="h-7 w-7 text-[#00D4FF]" />
               </div>
@@ -165,7 +255,7 @@ export default function HomePage() {
             </div>
 
             {/* Engineering */}
-            <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-8 backdrop-blur-sm transition-all hover:border-[#8B5CF6]/30 hover:bg-white/[0.06]">
+            <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-8 backdrop-blur-sm transition-all hover:border-[#8B5CF6]/30 hover:bg-white/[0.04]">
               <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-[#8B5CF6]/15">
                 <Cpu className="h-7 w-7 text-[#8B5CF6]" />
               </div>
@@ -214,11 +304,11 @@ export default function HomePage() {
             ].map((item) => (
               <div
                 key={item.text}
-                className="flex flex-col items-center rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 text-center backdrop-blur-sm transition-all hover:border-white/[0.15] hover:bg-white/[0.06]"
+                className="flex flex-col items-center rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 text-center backdrop-blur-sm transition-all hover:border-white/[0.12] hover:bg-white/[0.04]"
               >
                 <div
                   className="flex h-14 w-14 items-center justify-center rounded-xl"
-                  style={{ background: `${item.color}20` }}
+                  style={{ background: `${item.color}18` }}
                 >
                   <item.icon className="h-7 w-7" style={{ color: item.color }} />
                 </div>
@@ -234,7 +324,7 @@ export default function HomePage() {
       {/* ============================================================ */}
       {/*  OSCABE vs TRADITIONAL AGENCIES                               */}
       {/* ============================================================ */}
-      <Section className="py-20 sm:py-24 border-y border-white/[0.06]">
+      <Section className="py-20 sm:py-24 border-y border-white/[0.04]">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
@@ -243,8 +333,7 @@ export default function HomePage() {
           </div>
 
           <div className="mt-14 grid gap-8 sm:grid-cols-2">
-            {/* Traditional Agencies */}
-            <div className="rounded-2xl border border-red-500/20 bg-red-500/[0.03] p-8">
+            <div className="rounded-2xl border border-red-500/15 bg-red-500/[0.02] p-8">
               <h3 className="text-lg font-bold text-red-400">Traditional Agencies</h3>
               <ul className="mt-6 space-y-4">
                 {[
@@ -262,8 +351,7 @@ export default function HomePage() {
               </ul>
             </div>
 
-            {/* Oscabe */}
-            <div className="rounded-2xl border border-[#22C55E]/30 bg-[#22C55E]/[0.03] p-8">
+            <div className="rounded-2xl border border-[#22C55E]/25 bg-[#22C55E]/[0.02] p-8">
               <h3 className="text-lg font-bold text-[#22C55E]">Oscabe</h3>
               <ul className="mt-6 space-y-4">
                 {[
@@ -293,13 +381,12 @@ export default function HomePage() {
             <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
               How It Works
             </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-base text-gray-400">
+            <p className="mx-auto mt-4 max-w-2xl text-base text-gray-500">
               Simple, transparent, and fast.
             </p>
           </div>
 
           <div className="relative mt-16">
-            {/* Connecting line (desktop) */}
             <div className="absolute top-12 left-[12.5%] right-[12.5%] hidden h-[2px] lg:block" style={{ background: "linear-gradient(90deg, #4540DB, #00D4FF, #8B5CF6, #22C55E)" }} />
 
             <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
@@ -312,16 +399,12 @@ export default function HomePage() {
                 <div key={item.step} className="relative flex flex-col items-center text-center">
                   <div
                     className="relative z-10 flex h-16 w-16 items-center justify-center rounded-full text-2xl font-bold text-white shadow-lg"
-                    style={{ background: item.color, boxShadow: `0 0 30px ${item.color}40` }}
+                    style={{ background: item.color, boxShadow: `0 0 30px ${item.color}30` }}
                   >
                     {item.step}
                   </div>
-                  <h3 className="mt-6 text-lg font-semibold text-white">
-                    {item.title}
-                  </h3>
-                  <p className="mt-2 max-w-xs text-sm leading-relaxed text-gray-400">
-                    {item.description}
-                  </p>
+                  <h3 className="mt-6 text-lg font-semibold text-white">{item.title}</h3>
+                  <p className="mt-2 max-w-xs text-sm leading-relaxed text-gray-500">{item.description}</p>
                 </div>
               ))}
             </div>
@@ -332,7 +415,7 @@ export default function HomePage() {
       {/* ============================================================ */}
       {/*  CASE STUDY                                                   */}
       {/* ============================================================ */}
-      <Section className="py-20 sm:py-24 border-y border-white/[0.06]">
+      <Section className="py-20 sm:py-24 border-y border-white/[0.04]">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <span className="inline-flex items-center gap-2 rounded-full border border-[#4540DB]/40 bg-[#4540DB]/10 px-4 py-1.5 text-xs font-medium tracking-wide text-[#4540DB]">
@@ -344,13 +427,13 @@ export default function HomePage() {
           </div>
 
           <div className="mt-12 grid gap-6 sm:grid-cols-3">
-            <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 backdrop-blur-sm">
+            <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 backdrop-blur-sm">
               <h3 className="text-sm font-semibold uppercase tracking-wider text-red-400">Challenge</h3>
               <p className="mt-3 text-sm leading-relaxed text-gray-400">
                 Client needed urgent hiring support with limited time and budget constraints for critical technical positions.
               </p>
             </div>
-            <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 backdrop-blur-sm">
+            <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 backdrop-blur-sm">
               <h3 className="text-sm font-semibold uppercase tracking-wider text-[#00D4FF]">Solution</h3>
               <ul className="mt-3 space-y-2 text-sm text-gray-400">
                 <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-[#00D4FF]" />Rapid sourcing</li>
@@ -358,7 +441,7 @@ export default function HomePage() {
                 <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-[#00D4FF]" />Delivered shortlist in 3 days</li>
               </ul>
             </div>
-            <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 backdrop-blur-sm">
+            <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 backdrop-blur-sm">
               <h3 className="text-sm font-semibold uppercase tracking-wider text-[#22C55E]">Result</h3>
               <div className="mt-3 space-y-3">
                 <div>
@@ -371,6 +454,16 @@ export default function HomePage() {
                 </div>
               </div>
             </div>
+          </div>
+
+          <div className="mt-6 text-center">
+            <Link
+              href="/pricing"
+              className="inline-flex items-center gap-2 text-sm font-medium text-[#00D4FF] transition-colors hover:text-white"
+            >
+              View all case studies
+              <ArrowRight className="h-4 w-4" />
+            </Link>
           </div>
         </div>
       </Section>
@@ -388,42 +481,23 @@ export default function HomePage() {
 
           <div className="mt-14 grid gap-6 sm:grid-cols-2">
             {[
-              {
-                quote: "OSCABE delivered a shortlist of pre-qualified candidates within 48 hours. The quality was exceptional.",
-                name: "Meredith Decker",
-                title: "Engineering Director",
-              },
-              {
-                quote: "No upfront fees, fast turnaround, and candidates who actually matched our requirements. Refreshing.",
-                name: "Ezekiel Palmer",
-                title: "Operations Manager",
-              },
-              {
-                quote: "Finally, a recruitment partner who understands technical roles. No more explaining what we need.",
-                name: "Tiffany Cameron",
-                title: "HR Manager",
-              },
-              {
-                quote: "The speed was incredible. Pre-screened candidates ready to interview, not just CVs to sift through.",
-                name: "Adam Lamp",
-                title: "CTO",
-              },
-            ].map((testimonial) => (
-              <div
-                key={testimonial.name}
-                className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-8 backdrop-blur-sm"
-              >
+              { quote: "OSCABE delivered a shortlist of pre-qualified candidates within 48 hours. The quality was exceptional.", name: "Meredith Decker", title: "Engineering Director" },
+              { quote: "No upfront fees, fast turnaround, and candidates who actually matched our requirements. Refreshing.", name: "Ezekiel Palmer", title: "Operations Manager" },
+              { quote: "Finally, a recruitment partner who understands technical roles. No more explaining what we need.", name: "Tiffany Cameron", title: "HR Manager" },
+              { quote: "The speed was incredible. Pre-screened candidates ready to interview, not just CVs to sift through.", name: "Adam Lamp", title: "CTO" },
+            ].map((t) => (
+              <div key={t.name} className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-8 backdrop-blur-sm">
                 <div className="flex gap-1">
                   {Array.from({ length: 5 }).map((_, i) => (
                     <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                   ))}
                 </div>
                 <blockquote className="mt-4 text-sm leading-relaxed text-gray-300 sm:text-base">
-                  &ldquo;{testimonial.quote}&rdquo;
+                  &ldquo;{t.quote}&rdquo;
                 </blockquote>
                 <div className="mt-5">
-                  <p className="text-sm font-semibold text-white">{testimonial.name}</p>
-                  <p className="text-xs text-gray-500">{testimonial.title}</p>
+                  <p className="text-sm font-semibold text-white">{t.name}</p>
+                  <p className="text-xs text-gray-500">{t.title}</p>
                 </div>
               </div>
             ))}
@@ -436,7 +510,7 @@ export default function HomePage() {
       {/* ============================================================ */}
       <Section className="py-20 sm:py-24">
         <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-          <div className="rounded-3xl border border-white/[0.08] bg-white/[0.03] px-8 py-16 backdrop-blur-sm sm:px-16">
+          <div className="rounded-3xl border border-white/[0.06] bg-white/[0.02] px-8 py-16 backdrop-blur-sm sm:px-16">
             <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
               Struggling with slow or expensive recruitment?
             </h2>

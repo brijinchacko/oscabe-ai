@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import {
   ShieldCheck,
   Users,
@@ -98,7 +99,7 @@ const WHY_PARTNER = [
 
 export default function AgenciesPage() {
   return (
-    <div className="bg-[#02012B]">
+    <div className="bg-[#010118]">
       {/* Hero */}
       <section className="relative overflow-hidden py-20 sm:py-28">
         {/* Grid pattern */}
@@ -115,35 +116,52 @@ export default function AgenciesPage() {
         <div className="pointer-events-none absolute -bottom-40 -right-40 h-[400px] w-[400px] rounded-full bg-[#8B5CF6]/15 blur-[120px]" />
         <div className="pointer-events-none absolute top-1/2 right-1/4 h-[300px] w-[300px] rounded-full bg-[#8B5CF6]/10 blur-[120px]" />
 
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
-            Partner With OSCABE
-          </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-400">
-            Expand your reach, share candidates across a trusted network, and
-            earn split fees&mdash;all backed by AI-powered matching and
-            engineer-led technical verification.
-          </p>
-          <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-            <Link href="/contact">
-              <Button
-                size="lg"
-                className="bg-[#8B5CF6] hover:bg-[#8B5CF6]/90 text-white px-8 transition-transform hover:scale-105"
-                style={{ boxShadow: "0 0 30px rgba(139,92,246,0.4)" }}
-              >
-                Become a Partner
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
-            <a href="#products">
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-white/20 text-white hover:bg-white/10 px-8"
-              >
-                Learn More
-              </Button>
-            </a>
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+            <div className="text-center lg:text-left">
+              <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
+                Partner With OSCABE
+              </h1>
+              <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-400 lg:mx-0">
+                Expand your reach, share candidates across a trusted network, and
+                earn split fees&mdash;all backed by AI-powered matching and
+                engineer-led technical verification.
+              </p>
+              <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center lg:justify-start">
+                <Link href="/contact">
+                  <Button
+                    size="lg"
+                    className="bg-[#8B5CF6] hover:bg-[#8B5CF6]/90 text-white px-8 transition-transform hover:scale-105"
+                    style={{ boxShadow: "0 0 30px rgba(139,92,246,0.4)" }}
+                  >
+                    Become a Partner
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
+                <a href="#products">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="border-white/20 text-white hover:bg-white/10 px-8"
+                  >
+                    Learn More
+                  </Button>
+                </a>
+              </div>
+            </div>
+            <div className="relative mx-auto w-full max-w-lg lg:mx-0">
+              <div className="overflow-hidden rounded-2xl border border-white/[0.08]">
+                <Image
+                  src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=600&h=400&fit=crop"
+                  alt="Business partnership handshake"
+                  width={600}
+                  height={400}
+                  className="h-auto w-full object-cover"
+                  priority
+                />
+              </div>
+              <div className="pointer-events-none absolute -inset-4 rounded-3xl bg-[#8B5CF6]/10 blur-2xl" />
+            </div>
           </div>
         </div>
       </section>
@@ -163,7 +181,7 @@ export default function AgenciesPage() {
             </p>
           </div>
           <div className="mt-12 grid gap-8 lg:grid-cols-2">
-            {PRODUCTS.map((product) => (
+            {PRODUCTS.map((product, idx) => (
               <div
                 key={product.title}
                 className="group rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm p-6 transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.06]"
@@ -182,6 +200,22 @@ export default function AgenciesPage() {
                     "none";
                 }}
               >
+                <div className="mb-4 overflow-hidden rounded-xl">
+                  <Image
+                    src={
+                      [
+                        "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=600&h=200&fit=crop",
+                        "https://images.unsplash.com/photo-1551434678-e076c223a692?w=600&h=200&fit=crop",
+                        "https://images.unsplash.com/photo-1600880292089-90a7e086ee0c?w=600&h=200&fit=crop",
+                        "https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&h=200&fit=crop",
+                      ][idx]
+                    }
+                    alt={product.title}
+                    width={600}
+                    height={200}
+                    className="h-36 w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                </div>
                 <div className="mb-4 flex items-center justify-between">
                   <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-[#8B5CF6]/15">
                     <product.icon className="h-5 w-5 text-[#8B5CF6]" />
