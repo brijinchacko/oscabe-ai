@@ -22,6 +22,9 @@ import {
   Pause,
   Play,
   AlertTriangle,
+  CheckCircle2,
+  Timer,
+  X,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -32,9 +35,34 @@ interface AttendanceSession {
   checkInAt: string;
 }
 
-const STATUS_CONFIG: Record<string, { color: string; bg: string; label: string }> = {
-  CHECKED_IN: { color: "text-green-600", bg: "bg-green-100", label: "Active" },
-  ON_BREAK: { color: "text-yellow-600", bg: "bg-yellow-100", label: "On Break" },
+interface DailyReport {
+  date: string;
+  userName: string;
+  checkIn: string;
+  checkOut: string;
+  location: string;
+  totalHours: string;
+  activeHours: string;
+  breakHours: string;
+  idleHours: string;
+  breakCount: number;
+  summary: string;
+}
+
+const STATUS_CONFIG: Record<
+  string,
+  { color: string; bg: string; label: string }
+> = {
+  CHECKED_IN: {
+    color: "text-green-600",
+    bg: "bg-green-100",
+    label: "Active",
+  },
+  ON_BREAK: {
+    color: "text-yellow-600",
+    bg: "bg-yellow-100",
+    label: "On Break",
+  },
   IDLE: { color: "text-red-600", bg: "bg-red-100", label: "Idle" },
 };
 
@@ -45,7 +73,10 @@ const LOCATION_CONFIG: Record<string, { icon: typeof Home; label: string }> = {
 };
 
 function formatElapsed(checkInAt: string): string {
-  const diff = Math.max(0, Math.floor((Date.now() - new Date(checkInAt).getTime()) / 1000));
+  const diff = Math.max(
+    0,
+    Math.floor((Date.now() - new Date(checkInAt).getTime()) / 1000)
+  );
   const h = String(Math.floor(diff / 3600)).padStart(2, "0");
   const m = String(Math.floor((diff % 3600) / 60)).padStart(2, "0");
   const s = String(diff % 60).padStart(2, "0");
@@ -61,6 +92,7 @@ export function AttendanceDashboardCard() {
   const [checkOutOpen, setCheckOutOpen] = useState(false);
   const [checkInNote, setCheckInNote] = useState("");
   const [checkOutSummary, setCheckOutSummary] = useState("");
+  const [dailyReport, setDailyReport] = useState<DailyReport | null>(null);
 
   const fetchAttendance = useCallback(async () => {
     try {
@@ -83,7 +115,10 @@ export function AttendanceDashboardCard() {
   useEffect(() => {
     if (!attendance?.checkInAt || attendance.status === "CHECKED_OUT") return;
     setElapsed(formatElapsed(attendance.checkInAt));
-    const interval = setInterval(() => setElapsed(formatElapsed(attendance.checkInAt)), 1000);
+    const interval = setInterval(
+      () => setElapsed(formatElapsed(attendance.checkInAt)),
+      1000
+    );
     return () => clearInterval(interval);
   }, [attendance?.checkInAt, attendance?.status]);
 
@@ -99,6 +134,7 @@ export function AttendanceDashboardCard() {
         toast.success("Checked in successfully!");
         setCheckInOpen(false);
         setCheckInNote("");
+        setDailyReport(null);
         await fetchAttendance();
       } else {
         const err = await res.json();
@@ -143,10 +179,15 @@ export function AttendanceDashboardCard() {
         body: JSON.stringify({ summary: checkOutSummary }),
       });
       if (res.ok) {
+        const data = await res.json();
         toast.success("Checked out successfully!");
         setCheckOutOpen(false);
         setCheckOutSummary("");
-        await fetchAttendance();
+        // Show daily report
+        if (data.report) {
+          setDailyReport(data.report);
+        }
+        setAttendance(null);
       } else {
         const err = await res.json();
         toast.error(err.error || "Failed to check out");
@@ -180,11 +221,17 @@ export function AttendanceDashboardCard() {
             {/* Timer + Status */}
             <div className="flex items-center justify-between">
               <div>
-                <p className="font-mono text-4xl font-bold text-gray-900">{elapsed}</p>
+                <p className="font-mono text-4xl font-bold text-gray-900">
+                  {elapsed}
+                </p>
                 <div className="mt-2 flex items-center gap-3">
                   {statusConf && (
-                    <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium ${statusConf.bg} ${statusConf.color}`}>
-                      <span className={`h-1.5 w-1.5 rounded-full ${isOnBreak ? "bg-yellow-500 animate-pulse" : attendance?.status === "IDLE" ? "bg-red-500" : "bg-green-500"}`} />
+                    <span
+                      className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium ${statusConf.bg} ${statusConf.color}`}
+                    >
+                      <span
+                        className={`h-1.5 w-1.5 rounded-full ${isOnBreak ? "bg-yellow-500 animate-pulse" : attendance?.status === "IDLE" ? "bg-red-500" : "bg-green-500"}`}
+                      />
                       {statusConf.label}
                     </span>
                   )}
@@ -204,10 +251,22 @@ export function AttendanceDashboardCard() {
                   size="sm"
                   onClick={handleBreakToggle}
                   disabled={actionLoading}
-                  className={isOnBreak ? "border-yellow-300 bg-yellow-50 text-yellow-700 hover:bg-yellow-100" : ""}
+                  className={
+                    isOnBreak
+                      ? "border-yellow-300 bg-yellow-50 text-yellow-700 hover:bg-yellow-100"
+                      : ""
+                  }
                 >
-                  {actionLoading ? <Loader2 className="size-4 animate-spin" /> : isOnBreak ? <Play className="size-4" /> : <Pause className="size-4" />}
-                  <span className="ml-1.5">{isOnBreak ? "Resume" : "Break"}</span>
+                  {actionLoading ? (
+                    <Loader2 className="size-4 animate-spin" />
+                  ) : isOnBreak ? (
+                    <Play className="size-4" />
+                  ) : (
+                    <Pause className="size-4" />
+                  )}
+                  <span className="ml-1.5">
+                    {isOnBreak ? "Resume" : "Break"}
+                  </span>
                 </Button>
                 <Button
                   variant="outline"
@@ -222,13 +281,83 @@ export function AttendanceDashboardCard() {
               </div>
             </div>
           </div>
+        ) : dailyReport ? (
+          /* Show daily report summary after checkout */
+          <div>
+            <div className="mb-3 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="size-5 text-green-500" />
+                <span className="text-sm font-medium text-gray-700">
+                  Session Complete
+                </span>
+              </div>
+              <button
+                onClick={() => setDailyReport(null)}
+                className="rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+              >
+                <X className="size-4" />
+              </button>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="rounded-lg bg-indigo-50 p-3 text-center">
+                <p className="text-[10px] font-medium uppercase text-gray-500">
+                  Total
+                </p>
+                <p className="text-lg font-bold text-indigo-700">
+                  {dailyReport.totalHours}h
+                </p>
+              </div>
+              <div className="rounded-lg bg-green-50 p-3 text-center">
+                <p className="text-[10px] font-medium uppercase text-gray-500">
+                  Active
+                </p>
+                <p className="text-lg font-bold text-green-700">
+                  {dailyReport.activeHours}h
+                </p>
+              </div>
+              <div className="rounded-lg bg-yellow-50 p-3 text-center">
+                <p className="text-[10px] font-medium uppercase text-gray-500">
+                  Break
+                </p>
+                <p className="text-lg font-bold text-yellow-700">
+                  {dailyReport.breakHours}h
+                </p>
+              </div>
+              <div className="rounded-lg bg-red-50 p-3 text-center">
+                <p className="text-[10px] font-medium uppercase text-gray-500">
+                  Idle
+                </p>
+                <p className="text-lg font-bold text-red-700">
+                  {dailyReport.idleHours}h
+                </p>
+              </div>
+            </div>
+            {dailyReport.summary &&
+              dailyReport.summary !== "No summary provided" && (
+                <p className="mt-3 text-xs text-gray-500">
+                  {dailyReport.summary}
+                </p>
+              )}
+            <Button
+              className="mt-4 w-full bg-[#4540DB] text-white hover:bg-[#4540DB]/90"
+              onClick={() => {
+                setDailyReport(null);
+                setCheckInOpen(true);
+              }}
+            >
+              <Clock className="mr-2 size-4" />
+              Start New Session
+            </Button>
+          </div>
         ) : (
           /* Not checked in */
           <div className="flex flex-col items-center py-4">
             <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-indigo-50">
               <LogIn className="size-7 text-indigo-500" />
             </div>
-            <p className="text-sm text-gray-500">You haven&apos;t checked in today</p>
+            <p className="text-sm text-gray-500">
+              You haven&apos;t checked in today
+            </p>
             <Button
               className="mt-4 bg-[#4540DB] text-white hover:bg-[#4540DB]/90"
               onClick={() => setCheckInOpen(true)}
@@ -245,14 +374,31 @@ export function AttendanceDashboardCard() {
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Start Your Work Session</DialogTitle>
-            <DialogDescription>Where are you working from today?</DialogDescription>
+            <DialogDescription>
+              Where are you working from today?
+            </DialogDescription>
           </DialogHeader>
           <div className="grid grid-cols-3 gap-3 py-4">
-            {([
-              { loc: "HOME" as const, icon: Home, label: "Home", emoji: "\uD83C\uDFE0" },
-              { loc: "OFFICE" as const, icon: Building2, label: "Office", emoji: "\uD83C\uDFE2" },
-              { loc: "REMOTE" as const, icon: Globe, label: "Remote", emoji: "\uD83C\uDF10" },
-            ]).map((item) => (
+            {[
+              {
+                loc: "HOME" as const,
+                icon: Home,
+                label: "Home",
+                emoji: "\uD83C\uDFE0",
+              },
+              {
+                loc: "OFFICE" as const,
+                icon: Building2,
+                label: "Office",
+                emoji: "\uD83C\uDFE2",
+              },
+              {
+                loc: "REMOTE" as const,
+                icon: Globe,
+                label: "Remote",
+                emoji: "\uD83C\uDF10",
+              },
+            ].map((item) => (
               <button
                 key={item.loc}
                 onClick={() => handleCheckIn(item.loc)}
@@ -264,7 +410,9 @@ export function AttendanceDashboardCard() {
                 ) : (
                   <span className="text-2xl">{item.emoji}</span>
                 )}
-                <span className="text-sm font-medium text-gray-700">{item.label}</span>
+                <span className="text-sm font-medium text-gray-700">
+                  {item.label}
+                </span>
               </button>
             ))}
           </div>
@@ -283,7 +431,9 @@ export function AttendanceDashboardCard() {
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Check Out</DialogTitle>
-            <DialogDescription>What did you accomplish today?</DialogDescription>
+            <DialogDescription>
+              What did you accomplish today?
+            </DialogDescription>
           </DialogHeader>
           <Textarea
             placeholder="Summary of today's work..."
@@ -293,13 +443,22 @@ export function AttendanceDashboardCard() {
             rows={4}
           />
           <div className="mt-4 flex justify-end gap-2">
-            <Button variant="outline" onClick={() => setCheckOutOpen(false)}>Cancel</Button>
+            <Button
+              variant="outline"
+              onClick={() => setCheckOutOpen(false)}
+            >
+              Cancel
+            </Button>
             <Button
               className="bg-red-600 text-white hover:bg-red-700"
               onClick={handleCheckOut}
               disabled={actionLoading}
             >
-              {actionLoading ? <Loader2 className="mr-2 size-4 animate-spin" /> : <LogOut className="mr-2 size-4" />}
+              {actionLoading ? (
+                <Loader2 className="mr-2 size-4 animate-spin" />
+              ) : (
+                <LogOut className="mr-2 size-4" />
+              )}
               Check Out
             </Button>
           </div>

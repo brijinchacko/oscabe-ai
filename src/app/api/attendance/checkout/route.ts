@@ -81,12 +81,34 @@ export async function POST(request: Request) {
         (now.getTime() - activeSession.checkInAt.getTime()) / (1000 * 60)
       );
 
-      // Update session
+      // Build the daily report
+      const report = {
+        date: now.toISOString().split("T")[0],
+        userName: `${user.firstName} ${user.lastName}`,
+        checkIn: activeSession.checkInAt.toISOString(),
+        checkOut: now.toISOString(),
+        location: activeSession.workLocation,
+        totalHours: (totalMinutes / 60).toFixed(1),
+        activeHours: (activeMinutes / 60).toFixed(1),
+        breakHours: (breakMinutes / 60).toFixed(1),
+        idleHours: (idleMinutes / 60).toFixed(1),
+        breakCount: activeSession.breaks.length,
+        summary: summary || "No summary provided",
+        activities: allActivities.map((a) => ({
+          type: a.type,
+          startedAt: a.startedAt.toISOString(),
+          endedAt: a.endedAt?.toISOString(),
+          duration: a.durationMin,
+          description: a.description,
+        })),
+      };
+
+      // Update session - store report JSON in checkOutSummary
       const updated = await tx.employeeWorkSession.update({
         where: { id: activeSession.id },
         data: {
           checkOutAt: now,
-          checkOutSummary: summary || null,
+          checkOutSummary: JSON.stringify(report),
           status: "CHECKED_OUT",
           totalMinutes,
           activeMinutes,
@@ -95,15 +117,33 @@ export async function POST(request: Request) {
         },
       });
 
-      return updated;
+      // Log check-out as a CRM Activity
+      await tx.activity.create({
+        data: {
+          type: "CHECK_OUT",
+          title: `${user.firstName} checked out after ${totalMinutes} minutes`,
+          content: summary || null,
+          userId: user.id,
+          metadata: JSON.stringify({
+            sessionId: activeSession.id,
+            totalMinutes,
+            activeMinutes,
+            breakMinutes,
+            idleMinutes,
+          }),
+        },
+      });
+
+      return { session: updated, report };
     });
 
     return NextResponse.json({
       message: "Checked out successfully",
-      session: result,
+      session: result.session,
+      report: result.report,
     });
-  } catch (error) {
-    console.error("Checkout error:", error);
+  } catch (err) {
+    console.error("Checkout error:", err);
     return NextResponse.json(
       { error: "Failed to check out" },
       { status: 500 }

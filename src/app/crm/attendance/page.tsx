@@ -32,18 +32,28 @@ import { toast } from "sonner";
 interface TeamMember {
   id: string;
   name: string;
-  email: string;
-  image?: string;
   role?: string;
-  status: "CHECKED_IN" | "ON_BREAK" | "IDLE" | "CHECKED_OUT";
-  location?: "HOME" | "OFFICE" | "REMOTE";
-  checkInAt?: string;
-  activeMinutes?: number;
+  avatar?: string;
+  currentStatus: "CHECKED_IN" | "ON_BREAK" | "IDLE" | "OFFLINE";
+  workLocation?: string;
+  checkInTime?: string;
+  totalActiveMinutes?: number;
+  totalBreakMinutes?: number;
+  totalIdleMinutes?: number;
+  breakCount?: number;
+  lastCheckIn?: string;
 }
 
 interface TimelineEvent {
   id: string;
-  type: "CHECK_IN" | "CHECK_OUT" | "BREAK_START" | "BREAK_END" | "IDLE_START" | "IDLE_END" | "LOG";
+  type:
+    | "CHECK_IN"
+    | "CHECK_OUT"
+    | "BREAK_START"
+    | "BREAK_END"
+    | "IDLE_START"
+    | "IDLE_END"
+    | "LOG";
   timestamp: string;
   description?: string;
 }
@@ -77,27 +87,41 @@ interface MemberDetail {
   };
 }
 
+interface ReportEntry {
+  id: string;
+  date: string;
+  userName: string;
+  email: string;
+  checkIn: string;
+  checkOut: string | null;
+  location: string;
+  totalHours: string;
+  activeHours: string;
+  breakHours: string;
+  idleHours: string;
+}
+
 // --------------- Constants ---------------
 
 const STATUS_COLORS: Record<string, string> = {
   CHECKED_IN: "bg-[#22C55E]",
   ON_BREAK: "bg-[#F59E0B]",
   IDLE: "bg-[#EF4444]",
-  CHECKED_OUT: "bg-gray-400",
+  OFFLINE: "bg-gray-400",
 };
 
 const STATUS_TEXT_COLORS: Record<string, string> = {
   CHECKED_IN: "text-[#22C55E]",
   ON_BREAK: "text-[#F59E0B]",
   IDLE: "text-[#EF4444]",
-  CHECKED_OUT: "text-gray-400",
+  OFFLINE: "text-gray-400",
 };
 
 const STATUS_LABELS: Record<string, string> = {
   CHECKED_IN: "Active",
   ON_BREAK: "Break",
   IDLE: "Idle",
-  CHECKED_OUT: "Offline",
+  OFFLINE: "Offline",
 };
 
 const LOCATION_EMOJI: Record<string, string> = {
@@ -131,7 +155,7 @@ const FILTER_TABS = [
   { label: "Active", value: "CHECKED_IN" },
   { label: "Break", value: "ON_BREAK" },
   { label: "Idle", value: "IDLE" },
-  { label: "Offline", value: "CHECKED_OUT" },
+  { label: "Offline", value: "OFFLINE" },
 ];
 
 const LOG_TYPES = [
@@ -147,7 +171,10 @@ const LOG_TYPES = [
 // --------------- Helpers ---------------
 
 function formatTime(dateStr: string): string {
-  return new Date(dateStr).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  return new Date(dateStr).toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 }
 
 function formatMinutes(minutes: number): string {
@@ -155,6 +182,13 @@ function formatMinutes(minutes: number): string {
   const m = minutes % 60;
   if (h > 0) return `${h}h ${m}m`;
   return `${m}m`;
+}
+
+function formatDate(dateStr: string): string {
+  return new Date(dateStr).toLocaleDateString([], {
+    month: "short",
+    day: "numeric",
+  });
 }
 
 function getInitials(name: string): string {
@@ -173,22 +207,33 @@ export default function AttendancePage() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("ALL");
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedMemberId, setSelectedMemberId] = useState<string | null>(null);
+  const [selectedMemberId, setSelectedMemberId] = useState<string | null>(
+    null
+  );
   const [detail, setDetail] = useState<MemberDetail | null>(null);
   const [detailLoading, setDetailLoading] = useState(false);
-  const [detailTab, setDetailTab] = useState<"today" | "history" | "logs">("today");
+  const [detailTab, setDetailTab] = useState<"today" | "history" | "logs">(
+    "today"
+  );
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
   const [newLogDesc, setNewLogDesc] = useState("");
   const [newLogType, setNewLogType] = useState("General");
   const [logSubmitting, setLogSubmitting] = useState(false);
 
+  // Reports tab state
+  const [pageTab, setPageTab] = useState<"team" | "reports">("team");
+  const [reports, setReports] = useState<ReportEntry[]>([]);
+  const [reportsLoading, setReportsLoading] = useState(false);
+  const [reportFrom, setReportFrom] = useState("");
+  const [reportTo, setReportTo] = useState("");
+
   const fetchMembers = useCallback(async () => {
     try {
       const res = await fetch("/api/attendance/team");
       if (res.ok) {
         const data = await res.json();
-        setMembers(data.members || []);
+        setMembers(data.team || []);
       }
     } catch {
       // silently fail
@@ -203,23 +248,52 @@ export default function AttendancePage() {
     return () => clearInterval(interval);
   }, [fetchMembers]);
 
-  const fetchDetail = useCallback(async (memberId: string) => {
-    setDetailLoading(true);
+  const fetchDetail = useCallback(
+    async (memberId: string) => {
+      setDetailLoading(true);
+      try {
+        const params = new URLSearchParams();
+        if (dateFrom) params.set("from", dateFrom);
+        if (dateTo) params.set("to", dateTo);
+        const res = await fetch(
+          `/api/attendance/team/${memberId}?${params}`
+        );
+        if (res.ok) {
+          const data = await res.json();
+          setDetail(data);
+        }
+      } catch {
+        toast.error("Failed to load member details");
+      } finally {
+        setDetailLoading(false);
+      }
+    },
+    [dateFrom, dateTo]
+  );
+
+  const fetchReports = useCallback(async () => {
+    setReportsLoading(true);
     try {
       const params = new URLSearchParams();
-      if (dateFrom) params.set("from", dateFrom);
-      if (dateTo) params.set("to", dateTo);
-      const res = await fetch(`/api/attendance/team/${memberId}?${params}`);
+      if (reportFrom) params.set("from", reportFrom);
+      if (reportTo) params.set("to", reportTo);
+      const res = await fetch(`/api/attendance/reports?${params}`);
       if (res.ok) {
         const data = await res.json();
-        setDetail(data);
+        setReports(data.reports || []);
       }
     } catch {
-      toast.error("Failed to load member details");
+      toast.error("Failed to load reports");
     } finally {
-      setDetailLoading(false);
+      setReportsLoading(false);
     }
-  }, [dateFrom, dateTo]);
+  }, [reportFrom, reportTo]);
+
+  useEffect(() => {
+    if (pageTab === "reports") {
+      fetchReports();
+    }
+  }, [pageTab, fetchReports]);
 
   function openDetail(memberId: string) {
     setSelectedMemberId(memberId);
@@ -236,11 +310,17 @@ export default function AttendancePage() {
     if (!newLogDesc.trim() || !selectedMemberId) return;
     setLogSubmitting(true);
     try {
-      const res = await fetch(`/api/attendance/team/${selectedMemberId}/logs`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ description: newLogDesc, type: newLogType }),
-      });
+      const res = await fetch(
+        `/api/attendance/team/${selectedMemberId}/logs`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            description: newLogDesc,
+            type: newLogType,
+          }),
+        }
+      );
       if (res.ok) {
         toast.success("Work log added");
         setNewLogDesc("");
@@ -258,7 +338,8 @@ export default function AttendancePage() {
 
   function handleDownloadCSV() {
     if (!detail?.history.length) return;
-    const header = "Date,Check In,Check Out,Active (min),Break (min),Idle (min),Total (min)\n";
+    const header =
+      "Date,Check In,Check Out,Active (min),Break (min),Idle (min),Total (min)\n";
     const rows = detail.history
       .map(
         (d) =>
@@ -274,18 +355,37 @@ export default function AttendancePage() {
     URL.revokeObjectURL(url);
   }
 
+  function handleDownloadReportsCSV() {
+    if (!reports.length) return;
+    const header =
+      "Date,Name,Email,Check In,Check Out,Location,Total (hrs),Active (hrs),Break (hrs),Idle (hrs)\n";
+    const rows = reports
+      .map(
+        (r) =>
+          `${r.date},"${r.userName}",${r.email},${r.checkIn},${r.checkOut || ""},${r.location},${r.totalHours},${r.activeHours},${r.breakHours},${r.idleHours}`
+      )
+      .join("\n");
+    const blob = new Blob([header + rows], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "attendance-reports.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
   const filtered = members.filter((m) => {
-    if (filter !== "ALL" && m.status !== filter) return false;
+    if (filter !== "ALL" && m.currentStatus !== filter) return false;
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
-      return m.name.toLowerCase().includes(q) || m.email.toLowerCase().includes(q);
+      return m.name.toLowerCase().includes(q);
     }
     return true;
   });
 
   const statusCounts = members.reduce(
     (acc, m) => {
-      acc[m.status] = (acc[m.status] || 0) + 1;
+      acc[m.currentStatus] = (acc[m.currentStatus] || 0) + 1;
       return acc;
     },
     {} as Record<string, number>
@@ -296,126 +396,303 @@ export default function AttendancePage() {
       {/* Page header */}
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Team Attendance</h1>
+          <h1 className="text-2xl font-bold text-gray-900">
+            Team Attendance
+          </h1>
           <p className="text-sm text-gray-500">
-            Monitor your team&apos;s work sessions and activity in real-time.
+            Monitor your team&apos;s work sessions and activity in
+            real-time.
           </p>
         </div>
-        <Button variant="outline" size="sm" onClick={fetchMembers}>
-          <RefreshCw className="size-3.5" />
-          Refresh
-        </Button>
-      </div>
-
-      {/* Filter tabs and search */}
-      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex gap-1 rounded-lg bg-gray-100 p-1">
-          {FILTER_TABS.map((tab) => {
-            const count =
-              tab.value === "ALL"
-                ? members.length
-                : statusCounts[tab.value] || 0;
-            return (
-              <button
-                key={tab.value}
-                onClick={() => setFilter(tab.value)}
-                className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
-                  filter === tab.value
-                    ? "bg-white text-gray-900 shadow-sm"
-                    : "text-gray-500 hover:text-gray-700"
-                }`}
-              >
-                {tab.label}
-                <span className="ml-1.5 text-xs text-gray-400">{count}</span>
-              </button>
-            );
-          })}
-        </div>
-        <div className="relative w-full max-w-xs">
-          <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-gray-400" />
-          <Input
-            placeholder="Search by name or email..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-9"
-          />
+        <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" onClick={fetchMembers}>
+            <RefreshCw className="size-3.5" />
+            Refresh
+          </Button>
         </div>
       </div>
 
-      {/* Team grid */}
-      {loading ? (
-        <div className="flex items-center justify-center py-20">
-          <Loader2 className="size-8 animate-spin text-gray-400" />
-        </div>
-      ) : filtered.length === 0 ? (
-        <div className="py-20 text-center">
-          <p className="text-gray-400">No team members found.</p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {filtered.map((member) => (
-            <button
-              key={member.id}
-              onClick={() => openDetail(member.id)}
-              className="group flex items-start gap-3 rounded-xl border border-gray-200 bg-white p-4 text-left transition-all hover:border-indigo-200 hover:shadow-md"
+      {/* Page-level tabs: Team / Reports */}
+      <div className="mb-4 flex gap-1 rounded-lg bg-gray-100 p-1 w-fit">
+        <button
+          onClick={() => setPageTab("team")}
+          className={`rounded-md px-4 py-1.5 text-sm font-medium transition-colors ${
+            pageTab === "team"
+              ? "bg-white text-gray-900 shadow-sm"
+              : "text-gray-500 hover:text-gray-700"
+          }`}
+        >
+          Team Activity
+        </button>
+        <button
+          onClick={() => setPageTab("reports")}
+          className={`rounded-md px-4 py-1.5 text-sm font-medium transition-colors ${
+            pageTab === "reports"
+              ? "bg-white text-gray-900 shadow-sm"
+              : "text-gray-500 hover:text-gray-700"
+          }`}
+        >
+          <span className="flex items-center gap-1.5">
+            <BarChart3 className="size-3.5" />
+            Reports
+          </span>
+        </button>
+      </div>
+
+      {pageTab === "team" && (
+        <>
+          {/* Filter tabs and search */}
+          <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex gap-1 rounded-lg bg-gray-100 p-1">
+              {FILTER_TABS.map((tab) => {
+                const count =
+                  tab.value === "ALL"
+                    ? members.length
+                    : statusCounts[tab.value] || 0;
+                return (
+                  <button
+                    key={tab.value}
+                    onClick={() => setFilter(tab.value)}
+                    className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+                      filter === tab.value
+                        ? "bg-white text-gray-900 shadow-sm"
+                        : "text-gray-500 hover:text-gray-700"
+                    }`}
+                  >
+                    {tab.label}
+                    <span className="ml-1.5 text-xs text-gray-400">
+                      {count}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+            <div className="relative w-full max-w-xs">
+              <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-gray-400" />
+              <Input
+                placeholder="Search by name..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-9"
+              />
+            </div>
+          </div>
+
+          {/* Team grid */}
+          {loading ? (
+            <div className="flex items-center justify-center py-20">
+              <Loader2 className="size-8 animate-spin text-gray-400" />
+            </div>
+          ) : filtered.length === 0 ? (
+            <div className="py-20 text-center">
+              <p className="text-gray-400">No team members found.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {filtered.map((member) => (
+                <button
+                  key={member.id}
+                  onClick={() => openDetail(member.id)}
+                  className="group flex items-start gap-3 rounded-xl border border-gray-200 bg-white p-4 text-left transition-all hover:border-indigo-200 hover:shadow-md"
+                >
+                  {/* Avatar */}
+                  {member.avatar ? (
+                    <img
+                      src={member.avatar}
+                      alt=""
+                      className="size-10 shrink-0 rounded-full"
+                    />
+                  ) : (
+                    <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-sm font-bold text-indigo-600">
+                      {getInitials(member.name)}
+                    </div>
+                  )}
+
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2">
+                      <p className="truncate text-sm font-medium text-gray-900">
+                        {member.name}
+                      </p>
+                      <span
+                        className={`size-2 shrink-0 rounded-full ${STATUS_COLORS[member.currentStatus] || "bg-gray-400"}`}
+                      />
+                    </div>
+                    {member.role && (
+                      <span className="inline-block rounded-full bg-gray-100 px-2 py-0.5 text-[10px] font-medium text-gray-600">
+                        {member.role}
+                      </span>
+                    )}
+                    <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500">
+                      <span
+                        className={
+                          STATUS_TEXT_COLORS[member.currentStatus] ||
+                          "text-gray-400"
+                        }
+                      >
+                        {STATUS_LABELS[member.currentStatus] || "Offline"}
+                      </span>
+                      {member.workLocation && (
+                        <span>
+                          {LOCATION_EMOJI[member.workLocation] || ""}{" "}
+                          {member.workLocation}
+                        </span>
+                      )}
+                      {member.checkInTime && (
+                        <span className="flex items-center gap-0.5">
+                          <Clock className="size-3" />
+                          {formatTime(member.checkInTime)}
+                        </span>
+                      )}
+                      {member.currentStatus !== "OFFLINE" &&
+                        member.totalActiveMinutes !== undefined && (
+                          <span className="flex items-center gap-0.5">
+                            <Timer className="size-3" />
+                            {formatMinutes(member.totalActiveMinutes)}
+                          </span>
+                        )}
+                      {member.currentStatus === "OFFLINE" &&
+                        member.lastCheckIn && (
+                          <span className="flex items-center gap-0.5 text-gray-400">
+                            <Calendar className="size-3" />
+                            Last: {formatDate(member.lastCheckIn)}
+                          </span>
+                        )}
+                    </div>
+                  </div>
+
+                  <ChevronRight className="size-4 shrink-0 text-gray-300 transition-colors group-hover:text-indigo-400" />
+                </button>
+              ))}
+            </div>
+          )}
+        </>
+      )}
+
+      {pageTab === "reports" && (
+        <div>
+          {/* Date range and export */}
+          <div className="mb-4 flex flex-wrap items-center gap-2">
+            <Input
+              type="date"
+              value={reportFrom}
+              onChange={(e) => setReportFrom(e.target.value)}
+              className="w-40"
+            />
+            <span className="text-xs text-gray-400">to</span>
+            <Input
+              type="date"
+              value={reportTo}
+              onChange={(e) => setReportTo(e.target.value)}
+              className="w-40"
+            />
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={fetchReports}
             >
-              {/* Avatar */}
-              {member.image ? (
-                <img
-                  src={member.image}
-                  alt=""
-                  className="size-10 shrink-0 rounded-full"
-                />
-              ) : (
-                <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-sm font-bold text-indigo-600">
-                  {getInitials(member.name)}
-                </div>
-              )}
+              <Search className="size-3.5" />
+              Search
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleDownloadReportsCSV}
+              disabled={!reports.length}
+            >
+              <Download className="size-3.5" />
+              Export CSV
+            </Button>
+          </div>
 
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-2">
-                  <p className="truncate text-sm font-medium text-gray-900">
-                    {member.name}
-                  </p>
-                  <span
-                    className={`size-2 shrink-0 rounded-full ${STATUS_COLORS[member.status]}`}
-                  />
-                </div>
-                {member.role && (
-                  <span className="inline-block rounded-full bg-gray-100 px-2 py-0.5 text-[10px] font-medium text-gray-600">
-                    {member.role}
-                  </span>
-                )}
-                <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500">
-                  <span className={STATUS_TEXT_COLORS[member.status]}>
-                    {STATUS_LABELS[member.status]}
-                  </span>
-                  {member.location && (
-                    <span>{LOCATION_EMOJI[member.location]} {member.location}</span>
-                  )}
-                  {member.checkInAt && (
-                    <span className="flex items-center gap-0.5">
-                      <Clock className="size-3" />
-                      {formatTime(member.checkInAt)}
-                    </span>
-                  )}
-                  {member.activeMinutes !== undefined && (
-                    <span className="flex items-center gap-0.5">
-                      <Timer className="size-3" />
-                      {formatMinutes(member.activeMinutes)}
-                    </span>
-                  )}
-                </div>
-              </div>
-
-              <ChevronRight className="size-4 shrink-0 text-gray-300 transition-colors group-hover:text-indigo-400" />
-            </button>
-          ))}
+          {reportsLoading ? (
+            <div className="flex items-center justify-center py-20">
+              <Loader2 className="size-8 animate-spin text-gray-400" />
+            </div>
+          ) : reports.length === 0 ? (
+            <div className="py-20 text-center">
+              <p className="text-gray-400">
+                No reports found. Select a date range and search.
+              </p>
+            </div>
+          ) : (
+            <div className="overflow-x-auto rounded-lg border border-gray-200">
+              <table className="w-full text-xs">
+                <thead>
+                  <tr className="border-b bg-gray-50 text-left text-gray-500">
+                    <th className="px-3 py-2.5 font-medium">Date</th>
+                    <th className="px-3 py-2.5 font-medium">Name</th>
+                    <th className="px-3 py-2.5 font-medium">
+                      Location
+                    </th>
+                    <th className="px-3 py-2.5 font-medium">
+                      Check In
+                    </th>
+                    <th className="px-3 py-2.5 font-medium">
+                      Check Out
+                    </th>
+                    <th className="px-3 py-2.5 font-medium">
+                      Total (hrs)
+                    </th>
+                    <th className="px-3 py-2.5 font-medium">
+                      Active (hrs)
+                    </th>
+                    <th className="px-3 py-2.5 font-medium">
+                      Break (hrs)
+                    </th>
+                    <th className="px-3 py-2.5 font-medium">
+                      Idle (hrs)
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {reports.map((r) => (
+                    <tr
+                      key={r.id}
+                      className="border-b border-gray-100 last:border-0"
+                    >
+                      <td className="px-3 py-2 font-medium text-gray-700">
+                        {r.date}
+                      </td>
+                      <td className="px-3 py-2 text-gray-700">
+                        {r.userName}
+                      </td>
+                      <td className="px-3 py-2 text-gray-600">
+                        {LOCATION_EMOJI[r.location] || ""} {r.location}
+                      </td>
+                      <td className="px-3 py-2 text-gray-600">
+                        {formatTime(r.checkIn)}
+                      </td>
+                      <td className="px-3 py-2 text-gray-600">
+                        {r.checkOut ? formatTime(r.checkOut) : "-"}
+                      </td>
+                      <td className="px-3 py-2 font-medium text-gray-800">
+                        {r.totalHours}
+                      </td>
+                      <td className="px-3 py-2 text-[#22C55E]">
+                        {r.activeHours}
+                      </td>
+                      <td className="px-3 py-2 text-[#F59E0B]">
+                        {r.breakHours}
+                      </td>
+                      <td className="px-3 py-2 text-[#EF4444]">
+                        {r.idleHours}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       )}
 
       {/* Detail slide-over panel */}
-      <Sheet open={!!selectedMemberId} onOpenChange={(open) => { if (!open) closeDetail(); }}>
+      <Sheet
+        open={!!selectedMemberId}
+        onOpenChange={(open) => {
+          if (!open) closeDetail();
+        }}
+      >
         <SheetContent side="right" className="w-full overflow-y-auto sm:max-w-lg">
           <SheetHeader className="px-6 pt-6">
             <SheetTitle>
@@ -481,17 +758,22 @@ export default function AttendancePage() {
                   ) : (
                     <div className="relative ml-4 border-l-2 border-gray-200 pl-6">
                       {detail.timeline.map((event) => (
-                        <div key={event.id} className="relative mb-4 last:mb-0">
+                        <div
+                          key={event.id}
+                          className="relative mb-4 last:mb-0"
+                        >
                           {/* Dot */}
                           <div
                             className={`absolute -left-[31px] top-1 size-3 rounded-full border-2 border-white ${
-                              EVENT_DOT_COLORS[event.type] || "bg-gray-400"
+                              EVENT_DOT_COLORS[event.type] ||
+                              "bg-gray-400"
                             }`}
                           />
                           {/* Card */}
                           <div
                             className={`rounded-lg border-l-2 p-3 ${
-                              EVENT_COLORS[event.type] || "border-gray-300 bg-gray-50"
+                              EVENT_COLORS[event.type] ||
+                              "border-gray-300 bg-gray-50"
                             }`}
                           >
                             <div className="flex items-center justify-between">
@@ -537,7 +819,8 @@ export default function AttendancePage() {
                       variant="outline"
                       size="sm"
                       onClick={() => {
-                        if (selectedMemberId) fetchDetail(selectedMemberId);
+                        if (selectedMemberId)
+                          fetchDetail(selectedMemberId);
                       }}
                     >
                       <Search className="size-3" />
@@ -563,12 +846,24 @@ export default function AttendancePage() {
                       <table className="w-full text-xs">
                         <thead>
                           <tr className="border-b bg-gray-50 text-left text-gray-500">
-                            <th className="px-3 py-2 font-medium">Date</th>
-                            <th className="px-3 py-2 font-medium">In</th>
-                            <th className="px-3 py-2 font-medium">Out</th>
-                            <th className="px-3 py-2 font-medium">Active</th>
-                            <th className="px-3 py-2 font-medium">Break</th>
-                            <th className="px-3 py-2 font-medium">Total</th>
+                            <th className="px-3 py-2 font-medium">
+                              Date
+                            </th>
+                            <th className="px-3 py-2 font-medium">
+                              In
+                            </th>
+                            <th className="px-3 py-2 font-medium">
+                              Out
+                            </th>
+                            <th className="px-3 py-2 font-medium">
+                              Active
+                            </th>
+                            <th className="px-3 py-2 font-medium">
+                              Break
+                            </th>
+                            <th className="px-3 py-2 font-medium">
+                              Total
+                            </th>
                           </tr>
                         </thead>
                         <tbody>
@@ -581,10 +876,14 @@ export default function AttendancePage() {
                                 {day.date}
                               </td>
                               <td className="px-3 py-2 text-gray-600">
-                                {day.checkInAt ? formatTime(day.checkInAt) : "-"}
+                                {day.checkInAt
+                                  ? formatTime(day.checkInAt)
+                                  : "-"}
                               </td>
                               <td className="px-3 py-2 text-gray-600">
-                                {day.checkOutAt ? formatTime(day.checkOutAt) : "-"}
+                                {day.checkOutAt
+                                  ? formatTime(day.checkOutAt)
+                                  : "-"}
                               </td>
                               <td className="px-3 py-2 text-[#22C55E]">
                                 {formatMinutes(day.activeMinutes)}

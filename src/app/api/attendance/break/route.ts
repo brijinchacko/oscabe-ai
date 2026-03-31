@@ -83,6 +83,21 @@ export async function POST(request: Request) {
           where: { id: activeSession.id },
           data: { status: "ON_BREAK" },
         });
+
+        // Log break start as a CRM Activity
+        await tx.activity.create({
+          data: {
+            type: "BREAK_START",
+            title: `${user.firstName} started a break`,
+            content: reason || null,
+            userId: user.id,
+            metadata: JSON.stringify({
+              sessionId: activeSession.id,
+              reason: reason || null,
+              time: now.toISOString(),
+            }),
+          },
+        });
       });
 
       return NextResponse.json({ message: "Break started" });
@@ -103,7 +118,11 @@ export async function POST(request: Request) {
         orderBy: { startedAt: "desc" },
       });
 
+      let breakDurationMin = 0;
       if (openBreak) {
+        breakDurationMin = Math.round(
+          (now.getTime() - openBreak.startedAt.getTime()) / (1000 * 60)
+        );
         await tx.employeeBreak.update({
           where: { id: openBreak.id },
           data: { endedAt: now },
@@ -146,11 +165,26 @@ export async function POST(request: Request) {
         where: { id: activeSession.id },
         data: { status: "CHECKED_IN" },
       });
+
+      // Log break end as a CRM Activity
+      await tx.activity.create({
+        data: {
+          type: "BREAK_END",
+          title: `${user.firstName} ended break after ${breakDurationMin} minutes`,
+          content: null,
+          userId: user.id,
+          metadata: JSON.stringify({
+            sessionId: activeSession.id,
+            breakDurationMin,
+            time: now.toISOString(),
+          }),
+        },
+      });
     });
 
     return NextResponse.json({ message: "Break ended" });
-  } catch (error) {
-    console.error("Break error:", error);
+  } catch (err) {
+    console.error("Break error:", err);
     return NextResponse.json(
       { error: "Failed to process break" },
       { status: 500 }

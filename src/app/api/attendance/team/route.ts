@@ -7,20 +7,30 @@ export async function GET() {
   if (error) return error;
 
   try {
-    // Role-based visibility
+    const now = new Date();
+    const startOfDay = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate()
+    );
+    const endOfDay = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate() + 1
+    );
+
+    // Role-based visibility: ADMIN sees everyone, RECRUITER sees everyone except ADMIN
     let roleFilter: object;
     if (user.role === "ADMIN") {
-      // ADMIN sees everyone except other ADMINs
-      roleFilter = { role: { not: "ADMIN" } };
+      roleFilter = { role: { in: ["ADMIN", "RECRUITER"] } };
     } else if (user.role === "RECRUITER") {
-      // RECRUITER sees everyone except ADMINs
-      roleFilter = { role: { not: "ADMIN" } };
+      roleFilter = { role: { in: ["RECRUITER"] } };
     } else {
-      // Others see only themselves
       roleFilter = { id: user.id };
     }
 
-    const teamMembers = await prisma.user.findMany({
+    // Query ALL users matching the role filter
+    const allUsers = await prisma.user.findMany({
       where: {
         isActive: true,
         ...roleFilter,
@@ -31,70 +41,83 @@ export async function GET() {
         lastName: true,
         role: true,
         avatarUrl: true,
-        workSessions: {
+      },
+    });
+
+    // For each user, check for active session today
+    const result = await Promise.all(
+      allUsers.map(async (member) => {
+        // Check for an active (non-checked-out) session
+        const activeSession = await prisma.employeeWorkSession.findFirst({
           where: {
+            userId: member.id,
             status: { in: ["CHECKED_IN", "ON_BREAK", "IDLE"] },
           },
           include: {
             activities: true,
             breaks: true,
           },
-          take: 1,
           orderBy: { checkInAt: "desc" },
-        },
-      },
-    });
+        });
 
-    const now = new Date();
+        let currentStatus = "OFFLINE";
+        let checkInTime: string | null = null;
+        let workLocation: string | null = null;
+        let totalActiveMinutes = 0;
+        let totalBreakMinutes = 0;
+        let totalIdleMinutes = 0;
+        let breakCount = 0;
+        let lastCheckIn: string | null = null;
 
-    const result = teamMembers.map((member) => {
-      const activeSession = member.workSessions[0] || null;
+        if (activeSession) {
+          currentStatus = activeSession.status;
+          checkInTime = activeSession.checkInAt.toISOString();
+          workLocation = activeSession.workLocation;
+          breakCount = activeSession.breaks.length;
 
-      let currentStatus = "OFFLINE";
-      let checkInTime: string | null = null;
-      let workLocation: string | null = null;
-      let totalActiveMinutes = 0;
-      let totalBreakMinutes = 0;
-      let totalIdleMinutes = 0;
-      let breakCount = 0;
-
-      if (activeSession) {
-        currentStatus = activeSession.status;
-        checkInTime = activeSession.checkInAt.toISOString();
-        workLocation = activeSession.workLocation;
-        breakCount = activeSession.breaks.length;
-
-        for (const act of activeSession.activities) {
-          const end = act.endedAt || now;
-          const dur = Math.round(
-            (end.getTime() - act.startedAt.getTime()) / (1000 * 60)
-          );
-          if (act.type === "ACTIVE") totalActiveMinutes += dur;
-          else if (act.type === "BREAK") totalBreakMinutes += dur;
-          else if (act.type === "IDLE") totalIdleMinutes += dur;
+          for (const act of activeSession.activities) {
+            const end = act.endedAt || now;
+            const dur = Math.round(
+              (end.getTime() - act.startedAt.getTime()) / (1000 * 60)
+            );
+            if (act.type === "ACTIVE") totalActiveMinutes += dur;
+            else if (act.type === "BREAK") totalBreakMinutes += dur;
+            else if (act.type === "IDLE") totalIdleMinutes += dur;
+          }
+        } else {
+          // No active session - find the most recent session for last check-in info
+          const lastSession = await prisma.employeeWorkSession.findFirst({
+            where: { userId: member.id },
+            orderBy: { checkInAt: "desc" },
+            select: { checkInAt: true },
+          });
+          if (lastSession) {
+            lastCheckIn = lastSession.checkInAt.toISOString();
+          }
         }
-      }
 
-      return {
-        id: member.id,
-        name: [member.firstName, member.lastName]
-          .filter(Boolean)
-          .join(" ") || "Unknown",
-        role: member.role,
-        avatar: member.avatarUrl,
-        currentStatus,
-        checkInTime,
-        workLocation,
-        totalActiveMinutes,
-        totalBreakMinutes,
-        totalIdleMinutes,
-        breakCount,
-      };
-    });
+        return {
+          id: member.id,
+          name:
+            [member.firstName, member.lastName].filter(Boolean).join(" ") ||
+            "Unknown",
+          role: member.role,
+          avatar: member.avatarUrl,
+          currentStatus,
+          checkInTime,
+          workLocation,
+          totalActiveMinutes,
+          totalBreakMinutes,
+          totalIdleMinutes,
+          breakCount,
+          lastCheckIn,
+        };
+      })
+    );
 
     return NextResponse.json({ team: result });
-  } catch (error) {
-    console.error("Team attendance error:", error);
+  } catch (err) {
+    console.error("Team attendance error:", err);
     return NextResponse.json(
       { error: "Failed to fetch team attendance" },
       { status: 500 }

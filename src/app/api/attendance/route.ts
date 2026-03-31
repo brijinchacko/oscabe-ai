@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/auth";
-import prisma from "@/lib/prisma";
 import { requireAuth } from "@/lib/auth-helpers";
+import prisma from "@/lib/prisma";
 
 export async function GET() {
   const { user, error } = await requireAuth();
@@ -44,18 +43,22 @@ export async function GET() {
     });
 
     // Map to frontend-expected format
-    const session = activeSession ? {
-      id: activeSession.id,
-      status: activeSession.status,
-      location: activeSession.workLocation,
-      checkInAt: activeSession.checkInAt.toISOString(),
-      note: activeSession.checkInNote,
-      breakStartedAt: activeSession.breaks?.find((b: { endedAt: Date | null }) => !b.endedAt)?.startedAt?.toISOString(),
-    } : null;
+    const session = activeSession
+      ? {
+          id: activeSession.id,
+          status: activeSession.status,
+          location: activeSession.workLocation,
+          checkInAt: activeSession.checkInAt.toISOString(),
+          note: activeSession.checkInNote,
+          breakStartedAt: activeSession.breaks?.find(
+            (b: { endedAt: Date | null }) => !b.endedAt
+          )?.startedAt?.toISOString(),
+        }
+      : null;
 
     return NextResponse.json({ session, activeSession, todaySessions });
-  } catch (error) {
-    console.error("Attendance GET error:", error);
+  } catch (err) {
+    console.error("Attendance GET error:", err);
     return NextResponse.json(
       { error: "Failed to fetch attendance" },
       { status: 500 }
@@ -82,7 +85,10 @@ export async function POST(request: Request) {
 
     if (existingSession) {
       return NextResponse.json(
-        { error: "You already have an active session. Please check out first." },
+        {
+          error:
+            "You already have an active session. Please check out first.",
+        },
         { status: 400 }
       );
     }
@@ -109,6 +115,21 @@ export async function POST(request: Request) {
         },
       });
 
+      // Log check-in as a CRM Activity
+      await tx.activity.create({
+        data: {
+          type: "CHECK_IN",
+          title: `${user.firstName} checked in from ${workLocation}`,
+          content: note || null,
+          userId: user.id,
+          metadata: JSON.stringify({
+            sessionId: workSession.id,
+            workLocation,
+            time: now.toISOString(),
+          }),
+        },
+      });
+
       return workSession;
     });
 
@@ -123,8 +144,8 @@ export async function POST(request: Request) {
       { message: "Checked in successfully", session: mappedSession },
       { status: 201 }
     );
-  } catch (error) {
-    console.error("Attendance POST error:", error);
+  } catch (err) {
+    console.error("Attendance POST error:", err);
     return NextResponse.json(
       { error: "Failed to check in" },
       { status: 500 }
