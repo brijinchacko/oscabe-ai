@@ -21,6 +21,7 @@ import {
   CreditCard,
   Shield,
   Loader2,
+  CalendarDays,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -249,6 +250,93 @@ function GeneralTab() {
           <Save className="size-4" />
         )}
         Save Settings
+      </Button>
+
+      {/* Meeting Booking Link */}
+      <BookingLinkSection />
+    </div>
+  );
+}
+
+// ─── Booking Link Section ──────────────────────────────────────────────
+
+function BookingLinkSection() {
+  const [bookingLink, setBookingLink] = useState("");
+  const [bookingEnabled, setBookingEnabled] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/user/booking")
+      .then((r) => r.json())
+      .then((data) => {
+        setBookingLink(data.bookingLink || "");
+        setBookingEnabled(data.bookingEnabled);
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
+  }, []);
+
+  async function handleSaveBooking() {
+    setSaving(true);
+    try {
+      const res = await fetch("/api/user/booking", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ bookingLink, bookingEnabled }),
+      });
+      if (!res.ok) throw new Error();
+      toast.success("Booking settings saved");
+    } catch {
+      toast.error("Failed to save booking settings");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  if (loading) return null;
+
+  return (
+    <div className="mt-8 border-t pt-6 space-y-4">
+      <div className="flex items-center gap-2">
+        <CalendarDays className="size-5 text-indigo-600" />
+        <h3 className="text-sm font-semibold text-gray-900">
+          Meeting Booking Link
+        </h3>
+      </div>
+      <p className="text-xs text-muted-foreground">
+        Set your Calendly, Cal.com, or other booking link. When enabled, it will be available as a {"{booking_link}"} token in email templates and auto-included in positive response follow-ups.
+      </p>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="space-y-2">
+          <Label htmlFor="bookingLink">Booking URL</Label>
+          <Input
+            id="bookingLink"
+            type="url"
+            value={bookingLink}
+            onChange={(e) => setBookingLink(e.target.value)}
+            placeholder="https://calendly.com/your-name"
+          />
+        </div>
+        <div className="flex items-center gap-3 pt-6">
+          <Switch
+            checked={bookingEnabled}
+            onCheckedChange={setBookingEnabled}
+          />
+          <Label className="text-sm">
+            {bookingEnabled ? "Booking link enabled" : "Booking link disabled"}
+          </Label>
+        </div>
+      </div>
+      <Button variant="outline" onClick={handleSaveBooking} disabled={saving}>
+        {saving ? (
+          <Loader2 className="size-4 animate-spin" />
+        ) : (
+          <Save className="size-4" />
+        )}
+        Save Booking Settings
       </Button>
     </div>
   );

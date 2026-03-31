@@ -40,6 +40,7 @@ import {
   FileText,
   FileSignature,
   Contact,
+  Repeat,
 } from "lucide-react";
 
 type NavItem = { label: string; href: string; icon: React.ComponentType<{ className?: string }> };
@@ -67,6 +68,7 @@ const NAV_GROUPS: { label: string; items: NavItem[] }[] = [
     items: [
       { label: "Emails", href: "/crm/emails", icon: Mail },
       { label: "Outreach", href: "/crm/outreach", icon: Megaphone },
+      { label: "Sequences", href: "/crm/sequences", icon: Repeat },
     ],
   },
   {

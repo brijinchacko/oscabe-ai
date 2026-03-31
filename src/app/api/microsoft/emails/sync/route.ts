@@ -19,6 +19,56 @@ interface GraphEmail {
   conversationId?: string;
 }
 
+// ─── Response Classification ────────────────────────────────────────────
+
+const POSITIVE_KEYWORDS = [
+  "interested", "yes", "let's talk", "lets talk", "schedule", "available",
+  "send me", "tell me more", "sounds good", "great", "love to", "happy to",
+  "look forward", "keen", "absolutely", "when can we", "set up a call",
+  "book a meeting", "let's discuss", "lets discuss", "perfect",
+];
+
+const NEGATIVE_KEYWORDS = [
+  "not interested", "no thank you", "no thanks", "remove me", "unsubscribe",
+  "not looking", "already have", "pass on this", "not right now",
+  "not at this time", "decline", "not for us", "no need", "stop emailing",
+  "do not contact", "please remove", "opt out",
+];
+
+const OOO_KEYWORDS = [
+  "out of office", "ooo", "annual leave", "vacation", "will return",
+  "away from", "on leave", "auto-reply", "automatic reply", "currently away",
+  "limited access", "returning on",
+];
+
+function classifyEmailBody(body: string): {
+  classification: "POSITIVE" | "NEGATIVE" | "NEUTRAL" | "OUT_OF_OFFICE";
+  keywords: string[];
+} {
+  const lower = body.toLowerCase();
+  const matched: string[] = [];
+
+  // Check OOO first
+  for (const kw of OOO_KEYWORDS) {
+    if (lower.includes(kw)) matched.push(kw);
+  }
+  if (matched.length > 0) return { classification: "OUT_OF_OFFICE", keywords: matched };
+
+  // Check negative
+  let negScore = 0;
+  let posScore = 0;
+  for (const kw of NEGATIVE_KEYWORDS) {
+    if (lower.includes(kw)) { negScore++; matched.push(kw); }
+  }
+  for (const kw of POSITIVE_KEYWORDS) {
+    if (lower.includes(kw)) { posScore++; matched.push(kw); }
+  }
+
+  if (negScore > posScore && negScore > 0) return { classification: "NEGATIVE", keywords: matched };
+  if (posScore > 0) return { classification: "POSITIVE", keywords: matched };
+  return { classification: "NEUTRAL", keywords: [] };
+}
+
 export async function POST() {
   const { user, error } = await requireAuth();
   if (error) return error;
@@ -153,6 +203,68 @@ export async function POST() {
           clientId: matchedClientId || undefined,
         },
       });
+
+      // ── Auto-classify incoming emails ──────────────────────────────
+      if (direction === "received" && (matchedClientId || matchedCandidateId)) {
+        const bodyText = email.bodyPreview || "";
+        const { classification, keywords } = classifyEmailBody(bodyText);
+
+        // Store classification in activity metadata
+        if (classification !== "NEUTRAL") {
+          await prisma.activity.create({
+            data: {
+              type: "EMAIL_CLASSIFIED",
+              title: `Email classified: ${classification}`,
+              content: `Response from ${fromName || fromAddress} classified as ${classification}. Keywords: ${keywords.join(", ")}`,
+              userId: user!.id,
+              clientId: matchedClientId || undefined,
+              candidateId: matchedCandidateId || undefined,
+              metadata: JSON.stringify({ classification, keywords, emailId: messageId }),
+            },
+          });
+        }
+
+        // Handle POSITIVE response
+        if (classification === "POSITIVE" && matchedClientId) {
+          // Update client pipeline to INTERESTED
+          await prisma.client.update({
+            where: { id: matchedClientId },
+            data: { pipelineStage: "INTERESTED" },
+          });
+
+          // Pause any active follow-up sequences for this client
+          await prisma.sequenceEnrollment.updateMany({
+            where: { clientId: matchedClientId, status: "ACTIVE" },
+            data: { status: "REPLIED" },
+          });
+
+          // Get client name for notification
+          const client = await prisma.client.findUnique({
+            where: { id: matchedClientId },
+            select: { companyName: true },
+          });
+
+          // Create hot lead notification
+          await prisma.notification.create({
+            data: {
+              userId: user!.id,
+              title: `Hot lead: ${client?.companyName || "Unknown"} responded positively`,
+              message: `${fromName || fromAddress} replied positively. Consider scheduling a meeting.`,
+              type: "HOT_LEAD",
+              link: `/crm/clients/${matchedClientId}`,
+            },
+          });
+        }
+
+        // Handle NEGATIVE response
+        if (classification === "NEGATIVE" && matchedClientId) {
+          // Pause active sequences
+          await prisma.sequenceEnrollment.updateMany({
+            where: { clientId: matchedClientId, status: "ACTIVE" },
+            data: { status: "REPLIED" },
+          });
+        }
+      }
 
       syncCount++;
       if (matchedCandidateId) linkedCandidates++;

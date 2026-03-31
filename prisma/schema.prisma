@@ -40,6 +40,9 @@ model User {
   microsoftTokenExpiry  DateTime?
   microsoftEmail        String?
   microsoftConnected    Boolean  @default(false)
+
+  bookingLink    String?
+  bookingEnabled Boolean  @default(false)
 }
 
 model Employer {
@@ -734,6 +737,50 @@ model Notification {
   read      Boolean  @default(false)
   link      String?
   createdAt DateTime @default(now())
+}
+
+// ======== DOCUMENTS ========
+
+// ======== FOLLOW-UP SEQUENCES ========
+
+model FollowUpSequence {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  isActive    Boolean  @default(true)
+  createdBy   String?
+  steps       FollowUpStep[]
+  enrollments SequenceEnrollment[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model FollowUpStep {
+  id          String   @id @default(cuid())
+  sequenceId  String
+  sequence    FollowUpSequence @relation(fields: [sequenceId], references: [id], onDelete: Cascade)
+  dayDelay    Int
+  action      String
+  subject     String?
+  body        String?
+  stepOrder   Int
+  createdAt   DateTime @default(now())
+}
+
+model SequenceEnrollment {
+  id            String   @id @default(cuid())
+  sequenceId    String
+  sequence      FollowUpSequence @relation(fields: [sequenceId], references: [id])
+  clientId      String?
+  candidateId   String?
+  contactEmail  String
+  currentStep   Int      @default(0)
+  status        String   @default("ACTIVE")
+  lastActionAt  DateTime?
+  nextActionAt  DateTime?
+  enrolledBy    String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 // ======== DOCUMENTS ========

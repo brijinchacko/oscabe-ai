@@ -13,6 +13,7 @@ module.exports = {
       env: {
         NODE_ENV: "production",
         PORT: "3012",
+        TZ: "Europe/London",
       },
     },
 
