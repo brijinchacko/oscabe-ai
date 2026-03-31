@@ -8,10 +8,8 @@ import {
   Network,
   Paintbrush,
   CheckCircle,
-  Radar,
-  Calculator,
-  Gift,
   TrendingUp,
+  Calculator,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AwardsBanner } from "@/components/shared/awards-banner";
@@ -20,13 +18,14 @@ const PRODUCTS = [
   {
     icon: ShieldCheck,
     title: "OSCABE Verify",
-    subtitle: "Skill Verification as a Service",
+    subtitle: "Technical Screening as a Service",
+    price: "\u00a330\u2013\u00a375/candidate",
     description:
-      "Leverage our engineer-led technical assessment framework to verify your candidates' PLC, SCADA, and controls skills. Provide your clients with confidence that your candidates can deliver.",
+      "Leverage our engineer-led technical assessment framework to verify your candidates\u2019 skills before submission. Provide your clients with confidence that your candidates can deliver from day one.",
     features: [
       "Technical assessments designed by chartered engineers",
       "Platform-specific verification (Siemens, Rockwell, Schneider, etc.)",
-      "Verification badges for candidate profiles",
+      "White-label PDF reports branded to your agency",
       "Faster client acceptance rates",
     ],
   },
@@ -34,23 +33,25 @@ const PRODUCTS = [
     icon: Users,
     title: "Talent Pool Access",
     subtitle: "Verified Candidate Database",
+    price: "Subscription",
     description:
-      "Access our growing database of pre-verified automation engineers. Search by platform, industry, and skill level to find candidates that match your open requirements.",
+      "Access our growing database of pre-verified engineers. Search by platform, industry, and skill level to find candidates that match your open requirements instantly.",
     features: [
       "Pre-screened and technically verified engineers",
-      "Search by PLC platform, industry, and seniority",
+      "Search by specialisation, industry, and seniority",
       "Candidate availability alerts",
       "Reduced time-to-shortlist",
     ],
   },
   {
     icon: Network,
-    title: "Marketplace",
-    subtitle: "Split-Fee Network",
+    title: "Split-Fee Network",
+    subtitle: "Collaborate on Roles and Share Candidates",
+    price: "Revenue share",
     description:
       "Join our split-fee marketplace to collaborate with other specialist recruiters. Share roles, share candidates, and close more placements together.",
     features: [
-      "Access to exclusive automation roles",
+      "Access to exclusive roles across sectors",
       "Transparent split-fee arrangements",
       "Vetted network of specialist agencies",
       "Collaborative placement tracking",
@@ -58,16 +59,40 @@ const PRODUCTS = [
   },
   {
     icon: Paintbrush,
-    title: "White-Label",
-    subtitle: "White-Label AI Recruitment Tools",
+    title: "White-Label Tools",
+    subtitle: "AI Recruitment Tools Under Your Brand",
+    price: "Custom pricing",
     description:
-      "Embed OSCABE's AI-powered matching and verification technology into your own platform. Offer cutting-edge recruitment capabilities under your brand.",
+      "Embed OSCABE\u2019s AI-powered matching and verification technology into your own platform. Offer cutting-edge recruitment capabilities under your brand.",
     features: [
       "AI candidate matching engine",
-      "Customisable to your brand",
+      "Customisable to your brand identity",
       "API integration with your ATS",
       "Technical verification workflows",
     ],
+  },
+];
+
+const WHY_PARTNER = [
+  {
+    title: "Broader Talent Pool",
+    description:
+      "Tap into a growing network of verified candidates you won\u2019t find on job boards. Expand your reach without expanding your sourcing team.",
+  },
+  {
+    title: "AI-Powered Matching",
+    description:
+      "Our AI analyses skills, experience, and preferences to surface the best-fit candidates for your roles in seconds, not days.",
+  },
+  {
+    title: "Technical Verification",
+    description:
+      "Every candidate in our pool is assessed by chartered engineers. Submit with confidence and reduce client rejection rates.",
+  },
+  {
+    title: "Flexible Commercial Terms",
+    description:
+      "Whether you prefer per-candidate pricing, subscriptions, or revenue share, we\u2019ll find a model that works for your agency.",
   },
 ];
 
@@ -95,31 +120,46 @@ export default function AgenciesPage() {
             Partner With OSCABE
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-400">
-            Supercharge your automation recruitment with OSCABE&apos;s verification
-            technology, talent pool, and collaborative marketplace.
+            Expand your reach, share candidates across a trusted network, and
+            earn split fees&mdash;all backed by AI-powered matching and
+            engineer-led technical verification.
           </p>
-          <Link href="/contact">
-            <Button
-              size="lg"
-              className="mt-8 bg-[#8B5CF6] hover:bg-[#8B5CF6]/90 text-white px-8 transition-transform hover:scale-105"
-              style={{ boxShadow: "0 0 30px rgba(139,92,246,0.4)" }}
-            >
-              Partner With Us
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-          </Link>
+          <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+            <Link href="/contact">
+              <Button
+                size="lg"
+                className="bg-[#8B5CF6] hover:bg-[#8B5CF6]/90 text-white px-8 transition-transform hover:scale-105"
+                style={{ boxShadow: "0 0 30px rgba(139,92,246,0.4)" }}
+              >
+                Become a Partner
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
+            <a href="#products">
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-white/20 text-white hover:bg-white/10 px-8"
+              >
+                Learn More
+              </Button>
+            </a>
+          </div>
         </div>
       </section>
 
-      {/* Products */}
-      <section className="border-y border-white/[0.06] bg-white/[0.02] py-16 sm:py-20">
+      {/* Partnership Products */}
+      <section
+        id="products"
+        className="border-y border-white/[0.06] bg-white/[0.02] py-16 sm:py-20"
+      >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h2 className="text-2xl font-bold text-white sm:text-3xl">
-              Our Agency Solutions
+              Partnership Products
             </h2>
             <p className="mx-auto mt-3 max-w-2xl text-gray-400">
-              Four ways to grow your automation recruitment business with OSCABE.
+              Four ways to grow your recruitment business with OSCABE.
             </p>
           </div>
           <div className="mt-12 grid gap-8 lg:grid-cols-2">
@@ -127,18 +167,32 @@ export default function AgenciesPage() {
               <div
                 key={product.title}
                 className="group rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm p-6 transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.06]"
-                style={{ transition: "box-shadow 0.3s, border-color 0.3s, background 0.3s" }}
+                style={{
+                  transition:
+                    "box-shadow 0.3s, border-color 0.3s, background 0.3s",
+                }}
                 onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLDivElement).style.boxShadow = "0 0 30px rgba(139,92,246,0.15)";
+                  (
+                    e.currentTarget as HTMLDivElement
+                  ).style.boxShadow =
+                    "0 0 30px rgba(139,92,246,0.15)";
                 }}
                 onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLDivElement).style.boxShadow = "none";
+                  (e.currentTarget as HTMLDivElement).style.boxShadow =
+                    "none";
                 }}
               >
-                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-[#8B5CF6]/15">
-                  <product.icon className="h-5 w-5 text-[#8B5CF6]" />
+                <div className="mb-4 flex items-center justify-between">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-[#8B5CF6]/15">
+                    <product.icon className="h-5 w-5 text-[#8B5CF6]" />
+                  </div>
+                  <span className="rounded-full border border-[#8B5CF6]/30 bg-[#8B5CF6]/10 px-3 py-1 text-xs font-medium text-[#8B5CF6]">
+                    {product.price}
+                  </span>
                 </div>
-                <h3 className="text-xl font-semibold text-white">{product.title}</h3>
+                <h3 className="text-xl font-semibold text-white">
+                  {product.title}
+                </h3>
                 <p className="mt-1 text-sm font-medium text-[#8B5CF6]">
                   {product.subtitle}
                 </p>
@@ -147,7 +201,10 @@ export default function AgenciesPage() {
                 </p>
                 <ul className="mt-4 space-y-2">
                   {product.features.map((feature) => (
-                    <li key={feature} className="flex items-start gap-2 text-sm text-gray-400">
+                    <li
+                      key={feature}
+                      className="flex items-start gap-2 text-sm text-gray-400"
+                    >
                       <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-[#8B5CF6]" />
                       {feature}
                     </li>
@@ -159,161 +216,104 @@ export default function AgenciesPage() {
         </div>
       </section>
 
-      {/* OSCABE Verify Pricing */}
+      {/* Why Partner */}
       <section className="py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h2 className="text-2xl font-bold text-white sm:text-3xl">
-              OSCABE Verify Pricing
+              Why Partner With OSCABE?
             </h2>
             <p className="mx-auto mt-3 max-w-2xl text-gray-400">
-              Transparent, per-candidate pricing. No hidden fees.
+              We give your agency a competitive edge with technology,
+              talent, and flexible terms.
             </p>
           </div>
-
           <div className="mt-12 grid gap-6 sm:grid-cols-2">
-            {/* Basic Assessment */}
-            <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm p-6 transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.06]">
-              <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-[#8B5CF6]/15">
-                <ShieldCheck className="h-5 w-5 text-[#8B5CF6]" />
+            {WHY_PARTNER.map((item) => (
+              <div
+                key={item.title}
+                className="rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm p-6 transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.06]"
+              >
+                <div className="flex items-start gap-3">
+                  <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-[#8B5CF6]" />
+                  <div>
+                    <h3 className="text-lg font-semibold text-white">
+                      {item.title}
+                    </h3>
+                    <p className="mt-2 text-sm leading-relaxed text-gray-400">
+                      {item.description}
+                    </p>
+                  </div>
+                </div>
               </div>
-              <h3 className="text-xl font-semibold text-white">Basic Assessment</h3>
-              <p className="mt-2 text-3xl font-bold text-[#8B5CF6]">
-                &pound;30<span className="text-base font-normal text-gray-400">/candidate</span>
-              </p>
-              <p className="mt-3 text-sm leading-relaxed text-gray-400">
-                Single platform skill test. Quick turnaround for high-volume screening.
-              </p>
-            </div>
-
-            {/* Advanced Assessment */}
-            <div className="relative rounded-2xl border border-[#8B5CF6]/30 bg-white/[0.03] backdrop-blur-sm p-6 transition-all duration-300 hover:border-[#8B5CF6]/50 hover:bg-white/[0.06]">
-              <span className="absolute -top-3 right-6 rounded-full bg-[#8B5CF6] px-3 py-1 text-xs font-semibold text-white">
-                Most Popular
-              </span>
-              <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-[#8B5CF6]/15">
-                <ShieldCheck className="h-5 w-5 text-[#8B5CF6]" />
-              </div>
-              <h3 className="text-xl font-semibold text-white">Advanced Assessment</h3>
-              <p className="mt-2 text-3xl font-bold text-[#8B5CF6]">
-                &pound;75<span className="text-base font-normal text-gray-400">/candidate</span>
-              </p>
-              <p className="mt-3 text-sm leading-relaxed text-gray-400">
-                Multi-platform testing + Chartered Engineer review + white-label PDF report branded to your agency.
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-6 space-y-3 text-center">
-            <p className="text-sm text-gray-400">
-              <span className="font-semibold text-[#8B5CF6]">Volume discount:</span>{" "}
-              Contact us for volume packages (50+ assessments/month)
-            </p>
-            <p className="text-xs text-gray-500">
-              Different from our employer Technical Screening (&pound;150&ndash;&pound;250) which includes deeper analysis
-            </p>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Talent Radar for Agencies */}
+      {/* Revenue Potential */}
       <section className="border-y border-white/[0.06] bg-white/[0.02] py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
-            <div>
-              <div className="flex items-center gap-3">
-                <h2 className="text-2xl font-bold text-white sm:text-3xl">
-                  Talent Radar for Agencies
-                </h2>
-                <span className="rounded-full bg-[#22C55E] px-3 py-1 text-xs font-bold text-white">
-                  New
-                </span>
-              </div>
-              <p className="mt-2 text-3xl font-bold text-[#8B5CF6]">
-                &pound;499<span className="text-base font-normal text-gray-400">/month</span>
-              </p>
-              <p className="mt-4 text-gray-400">
-                Stay ahead of competing agencies with market intelligence delivered straight to your inbox.
-              </p>
-              <ul className="mt-6 space-y-3">
-                {[
-                  "Weekly updates on new automation talent in your region",
-                  "Salary movement data for key specialisms",
-                  "First-look access before candidates hit the open market",
-                  "Regional market trends and demand forecasting",
-                ].map((item) => (
-                  <li key={item} className="flex items-start gap-2 text-sm text-gray-400">
-                    <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-[#8B5CF6]" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <Link href="/contact">
-                <button
-                  className="mt-8 inline-flex items-center gap-2 rounded-xl bg-[#8B5CF6] px-8 py-3 text-sm font-bold text-white shadow-xl transition-all hover:scale-105"
-                  style={{ boxShadow: "0 0 30px rgba(139,92,246,0.4)" }}
-                >
-                  <Radar className="h-4 w-4" />
-                  Subscribe to Talent Radar
-                </button>
-              </Link>
-            </div>
-
-            <div className="flex items-center justify-center">
-              <div className="relative h-64 w-64 rounded-full border border-[#8B5CF6]/20">
-                <div className="absolute inset-4 rounded-full border border-[#8B5CF6]/15" />
-                <div className="absolute inset-8 rounded-full border border-[#8B5CF6]/10" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <Radar className="h-16 w-16 text-[#8B5CF6]/60" />
-                </div>
-                <div className="absolute top-4 right-8 h-3 w-3 rounded-full bg-[#22C55E] shadow-[0_0_10px_rgba(34,197,94,0.6)]" />
-                <div className="absolute bottom-8 left-4 h-2 w-2 rounded-full bg-[#8B5CF6] shadow-[0_0_10px_rgba(139,92,246,0.6)]" />
-                <div className="absolute top-1/3 right-4 h-2.5 w-2.5 rounded-full bg-[#00D4FF] shadow-[0_0_10px_rgba(0,212,255,0.6)]" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Revenue Potential Calculator */}
-      <section className="py-16 sm:py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h2 className="text-2xl font-bold text-white sm:text-3xl">
-              Revenue Potential Calculator
+              Revenue Potential
             </h2>
             <p className="mx-auto mt-3 max-w-2xl text-gray-400">
-              See what partnering with OSCABE could mean for your bottom line.
+              See what partnering with OSCABE could mean for your bottom
+              line.
             </p>
           </div>
 
           <div
-            className="mx-auto mt-10 max-w-2xl rounded-2xl border border-[#22C55E]/20 bg-white/[0.03] backdrop-blur-sm p-8"
-            style={{ boxShadow: "0 0 40px rgba(34,197,94,0.08)" }}
+            className="mx-auto mt-10 max-w-2xl rounded-2xl border border-[#8B5CF6]/20 bg-white/[0.03] backdrop-blur-sm p-8"
+            style={{ boxShadow: "0 0 40px rgba(139,92,246,0.08)" }}
           >
             <div className="mb-6 flex items-center gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-[#22C55E]/15">
-                <Calculator className="h-5 w-5 text-[#22C55E]" />
+              <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-[#8B5CF6]/15">
+                <Calculator className="h-5 w-5 text-[#8B5CF6]" />
               </div>
-              <h3 className="text-lg font-semibold text-white">Example Earnings</h3>
+              <h3 className="text-lg font-semibold text-white">
+                Example Earnings
+              </h3>
             </div>
 
             <div className="space-y-4">
               <div className="flex items-center justify-between rounded-xl border border-white/[0.06] bg-white/[0.02] px-5 py-4">
-                <span className="text-sm text-gray-400">10 assessments/month &times; &pound;50 avg</span>
-                <span className="text-lg font-bold text-white">&pound;500/month</span>
+                <span className="text-sm text-gray-400">
+                  10 OSCABE Verify assessments/month &times; &pound;50 avg
+                </span>
+                <span className="text-lg font-bold text-white">
+                  &pound;500/month
+                </span>
               </div>
               <div className="flex items-center justify-between rounded-xl border border-white/[0.06] bg-white/[0.02] px-5 py-4">
-                <span className="text-sm text-gray-400">5 split-fee placements/year &times; &pound;3,500 avg</span>
-                <span className="text-lg font-bold text-white">&pound;17,500/year</span>
+                <span className="text-sm text-gray-400">
+                  5 split-fee placements/year &times; &pound;3,500 avg
+                </span>
+                <span className="text-lg font-bold text-white">
+                  &pound;17,500/year
+                </span>
               </div>
-              <div className="mt-2 h-px bg-gradient-to-r from-transparent via-[#22C55E]/30 to-transparent" />
+              <div className="flex items-center justify-between rounded-xl border border-white/[0.06] bg-white/[0.02] px-5 py-4">
+                <span className="text-sm text-gray-400">
+                  Talent Pool subscription savings on sourcing
+                </span>
+                <span className="text-lg font-bold text-white">
+                  &pound;5,000+/year
+                </span>
+              </div>
+              <div className="mt-2 h-px bg-gradient-to-r from-transparent via-[#8B5CF6]/30 to-transparent" />
               <div className="flex items-center justify-between px-5 py-2">
-                <span className="text-base font-semibold text-white">Total potential Year 1</span>
-                <span className="text-2xl font-extrabold text-[#22C55E]">&pound;20,000+</span>
+                <span className="text-base font-semibold text-white">
+                  Total potential Year 1
+                </span>
+                <span className="text-2xl font-extrabold text-[#8B5CF6]">
+                  &pound;28,500+
+                </span>
               </div>
               <p className="text-center text-xs text-gray-500">
-                in additional revenue from OSCABE partnership
+                in additional revenue and cost savings from OSCABE
+                partnership
               </p>
             </div>
           </div>
@@ -324,23 +324,38 @@ export default function AgenciesPage() {
       <section className="relative overflow-hidden py-16 sm:py-20">
         <div className="pointer-events-none absolute -top-20 left-1/2 h-[400px] w-[600px] -translate-x-1/2 rounded-full bg-[#8B5CF6]/20 blur-[120px]" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+          <div className="mb-4 flex justify-center">
+            <TrendingUp className="h-10 w-10 text-[#8B5CF6]" />
+          </div>
           <h2 className="text-2xl font-bold text-white sm:text-3xl">
-            Let&apos;s Build Something Together
+            Ready to Grow Your Agency?
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-lg text-gray-400">
-            Whether you want to verify candidates, access our talent pool, or
-            white-label our technology, we would love to talk.
+            Join a growing network of recruitment partners who are placing
+            faster, earning more, and delivering verified talent their
+            clients trust.
           </p>
-          <Link href="/contact">
-            <Button
-              size="lg"
-              className="mt-8 bg-[#8B5CF6] text-white hover:bg-[#8B5CF6]/90 px-8 transition-transform hover:scale-105"
-              style={{ boxShadow: "0 0 30px rgba(139,92,246,0.4)" }}
-            >
-              Partner With Us
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-          </Link>
+          <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+            <Link href="/contact">
+              <Button
+                size="lg"
+                className="bg-[#8B5CF6] text-white hover:bg-[#8B5CF6]/90 px-8 transition-transform hover:scale-105"
+                style={{ boxShadow: "0 0 30px rgba(139,92,246,0.4)" }}
+              >
+                Partner With Us
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
+            <Link href="/contact">
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-white/20 text-white hover:bg-white/10 px-8"
+              >
+                Book a Call
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
 

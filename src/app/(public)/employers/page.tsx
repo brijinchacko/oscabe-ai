@@ -2,8 +2,6 @@
 
 import Link from "next/link";
 import {
-  Brain,
-  ShieldCheck,
   Clock,
   ArrowRight,
   CheckCircle,
@@ -11,66 +9,189 @@ import {
   Users,
   FileSearch,
   Target,
+  ShieldCheck,
+  PoundSterling,
+  Sparkles,
+  Briefcase,
+  Code2,
+  Cpu,
+  MessageSquare,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AwardsBanner } from "@/components/shared/awards-banner";
 
+/* ------------------------------------------------------------------ */
+/*  DATA                                                               */
+/* ------------------------------------------------------------------ */
+
 const BENEFITS = [
   {
-    icon: Brain,
-    title: "AI-Powered Matching",
+    icon: Clock,
+    title: "72-Hour Shortlists",
     description:
-      "Our AI analyses skills, experience, and cultural fit to shortlist candidates that actually match your requirements, not just keyword matches.",
+      "From brief to shortlist in 72 hours. Our pre-qualified talent pool means you get quality candidates faster than any traditional agency.",
+  },
+  {
+    icon: PoundSterling,
+    title: "No Upfront Fees",
+    description:
+      "Zero risk to get started. You only pay when we deliver results, with flexible models to suit your hiring volume and budget.",
   },
   {
     icon: ShieldCheck,
-    title: "Technical Verification",
+    title: "Pre-Screened Candidates",
     description:
-      "Every candidate is technically assessed by chartered engineers who understand PLC, SCADA, and controls inside out.",
+      "Every candidate is technically assessed and validated before you see them. You receive qualified professionals, not just CVs.",
   },
   {
-    icon: Clock,
-    title: "48-Hour Shortlists",
+    icon: Sparkles,
+    title: "Flexible Pricing",
     description:
-      "From brief to shortlist in 48 hours. Our pre-verified talent pool means you get quality candidates faster than any traditional recruiter.",
+      "From contingency to subscription models, choose a pricing structure that works for your business. No hidden costs, ever.",
+  },
+  {
+    icon: Target,
+    title: "Domain Expertise",
+    description:
+      "Our recruiters specialise across operations, technology, and engineering, so they understand the roles they are hiring for.",
+  },
+];
+
+const ROLE_CATEGORIES = [
+  {
+    icon: Briefcase,
+    title: "Business & Operations",
+    color: "#4540DB",
+    roles: [
+      "Office & Admin",
+      "Business Analysts",
+      "Project Managers",
+      "HR & People",
+      "Finance & Procurement",
+    ],
+  },
+  {
+    icon: Code2,
+    title: "Technology",
+    color: "#00D4FF",
+    roles: [
+      "Software Developers",
+      "QA Engineers",
+      "Data & AI Specialists",
+      "DevOps & Cloud",
+      "IT Support & Infrastructure",
+    ],
+  },
+  {
+    icon: Cpu,
+    title: "Engineering",
+    color: "#22C55E",
+    roles: [
+      "Automation Engineers",
+      "PLC / SCADA / Controls",
+      "Electrical & Mechanical",
+      "Design Engineers",
+      "Commissioning Engineers",
+    ],
   },
 ];
 
 const STEPS = [
   {
     step: 1,
-    icon: Send,
-    title: "Submit Your Brief",
+    icon: MessageSquare,
+    title: "Understand Your Requirement",
     description:
-      "Tell us about the role, the skills you need, and your timeline. It takes less than 5 minutes.",
+      "We learn about the role, your team, must-have skills, and timeline so we target the right candidates from day one.",
   },
   {
     step: 2,
-    icon: Target,
-    title: "AI-Matched Candidates",
+    icon: FileSearch,
+    title: "Source & Pre-Screen",
     description:
-      "Our AI engine searches our verified talent pool and ranks candidates by technical fit, availability, and location.",
+      "We search our talent network and the wider market, then technically screen every candidate before they reach your desk.",
   },
   {
     step: 3,
-    icon: FileSearch,
-    title: "Engineer-Reviewed Shortlist",
+    icon: Send,
+    title: "Deliver Shortlist in 72 Hours",
     description:
-      "Our team of engineers review and validate every shortlist before it reaches you, ensuring quality over quantity.",
+      "You receive a curated shortlist of pre-qualified professionals, complete with screening notes and availability.",
   },
   {
     step: 4,
     icon: Users,
-    title: "Interview & Hire",
+    title: "Support Through Hiring",
     description:
-      "We coordinate interviews, handle offers, and support onboarding. You stay focused on your projects.",
+      "We coordinate interviews, manage offers, and support onboarding so you stay focused on your business.",
   },
 ];
+
+const PRICING_MODELS = [
+  {
+    title: "Contingency",
+    label: "Traditional",
+    price: "12-18%",
+    unit: "of salary",
+    best: "Best for standard roles",
+    popular: false,
+    features: [
+      "Pay only when you hire",
+      "90-day replacement guarantee",
+      "Full screening included",
+    ],
+  },
+  {
+    title: "Flat-Fee Shortlist",
+    label: "Fixed Price",
+    price: "\u00A31,500-\u00A34,000",
+    unit: "per curated shortlist",
+    best: "Best for specific needs",
+    popular: true,
+    features: [
+      "Pre-screened candidate shortlists",
+      "72-hour priority delivery",
+      "Technical assessment included",
+    ],
+  },
+  {
+    title: "Subscription",
+    label: "Ongoing Access",
+    price: "From \u00A3999",
+    unit: "/month",
+    best: "Best for volume hiring",
+    popular: false,
+    features: [
+      "Continuous talent pipeline",
+      "Dedicated account manager",
+      "Priority candidate access",
+    ],
+  },
+  {
+    title: "Hybrid Retainer",
+    label: "Best Value",
+    price: "\u00A3999/mo + 8%",
+    unit: "on hires",
+    best: "Best for predictable hiring",
+    popular: false,
+    features: [
+      "Lower total cost per hire",
+      "Ongoing partnership model",
+      "Strongest traction in 2026",
+    ],
+  },
+];
+
+/* ------------------------------------------------------------------ */
+/*  PAGE                                                               */
+/* ------------------------------------------------------------------ */
 
 export default function EmployersPage() {
   return (
     <div className="bg-[#02012B]">
-      {/* Hero */}
+      {/* ============================================================ */}
+      {/*  HERO                                                        */}
+      {/* ============================================================ */}
       <section className="relative overflow-hidden py-20 sm:py-28">
         {/* Grid pattern */}
         <div
@@ -88,12 +209,11 @@ export default function EmployersPage() {
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
-            Hire Verified Automation Engineers
+            Hire High-Performing Talent, Fast
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-400">
-            Stop sifting through unqualified CVs. OSCABE delivers technically
-            verified PLC, SCADA, and controls engineers, matched by AI and vetted
-            by engineers.
+            Pre-qualified candidates across operations, technology, and
+            engineering — delivered in 72 hours, with no upfront fees.
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link href="/post-a-role">
@@ -102,24 +222,26 @@ export default function EmployersPage() {
                 className="bg-[#4540DB] hover:bg-[#4540DB]/90 text-white px-8 transition-transform hover:scale-105"
                 style={{ boxShadow: "0 0 30px rgba(69,64,219,0.4)" }}
               >
-                Post a Role Now
+                Submit a Role
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
-            <Link href="/contact">
+            <Link href="/pricing">
               <Button
                 variant="outline"
                 size="lg"
                 className="border border-white/20 bg-white/5 backdrop-blur-sm text-white hover:bg-white/10 hover:text-white"
               >
-                Talk to Our Team
+                View Pricing
               </Button>
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Benefits */}
+      {/* ============================================================ */}
+      {/*  WHY OSCABE                                                   */}
+      {/* ============================================================ */}
       <section className="border-y border-white/[0.06] bg-white/[0.02] py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
@@ -127,8 +249,8 @@ export default function EmployersPage() {
               Why Employers Choose OSCABE
             </h2>
             <p className="mx-auto mt-3 max-w-2xl text-gray-400">
-              Purpose-built for industrial automation recruitment, powered by
-              technology, delivered by engineers.
+              Built for hiring managers who need quality candidates, not piles of
+              CVs. We combine domain expertise with speed.
             </p>
           </div>
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -136,9 +258,13 @@ export default function EmployersPage() {
               <div
                 key={benefit.title}
                 className="group rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm p-6 transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.06]"
-                style={{ transition: "box-shadow 0.3s, border-color 0.3s, background 0.3s" }}
+                style={{
+                  transition:
+                    "box-shadow 0.3s, border-color 0.3s, background 0.3s",
+                }}
                 onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLDivElement).style.boxShadow = "0 0 30px rgba(69,64,219,0.15)";
+                  (e.currentTarget as HTMLDivElement).style.boxShadow =
+                    "0 0 30px rgba(69,64,219,0.15)";
                 }}
                 onMouseLeave={(e) => {
                   (e.currentTarget as HTMLDivElement).style.boxShadow = "none";
@@ -147,7 +273,9 @@ export default function EmployersPage() {
                 <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-[#4540DB]/15">
                   <benefit.icon className="h-5 w-5 text-[#4540DB]" />
                 </div>
-                <h3 className="text-lg font-semibold text-white">{benefit.title}</h3>
+                <h3 className="text-lg font-semibold text-white">
+                  {benefit.title}
+                </h3>
                 <p className="mt-2 text-sm leading-relaxed text-gray-400">
                   {benefit.description}
                 </p>
@@ -157,8 +285,69 @@ export default function EmployersPage() {
         </div>
       </section>
 
-      {/* How It Works */}
+      {/* ============================================================ */}
+      {/*  ROLES WE FILL                                                */}
+      {/* ============================================================ */}
       <section className="py-16 sm:py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-white sm:text-3xl">
+              Roles We Fill
+            </h2>
+            <p className="mx-auto mt-3 max-w-2xl text-gray-400">
+              From office operations to complex engineering, we recruit across
+              three core disciplines.
+            </p>
+          </div>
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {ROLE_CATEGORIES.map((cat) => (
+              <div
+                key={cat.title}
+                className="rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm p-6 transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.06]"
+                style={{
+                  transition:
+                    "box-shadow 0.3s, border-color 0.3s, background 0.3s",
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLDivElement).style.boxShadow = `0 0 30px ${cat.color}15`;
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLDivElement).style.boxShadow = "none";
+                }}
+              >
+                <div
+                  className="mb-4 flex h-11 w-11 items-center justify-center rounded-lg"
+                  style={{ backgroundColor: `${cat.color}20` }}
+                >
+                  <cat.icon className="h-5 w-5" style={{ color: cat.color }} />
+                </div>
+                <h3 className="text-lg font-semibold text-white">
+                  {cat.title}
+                </h3>
+                <ul className="mt-4 space-y-2">
+                  {cat.roles.map((role) => (
+                    <li
+                      key={role}
+                      className="flex items-center gap-2 text-sm text-gray-400"
+                    >
+                      <CheckCircle
+                        className="h-3.5 w-3.5 shrink-0"
+                        style={{ color: cat.color }}
+                      />
+                      {role}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================================ */}
+      {/*  HOW IT WORKS                                                 */}
+      {/* ============================================================ */}
+      <section className="border-y border-white/[0.06] bg-white/[0.02] py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h2 className="text-2xl font-bold text-white sm:text-3xl">
@@ -190,73 +379,23 @@ export default function EmployersPage() {
         </div>
       </section>
 
-      {/* Choose Your Hiring Model */}
-      <section className="border-y border-white/[0.06] bg-white/[0.02] py-16 sm:py-20">
+      {/* ============================================================ */}
+      {/*  PRICING MODELS                                               */}
+      {/* ============================================================ */}
+      <section className="py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h2 className="text-2xl font-bold text-white sm:text-3xl">
               Choose Your Hiring Model
             </h2>
             <p className="mx-auto mt-3 max-w-2xl text-gray-400">
-              Flexible pricing that fits your hiring volume and budget. No hidden fees.
+              Flexible pricing that fits your hiring volume and budget. No hidden
+              fees.
             </p>
           </div>
 
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {[
-              {
-                title: "Contingency",
-                label: "Traditional",
-                price: "12–18%",
-                unit: "of salary",
-                best: "Best for standard roles",
-                popular: false,
-                features: [
-                  "Pay only when you hire",
-                  "90-day replacement guarantee",
-                  "Chartered engineer screening",
-                ],
-              },
-              {
-                title: "Shortlist Packages",
-                label: "Flat-Fee",
-                price: "£1,500–£4,000",
-                unit: "per curated shortlist",
-                best: "Best for specific needs",
-                popular: true,
-                features: [
-                  "Pre-screened candidate shortlists",
-                  "48-hour priority delivery",
-                  "Technical assessment included",
-                ],
-              },
-              {
-                title: "Subscription",
-                label: "Ongoing Access",
-                price: "From £999",
-                unit: "/month",
-                best: "Best for volume hiring",
-                popular: false,
-                features: [
-                  "Continuous talent pipeline",
-                  "Dedicated account manager",
-                  "Priority candidate access",
-                ],
-              },
-              {
-                title: "Hybrid Retainer",
-                label: "Best Value",
-                price: "£999/mo + 8%",
-                unit: "on hires",
-                best: "Best for predictable hiring",
-                popular: false,
-                features: [
-                  "Lower total cost per hire",
-                  "Ongoing partnership model",
-                  "Strongest traction in 2026",
-                ],
-              },
-            ].map((model) => (
+            {PRICING_MODELS.map((model) => (
               <div
                 key={model.title}
                 className={`relative flex flex-col rounded-2xl border p-6 backdrop-blur-sm transition-all hover:border-white/20 ${
@@ -273,15 +412,26 @@ export default function EmployersPage() {
                 <p className="text-xs font-semibold uppercase tracking-wider text-[#00D4FF]">
                   {model.label}
                 </p>
-                <h3 className="mt-1 text-lg font-semibold text-white">{model.title}</h3>
+                <h3 className="mt-1 text-lg font-semibold text-white">
+                  {model.title}
+                </h3>
                 <div className="mt-3">
-                  <span className="text-2xl font-bold text-white">{model.price}</span>
-                  <span className="ml-1 text-sm text-gray-500">{model.unit}</span>
+                  <span className="text-2xl font-bold text-white">
+                    {model.price}
+                  </span>
+                  <span className="ml-1 text-sm text-gray-500">
+                    {model.unit}
+                  </span>
                 </div>
-                <p className="mt-2 text-xs font-medium text-[#4540DB]">{model.best}</p>
+                <p className="mt-2 text-xs font-medium text-[#4540DB]">
+                  {model.best}
+                </p>
                 <ul className="mt-4 flex-1 space-y-3">
                   {model.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2 text-sm text-gray-300">
+                    <li
+                      key={f}
+                      className="flex items-start gap-2 text-sm text-gray-300"
+                    >
                       <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-[#00D4FF]" />
                       {f}
                     </li>
@@ -304,10 +454,78 @@ export default function EmployersPage() {
         </div>
       </section>
 
+      {/* ============================================================ */}
+      {/*  CASE STUDY                                                   */}
+      {/* ============================================================ */}
+      <section className="border-y border-white/[0.06] bg-white/[0.02] py-16 sm:py-20">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <span className="inline-flex items-center gap-2 rounded-full border border-[#4540DB]/40 bg-[#4540DB]/10 px-4 py-1.5 text-xs font-medium tracking-wide text-[#4540DB]">
+              Case Study
+            </span>
+            <h2 className="mt-4 text-2xl font-bold tracking-tight text-white sm:text-3xl">
+              Engineering / Technical Hiring
+            </h2>
+          </div>
+
+          <div className="mt-12 grid gap-6 sm:grid-cols-3">
+            <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 backdrop-blur-sm">
+              <h3 className="text-sm font-semibold uppercase tracking-wider text-red-400">
+                Challenge
+              </h3>
+              <p className="mt-3 text-sm leading-relaxed text-gray-400">
+                Client needed urgent hiring support with limited time and budget
+                constraints for critical technical positions.
+              </p>
+            </div>
+            <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 backdrop-blur-sm">
+              <h3 className="text-sm font-semibold uppercase tracking-wider text-[#00D4FF]">
+                Solution
+              </h3>
+              <ul className="mt-3 space-y-2 text-sm text-gray-400">
+                <li className="flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4 text-[#00D4FF]" />
+                  Rapid sourcing
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4 text-[#00D4FF]" />
+                  Pre-screening & validation
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4 text-[#00D4FF]" />
+                  Delivered shortlist in 3 days
+                </li>
+              </ul>
+            </div>
+            <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 backdrop-blur-sm">
+              <h3 className="text-sm font-semibold uppercase tracking-wider text-[#22C55E]">
+                Result
+              </h3>
+              <div className="mt-3 space-y-3">
+                <div>
+                  <p className="text-2xl font-bold text-[#22C55E]">
+                    2 positions
+                  </p>
+                  <p className="text-sm text-gray-400">Filled within 10 days</p>
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-[#22C55E]">40%</p>
+                  <p className="text-sm text-gray-400">
+                    Reduction in hiring time
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Awards */}
       <AwardsBanner compact accentColor="#4540DB" />
 
-      {/* CTA */}
+      {/* ============================================================ */}
+      {/*  FINAL CTA                                                    */}
+      {/* ============================================================ */}
       <section className="relative overflow-hidden py-16 sm:py-20">
         <div className="pointer-events-none absolute -top-20 left-1/2 h-[400px] w-[600px] -translate-x-1/2 rounded-full bg-[#4540DB]/20 blur-[120px]" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
@@ -315,19 +533,30 @@ export default function EmployersPage() {
             Ready to Hire?
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-lg text-gray-400">
-            Post your role today and receive a shortlist of technically verified
-            automation engineers within 48 hours.
+            Let&apos;s find your next great team member. Submit your requirement
+            and receive a shortlist of pre-qualified candidates within 72 hours.
           </p>
-          <Link href="/post-a-role">
-            <Button
-              size="lg"
-              className="mt-8 bg-[#4540DB] text-white hover:bg-[#4540DB]/90 px-8 transition-transform hover:scale-105"
-              style={{ boxShadow: "0 0 30px rgba(69,64,219,0.4)" }}
-            >
-              Post a Role Now
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-          </Link>
+          <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <Link href="/post-a-role">
+              <Button
+                size="lg"
+                className="bg-[#4540DB] text-white hover:bg-[#4540DB]/90 px-8 transition-transform hover:scale-105"
+                style={{ boxShadow: "0 0 30px rgba(69,64,219,0.4)" }}
+              >
+                Submit a Requirement
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
+            <Link href="/contact">
+              <Button
+                variant="outline"
+                size="lg"
+                className="border border-white/20 bg-white/5 backdrop-blur-sm text-white hover:bg-white/10 hover:text-white"
+              >
+                Book a Call
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
     </div>

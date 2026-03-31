@@ -2,50 +2,97 @@
 
 import Link from "next/link";
 import {
-  BadgeCheck,
-  Briefcase,
-  TrendingUp,
   ArrowRight,
   CheckCircle,
-  FileText,
-  Headphones,
-  Crown,
-  GraduationCap,
   Gift,
-  Sparkles,
-  BookOpen,
+  Briefcase,
+  Monitor,
+  Wrench,
+  GraduationCap,
+  UserPlus,
+  Search,
+  MessageSquare,
+  BadgeCheck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { PLATFORMS } from "@/lib/constants";
 import { AwardsBanner } from "@/components/shared/awards-banner";
 
-const BENEFITS = [
-  {
-    icon: BadgeCheck,
-    title: "Get Skill-Verified",
-    description:
-      "Earn a verification badge that proves your PLC, SCADA, and controls expertise to employers. Stand out from the crowd with technical proof, not just a CV.",
-  },
+const WHY_POINTS = [
+  "Get matched to roles that genuinely fit your skills and experience",
+  "Access premium opportunities across multiple sectors",
+  "Free registration and job matching - no fees, ever",
+  "Career support and guidance from industry professionals",
+  "Skill verification that sets you apart from other candidates",
+];
+
+const SECTORS = [
   {
     icon: Briefcase,
-    title: "Access Premium Roles",
-    description:
-      "Get exclusive access to high-quality automation roles that are never publicly advertised. Our employer network includes top-tier system integrators and end users.",
+    title: "Business & Operations",
+    roles: [
+      "Project Management",
+      "Supply Chain",
+      "Operations",
+      "Finance",
+      "HR & Talent",
+      "Sales & Marketing",
+    ],
   },
   {
-    icon: TrendingUp,
-    title: "Career Growth",
-    description:
-      "Receive salary benchmarking data for your role and region, career guidance from engineers who understand your field, and insights to negotiate better.",
+    icon: Monitor,
+    title: "Technology",
+    roles: [
+      "Software Development",
+      "Cloud & DevOps",
+      "Data & Analytics",
+      "Cybersecurity",
+      "IT Infrastructure",
+      "AI & Machine Learning",
+    ],
+  },
+  {
+    icon: Wrench,
+    title: "Engineering",
+    roles: [
+      "Controls & Automation",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Process Engineering",
+      "Manufacturing",
+      "Maintenance & Reliability",
+    ],
   },
 ];
 
-const WHY_POINTS = [
-  "Engineer-reviewed matching, not just keyword search",
-  "Transparent salary information on every role",
-  "Dedicated support from people who speak your language",
-  "Fast-track process: no unnecessary hoops",
-  "Your data is secure and only shared with your consent",
+const STEPS = [
+  {
+    icon: UserPlus,
+    step: "01",
+    title: "Register",
+    description:
+      "Create your free profile and tell us about your skills, experience, and what you are looking for.",
+  },
+  {
+    icon: Search,
+    step: "02",
+    title: "Get Matched",
+    description:
+      "Our team reviews your profile and matches you with roles that fit your expertise and career goals.",
+  },
+  {
+    icon: MessageSquare,
+    step: "03",
+    title: "Interview",
+    description:
+      "We prepare you for interviews and support you through the entire process.",
+  },
+  {
+    icon: BadgeCheck,
+    step: "04",
+    title: "Get Hired",
+    description:
+      "Land your next role with confidence. We stay in touch to make sure you are settled and thriving.",
+  },
 ];
 
 export default function CandidatesPage() {
@@ -69,14 +116,14 @@ export default function CandidatesPage() {
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
-            Your Skills, Verified.
+            Your Skills Deserve
             <br />
-            Your Career, Accelerated.
+            the Right Opportunity
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-400">
-            OSCABE connects skilled automation engineers with the best
-            opportunities in the industry. Get technically verified and let
-            employers come to you.
+            Get matched to roles that truly value your expertise. OSCABE
+            connects talented professionals with outstanding opportunities
+            across Business, Technology, and Engineering.
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link href="/jobs">
@@ -95,58 +142,24 @@ export default function CandidatesPage() {
                 size="lg"
                 className="border border-white/20 bg-white/5 backdrop-blur-sm text-white hover:bg-white/10 hover:text-white"
               >
-                Register Your Interest
+                Register Now
               </Button>
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Benefits */}
+      {/* Why Join OSCABE */}
       <section className="border-y border-white/[0.06] bg-white/[0.02] py-16 sm:py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h2 className="text-2xl font-bold text-white sm:text-3xl">
-              Built for Engineers, by Engineers
-            </h2>
-            <p className="mx-auto mt-3 max-w-2xl text-gray-400">
-              We understand automation because our team lives and breathes it.
-              Here is what you get with OSCABE.
-            </p>
-          </div>
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {BENEFITS.map((benefit) => (
-              <div
-                key={benefit.title}
-                className="group rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm p-6 transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.06]"
-                style={{ transition: "box-shadow 0.3s, border-color 0.3s, background 0.3s" }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLDivElement).style.boxShadow = "0 0 30px rgba(0,212,255,0.15)";
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLDivElement).style.boxShadow = "none";
-                }}
-              >
-                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-[#00D4FF]/15">
-                  <benefit.icon className="h-5 w-5 text-[#00D4FF]" />
-                </div>
-                <h3 className="text-lg font-semibold text-white">{benefit.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-gray-400">
-                  {benefit.description}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Why OSCABE */}
-      <section className="py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-3xl text-center">
             <h2 className="text-2xl font-bold text-white sm:text-3xl">
-              Why Engineers Trust OSCABE
+              Why Join OSCABE
             </h2>
+            <p className="mx-auto mt-3 max-w-2xl text-gray-400">
+              We make it simple to find your next role. Here is what you get
+              when you register.
+            </p>
             <div className="mt-8 space-y-4 text-left">
               {WHY_POINTS.map((point) => (
                 <div key={point} className="flex items-start gap-3">
@@ -159,149 +172,89 @@ export default function CandidatesPage() {
         </div>
       </section>
 
-      {/* Platforms */}
-      <section className="border-y border-white/[0.06] bg-white/[0.02] py-16 sm:py-20">
+      {/* Sectors We Recruit In */}
+      <section className="py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h2 className="text-2xl font-bold text-white sm:text-3xl">
-              Platforms We Recruit For
+              Sectors We Recruit In
             </h2>
             <p className="mx-auto mt-3 max-w-2xl text-gray-400">
-              Whether you specialise in Siemens, Rockwell, Schneider, or niche
-              platforms, we have roles that match your expertise.
+              From boardrooms to factory floors, we place professionals across a
+              wide range of industries and disciplines.
             </p>
           </div>
-          <div className="mt-10 flex flex-wrap justify-center gap-2.5">
-            {PLATFORMS.map((platform) => (
-              <span
-                key={platform}
-                className="rounded-full border border-white/[0.08] bg-white/[0.03] px-4 py-1.5 text-sm text-gray-300 backdrop-blur-sm"
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {SECTORS.map((sector) => (
+              <div
+                key={sector.title}
+                className="group rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm p-6 transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.06]"
+                style={{
+                  transition:
+                    "box-shadow 0.3s, border-color 0.3s, background 0.3s",
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLDivElement).style.boxShadow =
+                    "0 0 30px rgba(0,212,255,0.15)";
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLDivElement).style.boxShadow = "none";
+                }}
               >
-                {platform}
-              </span>
+                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-[#00D4FF]/15">
+                  <sector.icon className="h-5 w-5 text-[#00D4FF]" />
+                </div>
+                <h3 className="text-lg font-semibold text-white">
+                  {sector.title}
+                </h3>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {sector.roles.map((role) => (
+                    <span
+                      key={role}
+                      className="rounded-full border border-white/[0.08] bg-white/[0.03] px-3 py-1 text-xs text-gray-400"
+                    >
+                      {role}
+                    </span>
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Premium Services */}
-      <section className="py-16 sm:py-20">
+      {/* How It Works */}
+      <section className="border-y border-white/[0.06] bg-white/[0.02] py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h2 className="text-2xl font-bold text-white sm:text-3xl">
-              Premium Services
+              How It Works
             </h2>
             <p className="mx-auto mt-3 max-w-2xl text-gray-400">
-              Invest in your career with expert-led services designed for automation professionals.
+              From registration to your first day, we guide you through every
+              step.
             </p>
           </div>
-
-          <div className="mt-12 grid gap-6 sm:grid-cols-3">
-            {/* AI CV Review */}
-            <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm p-6 transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.06]">
-              <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-[#00D4FF]/15">
-                <FileText className="h-5 w-5 text-[#00D4FF]" />
-              </div>
-              <h3 className="text-lg font-semibold text-white">AI CV Review</h3>
-              <p className="mt-2 text-2xl font-bold text-[#00D4FF]">
-                &pound;50<span className="text-sm font-normal text-gray-400"> one-time</span>
-              </p>
-              <p className="mt-3 text-sm leading-relaxed text-gray-400">
-                Professional CV optimisation for automation roles. AI-powered analysis with expert review to make your experience shine.
-              </p>
-            </div>
-
-            {/* Interview Prep */}
-            <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm p-6 transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.06]">
-              <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-[#00D4FF]/15">
-                <Headphones className="h-5 w-5 text-[#00D4FF]" />
-              </div>
-              <h3 className="text-lg font-semibold text-white">Interview Prep</h3>
-              <p className="mt-2 text-2xl font-bold text-[#00D4FF]">
-                &pound;50<span className="text-sm font-normal text-gray-400">/session</span>
-              </p>
-              <p className="mt-3 text-sm leading-relaxed text-gray-400">
-                1-hour coaching session with an industry expert. Technical interview practice tailored to your target role and platform.
-              </p>
-            </div>
-
-            {/* Premium Membership */}
-            <div className="relative rounded-2xl border border-[#00D4FF]/30 bg-white/[0.03] backdrop-blur-sm p-6 transition-all duration-300 hover:border-[#00D4FF]/50 hover:bg-white/[0.06]">
-              <span className="absolute -top-3 right-6 rounded-full bg-[#00D4FF] px-3 py-1 text-xs font-semibold text-[#02012B]">
-                Best Value
-              </span>
-              <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-[#00D4FF]/15">
-                <Crown className="h-5 w-5 text-[#00D4FF]" />
-              </div>
-              <h3 className="text-lg font-semibold text-white">Premium Membership</h3>
-              <p className="mt-2 text-2xl font-bold text-[#00D4FF]">
-                &pound;9.99<span className="text-sm font-normal text-gray-400">/month</span>
-              </p>
-              <p className="mt-3 text-sm leading-relaxed text-gray-400">
-                Priority job alerts, career intelligence reports, and exclusive access to premium roles before they go public.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Upskill Your Career */}
-      <section className="border-y border-white/[0.06] overflow-hidden">
-        <div
-          className="py-16 sm:py-20"
-          style={{
-            background: "linear-gradient(135deg, rgba(0,212,255,0.08) 0%, rgba(139,92,246,0.08) 50%, rgba(0,212,255,0.04) 100%)",
-          }}
-        >
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="text-center">
-              <div className="flex items-center justify-center gap-2">
-                <h2 className="text-2xl font-bold text-white sm:text-3xl">
-                  Upskill Your Career
-                </h2>
-                <span className="rounded-full border border-[#8B5CF6]/30 bg-[#8B5CF6]/10 px-3 py-1 text-xs font-semibold text-[#8B5CF6]">
-                  Powered by Wartens
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {STEPS.map((item) => (
+              <div
+                key={item.title}
+                className="relative rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm p-6 transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.06]"
+              >
+                <span className="text-3xl font-bold text-[#00D4FF]/20">
+                  {item.step}
                 </span>
-              </div>
-              <p className="mx-auto mt-3 max-w-2xl text-gray-400">
-                Level up your skills with AI-powered learning and expert-led training programmes.
-              </p>
-            </div>
-
-            <div className="mt-12 grid gap-6 sm:grid-cols-3">
-              <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm p-6 text-center transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.06]">
-                <div className="mx-auto mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-[#8B5CF6]/15">
-                  <GraduationCap className="h-5 w-5 text-[#8B5CF6]" />
+                <div className="mt-3 mb-3 flex h-11 w-11 items-center justify-center rounded-lg bg-[#00D4FF]/15">
+                  <item.icon className="h-5 w-5 text-[#00D4FF]" />
                 </div>
-                <h3 className="text-lg font-semibold text-white">Platform Cross-Training</h3>
+                <h3 className="text-lg font-semibold text-white">
+                  {item.title}
+                </h3>
                 <p className="mt-2 text-sm leading-relaxed text-gray-400">
-                  Learn a new PLC platform in 4 weeks. Structured programmes for Siemens, Rockwell, Schneider and more.
+                  {item.description}
                 </p>
               </div>
-
-              <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm p-6 text-center transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.06]">
-                <div className="mx-auto mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-[#8B5CF6]/15">
-                  <Sparkles className="h-5 w-5 text-[#8B5CF6]" />
-                </div>
-                <h3 className="text-lg font-semibold text-white">nxtED AI Learning</h3>
-                <p className="mt-2 text-2xl font-bold text-[#8B5CF6]">
-                  &pound;9.99<span className="text-sm font-normal text-gray-400">/month</span>
-                </p>
-                <p className="mt-2 text-sm leading-relaxed text-gray-400">
-                  AI-powered microlearning tailored to your skill gaps and career goals.
-                </p>
-              </div>
-
-              <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm p-6 text-center transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.06]">
-                <div className="mx-auto mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-[#8B5CF6]/15">
-                  <BookOpen className="h-5 w-5 text-[#8B5CF6]" />
-                </div>
-                <h3 className="text-lg font-semibold text-white">Pre-Placement Training</h3>
-                <p className="mt-2 text-sm leading-relaxed text-gray-400">
-                  Get trained on your new employer&apos;s exact stack before day one. Hit the ground running.
-                </p>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
@@ -322,7 +275,9 @@ export default function CandidatesPage() {
                   Refer &amp; Earn &pound;200
                 </h2>
                 <p className="mt-2 text-gray-400">
-                  Know a talented automation engineer? Refer them and earn &pound;200 for every successful placement.
+                  Know someone looking for their next role? Refer them to OSCABE
+                  and earn &pound;200 for every successful placement. It is that
+                  simple.
                 </p>
               </div>
               <Link href="/refer">
@@ -339,6 +294,48 @@ export default function CandidatesPage() {
         </div>
       </section>
 
+      {/* Upskill */}
+      <section className="border-y border-white/[0.06] overflow-hidden">
+        <div
+          className="py-16 sm:py-20"
+          style={{
+            background:
+              "linear-gradient(135deg, rgba(0,212,255,0.08) 0%, rgba(139,92,246,0.08) 50%, rgba(0,212,255,0.04) 100%)",
+          }}
+        >
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col items-center text-center">
+              <div className="flex items-center gap-2">
+                <h2 className="text-2xl font-bold text-white sm:text-3xl">
+                  Upskill Your Career
+                </h2>
+                <span className="rounded-full border border-[#8B5CF6]/30 bg-[#8B5CF6]/10 px-3 py-1 text-xs font-semibold text-[#8B5CF6]">
+                  Powered by Wartens
+                </span>
+              </div>
+              <p className="mx-auto mt-3 max-w-2xl text-gray-400">
+                Take your career further with expert-led training programmes and
+                AI-powered learning from Wartens. Whether you want to master a
+                new platform or sharpen your existing skills, we have you
+                covered.
+              </p>
+              <div className="mt-6 flex h-12 w-12 items-center justify-center rounded-lg bg-[#8B5CF6]/15">
+                <GraduationCap className="h-6 w-6 text-[#8B5CF6]" />
+              </div>
+              <Link href="/upskill" className="mt-6">
+                <Button
+                  variant="outline"
+                  className="border border-[#8B5CF6]/30 bg-[#8B5CF6]/10 text-[#8B5CF6] hover:bg-[#8B5CF6]/20 hover:text-[#8B5CF6]"
+                >
+                  Explore Training Programmes
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Awards */}
       <AwardsBanner compact accentColor="#00D4FF" />
 
@@ -347,11 +344,11 @@ export default function CandidatesPage() {
         <div className="pointer-events-none absolute -top-20 left-1/2 h-[400px] w-[600px] -translate-x-1/2 rounded-full bg-[#00D4FF]/20 blur-[120px]" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-2xl font-bold text-white sm:text-3xl">
-            Ready to Take the Next Step?
+            Ready for Your Next Move?
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-lg text-gray-400">
-            Browse live roles or register your interest and we will match you
-            with opportunities that fit your skills and career goals.
+            Browse live roles or register today and let us match you with
+            opportunities that fit your skills and ambitions.
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link href="/jobs">
@@ -369,7 +366,7 @@ export default function CandidatesPage() {
                 size="lg"
                 className="border border-white/20 bg-white/5 backdrop-blur-sm text-white hover:bg-white/10 hover:text-white"
               >
-                Register Your Interest
+                Register
               </Button>
             </Link>
           </div>
