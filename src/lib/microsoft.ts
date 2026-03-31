@@ -311,6 +311,74 @@ export async function sendEmail(
   });
 }
 
+/**
+ * Send an email via the Microsoft Graph API from the user's connected Outlook account.
+ * Auto-refreshes tokens if expired.
+ */
+export async function sendEmailViaGraph(
+  userId: string,
+  to: string,
+  subject: string,
+  body: string,
+  cc?: string,
+  bcc?: string
+): Promise<{ success: boolean; messageId?: string; error?: string }> {
+  try {
+    const token = await getGraphClient(userId);
+    if (!token) {
+      return { success: false, error: "Microsoft account not connected or token unavailable" };
+    }
+
+    const message: Record<string, unknown> = {
+      subject,
+      body: { contentType: "HTML", content: body },
+      toRecipients: to.split(",").map((addr) => ({
+        emailAddress: { address: addr.trim() },
+      })),
+    };
+
+    if (cc) {
+      message.ccRecipients = cc.split(",").map((addr) => ({
+        emailAddress: { address: addr.trim() },
+      }));
+    }
+
+    if (bcc) {
+      message.bccRecipients = bcc.split(",").map((addr) => ({
+        emailAddress: { address: addr.trim() },
+      }));
+    }
+
+    const res = await fetch(`${GRAPH_API}/me/sendMail`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        message,
+        saveToSentItems: true,
+      }),
+    });
+
+    if (!res.ok) {
+      const errText = await res.text();
+      console.error(`Graph sendMail error (${res.status}):`, errText);
+      return { success: false, error: `Graph API error: ${res.status}` };
+    }
+
+    // Graph sendMail returns 202 Accepted with no body on success
+    // The message ID is not returned directly, generate a reference
+    return { success: true, messageId: `outlook-${Date.now()}` };
+  } catch (err) {
+    console.error("sendEmailViaGraph error:", err);
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : "Unknown error sending via Outlook",
+    };
+  }
+}
+
 export async function getEmailThread(userId: string, messageId: string) {
   const token = await getGraphClient(userId);
   if (!token) {

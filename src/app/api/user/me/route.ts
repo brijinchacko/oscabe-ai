@@ -42,6 +42,8 @@ export async function GET() {
       firstName: user.firstName,
       lastName: user.lastName,
       hasCompletedOnboarding,
+      microsoftConnected: user.microsoftConnected ?? false,
+      microsoftEmail: user.microsoftEmail ?? null,
     });
   } catch (error) {
     console.error("[GET /api/user/me]", error);

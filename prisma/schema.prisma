@@ -474,6 +474,7 @@ model OutreachCampaign {
   totalReplied    Int       @default(0)
   totalBounced    Int       @default(0)
   instantlyId     String?
+  sendVia         String?   // "resend" | "outlook"
   createdById     String?
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
@@ -520,6 +521,7 @@ model OutreachEmail {
   openedAt      DateTime?
   repliedAt     DateTime?
   bouncedAt     DateTime?
+  sentVia       String?   // "resend" | "outlook"
   scheduledAt   DateTime?
   createdAt     DateTime  @default(now())
 

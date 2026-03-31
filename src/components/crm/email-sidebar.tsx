@@ -65,6 +65,28 @@ export function EmailSidebar({ onClose }: { onClose: () => void }) {
   const [composeSubject, setComposeSubject] = useState("");
   const [composeBody, setComposeBody] = useState("");
   const [sending, setSending] = useState(false);
+  const [sendVia, setSendVia] = useState<"resend" | "outlook">("outlook");
+  const [microsoftConnected, setMicrosoftConnected] = useState(false);
+  const [microsoftEmail, setMicrosoftEmail] = useState<string | null>(null);
+
+  // Fetch Microsoft connection status
+  useEffect(() => {
+    async function fetchMicrosoftStatus() {
+      try {
+        const res = await fetch("/api/user/me");
+        if (res.ok) {
+          const data = await res.json();
+          setMicrosoftConnected(data.microsoftConnected ?? false);
+          setMicrosoftEmail(data.microsoftEmail ?? null);
+          // Default to outlook if connected, otherwise resend
+          if (!data.microsoftConnected) setSendVia("resend");
+        }
+      } catch {
+        setSendVia("resend");
+      }
+    }
+    fetchMicrosoftStatus();
+  }, []);
 
   const fetchEmails = useCallback(async () => {
     setLoading(true);
@@ -121,24 +143,30 @@ export function EmailSidebar({ onClose }: { onClose: () => void }) {
     }
     setSending(true);
     try {
-      const res = await fetch("/api/microsoft/emails/send", {
+      // Use the unified send endpoint with sendVia
+      const res = await fetch("/api/emails/send", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           to: composeTo,
           subject: composeSubject,
           body: composeBody,
+          sendVia,
         }),
       });
-      if (!res.ok) throw new Error();
-      toast.success("Email sent");
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || "Send failed");
+      }
+      const viaLabel = sendVia === "outlook" ? " via Outlook" : "";
+      toast.success(`Email sent${viaLabel}`);
       setComposeTo("");
       setComposeSubject("");
       setComposeBody("");
       setView("list");
       fetchEmails();
-    } catch {
-      toast.error("Failed to send email");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Failed to send email");
     } finally {
       setSending(false);
     }
@@ -303,6 +331,39 @@ export function EmailSidebar({ onClose }: { onClose: () => void }) {
         {/* Compose View */}
         {view === "compose" && (
           <div className="p-3 space-y-3">
+            {/* Send from selector */}
+            <div className="space-y-1.5">
+              <Label className="text-xs">Send from</Label>
+              <div className="flex gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => setSendVia("resend")}
+                  className={`flex-1 rounded-md border px-2 py-1.5 text-[10px] font-medium transition-colors ${
+                    sendVia === "resend"
+                      ? "border-indigo-500 bg-indigo-50 text-indigo-700"
+                      : "border-gray-200 bg-white text-gray-600 hover:bg-gray-50"
+                  }`}
+                >
+                  OSCABE
+                </button>
+                <button
+                  type="button"
+                  onClick={() => microsoftConnected && setSendVia("outlook")}
+                  disabled={!microsoftConnected}
+                  className={`flex-1 rounded-md border px-2 py-1.5 text-[10px] font-medium transition-colors ${
+                    sendVia === "outlook"
+                      ? "border-indigo-500 bg-indigo-50 text-indigo-700"
+                      : microsoftConnected
+                        ? "border-gray-200 bg-white text-gray-600 hover:bg-gray-50"
+                        : "border-gray-100 bg-gray-50 text-gray-400 cursor-not-allowed"
+                  }`}
+                  title={microsoftConnected ? (microsoftEmail || "Outlook") : "Connect Microsoft account in Settings"}
+                >
+                  Outlook {microsoftEmail ? `(${microsoftEmail.split("@")[0]})` : ""}
+                </button>
+              </div>
+            </div>
+
             <div className="space-y-1.5">
               <Label className="text-xs">To</Label>
               <Input

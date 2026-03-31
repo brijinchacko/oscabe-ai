@@ -29,16 +29,20 @@ import { wrapEmailHtml } from "@/lib/email-html";
 // Types
 // ---------------------------------------------------------------------------
 
+type SendVia = "resend" | "outlook";
+
 interface EmailComposerProps {
   to?: string | string[];
   recipientCount?: number;
   defaultSubject?: string;
   defaultBody?: string;
   tokenData?: Record<string, string | undefined>;
-  onSend: (data: { to: string[]; subject: string; body: string }) => Promise<void>;
+  onSend: (data: { to: string[]; subject: string; body: string; sendVia: SendVia }) => Promise<void>;
   onClose?: () => void;
   senderName?: string;
   senderEmail?: string;
+  microsoftConnected?: boolean;
+  microsoftEmail?: string | null;
 }
 
 // ---------------------------------------------------------------------------
@@ -68,10 +72,13 @@ export function EmailComposer({
   onClose,
   senderName,
   senderEmail,
+  microsoftConnected = false,
+  microsoftEmail,
 }: EmailComposerProps) {
   const [subject, setSubject] = useState(defaultSubject);
   const [mode, setMode] = useState<"edit" | "preview">("edit");
   const [sending, setSending] = useState(false);
+  const [sendVia, setSendVia] = useState<SendVia>("resend");
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   // Normalise recipients
@@ -195,6 +202,7 @@ export function EmailComposer({
         to: recipients,
         subject,
         body: editor.getHTML(),
+        sendVia,
       });
     } finally {
       setSending(false);
@@ -225,20 +233,36 @@ export function EmailComposer({
     <div className="flex flex-col h-full border rounded-lg bg-background overflow-hidden">
       {/* Header / metadata */}
       <div className="flex flex-col gap-3 p-4 border-b bg-muted/30">
-        {/* From */}
-        {(senderName || senderEmail) && (
-          <div className="flex items-center gap-2 text-sm">
-            <Label className="w-14 text-muted-foreground shrink-0">From</Label>
-            <span className="text-foreground">
-              {senderName && <span className="font-medium">{senderName}</span>}
-              {senderEmail && (
-                <span className="text-muted-foreground">
-                  {senderName ? ` <${senderEmail}>` : senderEmail}
-                </span>
-              )}
-            </span>
+        {/* Send from selector */}
+        <div className="flex items-center gap-2 text-sm">
+          <Label className="w-14 text-muted-foreground shrink-0">From</Label>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setSendVia("resend")}
+              className={`rounded-md border px-3 py-1.5 text-xs font-medium transition-colors ${
+                sendVia === "resend"
+                  ? "border-indigo-500 bg-indigo-50 text-indigo-700"
+                  : "border-gray-200 bg-white text-gray-600 hover:bg-gray-50"
+              }`}
+            >
+              OSCABE (noreply@oscabe.com)
+            </button>
+            {microsoftConnected && (
+              <button
+                type="button"
+                onClick={() => setSendVia("outlook")}
+                className={`rounded-md border px-3 py-1.5 text-xs font-medium transition-colors ${
+                  sendVia === "outlook"
+                    ? "border-indigo-500 bg-indigo-50 text-indigo-700"
+                    : "border-gray-200 bg-white text-gray-600 hover:bg-gray-50"
+                }`}
+              >
+                Your Outlook {microsoftEmail ? `(${microsoftEmail})` : ""}
+              </button>
+            )}
           </div>
-        )}
+        </div>
 
         {/* To */}
         <div className="flex items-center gap-2 text-sm">

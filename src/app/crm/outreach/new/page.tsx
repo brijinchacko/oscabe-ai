@@ -70,12 +70,22 @@ const STEPS = ["Details", "Sequence", "Prospects", "Review & Launch"];
 // Step 1: Details
 // ---------------------------------------------------------------------------
 
+type SendVia = "resend" | "outlook";
+
 function StepDetails({
   form,
   setForm,
+  sendVia,
+  setSendVia,
+  microsoftConnected,
+  microsoftEmail,
 }: {
   form: { name: string; description: string; segment: string; dailyLimit: number };
   setForm: (f: typeof form | ((prev: typeof form) => typeof form)) => void;
+  sendVia: SendVia;
+  setSendVia: (v: SendVia) => void;
+  microsoftConnected: boolean;
+  microsoftEmail: string | null;
 }) {
   return (
     <div className="mx-auto max-w-lg space-y-5">
@@ -141,6 +151,67 @@ function StepDetails({
         <p className="mt-1 text-xs text-gray-500">
           Maximum emails to send per day (1-500)
         </p>
+      </div>
+
+      {/* Sending Account */}
+      <div>
+        <Label>Sending Account</Label>
+        <div className="mt-1.5 space-y-2">
+          <label className="flex items-start gap-3 rounded-lg border border-gray-200 p-3 cursor-pointer hover:bg-gray-50 transition-colors">
+            <input
+              type="radio"
+              name="sendVia"
+              value="resend"
+              checked={sendVia === "resend"}
+              onChange={() => setSendVia("resend")}
+              className="mt-0.5"
+            />
+            <div>
+              <span className="text-sm font-medium text-gray-900">
+                Send from OSCABE
+              </span>
+              <p className="text-xs text-gray-500 mt-0.5">
+                Shared sender (noreply@oscabe.com) — good for bulk outreach
+              </p>
+            </div>
+          </label>
+          <label
+            className={`flex items-start gap-3 rounded-lg border p-3 transition-colors ${
+              microsoftConnected
+                ? "border-gray-200 cursor-pointer hover:bg-gray-50"
+                : "border-gray-100 bg-gray-50 opacity-60 cursor-not-allowed"
+            }`}
+          >
+            <input
+              type="radio"
+              name="sendVia"
+              value="outlook"
+              checked={sendVia === "outlook"}
+              onChange={() => setSendVia("outlook")}
+              disabled={!microsoftConnected}
+              className="mt-0.5"
+            />
+            <div>
+              <span className="text-sm font-medium text-gray-900">
+                Send from my Outlook
+                {microsoftEmail ? ` (${microsoftEmail})` : ""}
+              </span>
+              <p className="text-xs text-gray-500 mt-0.5">
+                Personal sender — better deliverability and reply tracking
+              </p>
+              {!microsoftConnected && (
+                <p className="text-xs text-amber-600 mt-1">
+                  Connect your Microsoft account in Settings to enable this option
+                </p>
+              )}
+              {microsoftConnected && (
+                <p className="text-xs text-amber-600 mt-1">
+                  Outlook sending is limited to 30 emails/minute
+                </p>
+              )}
+            </div>
+          </label>
+        </div>
       </div>
     </div>
   );
@@ -553,6 +624,7 @@ function StepReview({
   setLiaChecked,
   suppressionChecked,
   setSuppressionChecked,
+  sendVia,
 }: {
   form: { name: string; description: string; segment: string; dailyLimit: number };
   templates: TemplateStep[];
@@ -561,6 +633,7 @@ function StepReview({
   setLiaChecked: (v: boolean) => void;
   suppressionChecked: boolean;
   setSuppressionChecked: (v: boolean) => void;
+  sendVia: SendVia;
 }) {
   return (
     <div className="mx-auto max-w-lg space-y-6">
@@ -581,6 +654,12 @@ function StepReview({
           <div className="flex justify-between">
             <dt className="text-gray-500">Daily Limit</dt>
             <dd className="font-medium text-gray-900">{form.dailyLimit}</dd>
+          </div>
+          <div className="flex justify-between">
+            <dt className="text-gray-500">Sending Account</dt>
+            <dd className="font-medium text-gray-900">
+              {sendVia === "outlook" ? "My Outlook" : "OSCABE (Resend)"}
+            </dd>
           </div>
         </dl>
       </div>
@@ -682,6 +761,26 @@ export default function NewCampaignPage() {
   const [selectedProspectIds, setSelectedProspectIds] = useState<string[]>([]);
   const [liaChecked, setLiaChecked] = useState(false);
   const [suppressionChecked, setSuppressionChecked] = useState(false);
+  const [sendVia, setSendVia] = useState<SendVia>("resend");
+  const [microsoftConnected, setMicrosoftConnected] = useState(false);
+  const [microsoftEmail, setMicrosoftEmail] = useState<string | null>(null);
+
+  // Fetch user's Microsoft connection status
+  useEffect(() => {
+    async function fetchMicrosoftStatus() {
+      try {
+        const res = await fetch("/api/user/me");
+        if (res.ok) {
+          const data = await res.json();
+          setMicrosoftConnected(data.microsoftConnected ?? false);
+          setMicrosoftEmail(data.microsoftEmail ?? null);
+        }
+      } catch {
+        // Ignore — default to not connected
+      }
+    }
+    fetchMicrosoftStatus();
+  }, []);
 
   function canProceed(): boolean {
     if (currentStep === 0) return form.name.trim().length > 0;
@@ -699,7 +798,7 @@ export default function NewCampaignPage() {
       const campRes = await fetch("/api/outreach/campaigns", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, sendVia }),
       });
       if (!campRes.ok) {
         const err = await campRes.json();
@@ -733,7 +832,11 @@ export default function NewCampaignPage() {
       // 4. Start campaign
       const sendRes = await fetch(
         `/api/outreach/campaigns/${campaign.id}/send`,
-        { method: "POST" }
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ sendVia }),
+        }
       );
       if (sendRes.ok) {
         const sendData = await sendRes.json();
@@ -808,7 +911,16 @@ export default function NewCampaignPage() {
 
       {/* Step content */}
       <div className="flex-1 overflow-y-auto">
-        {currentStep === 0 && <StepDetails form={form} setForm={setForm} />}
+        {currentStep === 0 && (
+          <StepDetails
+            form={form}
+            setForm={setForm}
+            sendVia={sendVia}
+            setSendVia={setSendVia}
+            microsoftConnected={microsoftConnected}
+            microsoftEmail={microsoftEmail}
+          />
+        )}
         {currentStep === 1 && (
           <StepSequence
             templates={templates}
@@ -832,6 +944,7 @@ export default function NewCampaignPage() {
             setLiaChecked={setLiaChecked}
             suppressionChecked={suppressionChecked}
             setSuppressionChecked={setSuppressionChecked}
+            sendVia={sendVia}
           />
         )}
       </div>

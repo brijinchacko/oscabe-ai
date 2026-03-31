@@ -1,31 +1,29 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/auth";
+import { requireAuth } from "@/lib/auth-helpers";
 import { getAuthUrl, isMicrosoftConfigured } from "@/lib/microsoft";
+import prisma from "@/lib/prisma";
 
 export async function GET() {
-  const session = await auth();
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const { user, error } = await requireAuth();
+  if (error) return error;
 
   if (!isMicrosoftConfigured()) {
     // In demo mode, simulate a successful connection
-    const { default: prisma } = await import("@/lib/prisma");
     await prisma.user.update({
-      where: { id: session.user.id },
+      where: { id: user.id },
       data: {
         microsoftConnected: true,
-        microsoftEmail: session.user.email || "demo@oscabe.com",
+        microsoftEmail: user.email || "demo@oscabe.com",
         microsoftAccessToken: "mock_token",
         microsoftRefreshToken: "mock_refresh",
         microsoftTokenExpiry: new Date(Date.now() + 3600 * 1000),
       },
     });
     return NextResponse.redirect(
-      `${process.env.NEXT_PUBLIC_APP_URL}/crm/settings?tab=integrations&connected=microsoft`
+      `${process.env.NEXT_PUBLIC_APP_URL || "https://oscabe.com"}/crm/settings?tab=integrations&connected=microsoft`
     );
   }
 
-  const authUrl = getAuthUrl(session.user.id);
+  const authUrl = getAuthUrl(user.id);
   return NextResponse.redirect(authUrl);
 }

@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
   const state = searchParams.get("state"); // userId
   const error = searchParams.get("error");
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://oscabe.com";
 
   if (error) {
     return NextResponse.redirect(
@@ -23,8 +23,12 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    // Verify user exists
-    const user = await prisma.user.findUnique({ where: { id: state } });
+    // Verify user exists (try by ID first, then email fallback)
+    let user = await prisma.user.findUnique({ where: { id: state } });
+    if (!user) {
+      // State might be email if ID didn't match
+      user = await prisma.user.findUnique({ where: { email: state } });
+    }
     if (!user) {
       return NextResponse.redirect(
         `${appUrl}/crm/settings?tab=integrations&error=invalid_user`
@@ -53,7 +57,7 @@ export async function GET(request: NextRequest) {
 
     // Store tokens
     await prisma.user.update({
-      where: { id: state },
+      where: { id: user.id },
       data: {
         microsoftAccessToken: tokens.access_token,
         microsoftRefreshToken: tokens.refresh_token,

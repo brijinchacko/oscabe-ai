@@ -8,6 +8,7 @@ const createCampaignSchema = z.object({
   description: z.string().optional(),
   segment: z.string().optional(),
   dailyLimit: z.number().min(1).max(500).optional(),
+  sendVia: z.enum(["resend", "outlook"]).optional(),
 });
 
 export async function GET(request: NextRequest) {
@@ -137,6 +138,7 @@ export async function POST(request: NextRequest) {
         description: parsed.data.description || null,
         segment: parsed.data.segment || null,
         dailyLimit: parsed.data.dailyLimit || 50,
+        sendVia: parsed.data.sendVia || null,
         createdById: userId,
       },
     });
