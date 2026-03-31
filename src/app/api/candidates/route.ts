@@ -43,6 +43,10 @@ export async function GET(request: NextRequest) {
     const industry = searchParams.get("industry") || "";
     const specialism = searchParams.get("specialism") || "";
     const hasCV = searchParams.get("hasCV") || "";
+    const rightToWork = searchParams.get("rightToWork") || "";
+    const salaryMin = searchParams.get("salaryMin") || "";
+    const salaryMax = searchParams.get("salaryMax") || "";
+    const contractType = searchParams.get("contractType") || "";
     const sortBy = searchParams.get("sortBy") || "newest";
 
     const where: Record<string, unknown> = {};
@@ -79,6 +83,22 @@ export async function GET(request: NextRequest) {
 
     if (hasCV === "true") {
       where.cvUrl = { not: null };
+    }
+
+    if (rightToWork === "true") {
+      where.rightToWork = true;
+    }
+
+    if (salaryMin) {
+      where.salaryMin = { gte: parseInt(salaryMin, 10) };
+    }
+
+    if (salaryMax) {
+      where.salaryMax = { lte: parseInt(salaryMax, 10) };
+    }
+
+    if (contractType) {
+      where.contractType = contractType;
     }
 
     // Determine sort order

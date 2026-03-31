@@ -81,6 +81,57 @@ export async function POST(request: Request) {
         (now.getTime() - activeSession.checkInAt.getTime()) / (1000 * 60)
       );
 
+      // Query CRM Activity records created by this user today
+      const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+      const crmActivities = await tx.activity.findMany({
+        where: {
+          userId: user.id,
+          createdAt: { gte: startOfDay, lt: endOfDay },
+          type: { notIn: ["CHECK_IN", "CHECK_OUT", "SYSTEM_CONFIG"] },
+        },
+      });
+
+      // Group CRM activities by type and count
+      const crmCounts: Record<string, number> = {};
+      for (const act of crmActivities) {
+        crmCounts[act.type] = (crmCounts[act.type] || 0) + 1;
+      }
+
+      // Calculate productivity score
+      const pointsMap: Record<string, number> = {
+        CANDIDATE_ADDED: 5, CANDIDATE_SOURCED: 5, CANDIDATE_CREATE: 5,
+        EMAIL: 3, EMAIL_SENT: 3, EMAIL_SEND: 3,
+        CALL: 5, PHONE_CALL: 5, CALL_LOGGED: 5,
+        NOTE: 2, NOTE_ADDED: 2, NOTE_CREATE: 2,
+        APPLICATION: 10, APPLICATION_SUBMITTED: 10, APPLICATION_CREATE: 10,
+        INTERVIEW: 15, INTERVIEW_SCHEDULED: 15, INTERVIEW_CREATE: 15,
+        CLIENT_CONTACT: 5, CLIENT_MEETING: 5, CLIENT_CALL: 5,
+      };
+      let productivityScore = 0;
+      for (const [type, count] of Object.entries(crmCounts)) {
+        productivityScore += (pointsMap[type.toUpperCase()] || 1) * count;
+      }
+
+      // Format activity summary string
+      const typeLabels: Record<string, string> = {
+        EMAIL: "emails sent", EMAIL_SENT: "emails sent", EMAIL_SEND: "emails sent",
+        CALL: "calls made", PHONE_CALL: "calls made", CALL_LOGGED: "calls made",
+        CANDIDATE_ADDED: "candidates sourced", CANDIDATE_SOURCED: "candidates sourced", CANDIDATE_CREATE: "candidates sourced",
+        NOTE: "notes written", NOTE_ADDED: "notes written", NOTE_CREATE: "notes written",
+        APPLICATION: "applications submitted", APPLICATION_SUBMITTED: "applications submitted",
+        INTERVIEW: "interviews scheduled", INTERVIEW_SCHEDULED: "interviews scheduled",
+        CLIENT_CONTACT: "clients contacted", CLIENT_MEETING: "client meetings",
+      };
+      const activitySummaryParts: string[] = [];
+      for (const [type, count] of Object.entries(crmCounts)) {
+        const label = typeLabels[type.toUpperCase()] || type.toLowerCase().replace(/_/g, " ");
+        activitySummaryParts.push(`${count} ${label}`);
+      }
+      const activitySummaryStr = activitySummaryParts.length > 0
+        ? `Today's Activity: ${activitySummaryParts.join(", ")}`
+        : "No CRM activity recorded today";
+
       // Build the daily report
       const report = {
         date: now.toISOString().split("T")[0],
@@ -101,6 +152,9 @@ export async function POST(request: Request) {
           duration: a.durationMin,
           description: a.description,
         })),
+        crmActivitySummary: activitySummaryStr,
+        crmActivityBreakdown: crmCounts,
+        productivityScore,
       };
 
       // Update session - store report JSON in checkOutSummary

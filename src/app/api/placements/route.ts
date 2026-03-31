@@ -32,6 +32,9 @@ export async function GET(request: NextRequest) {
     const from = searchParams.get("from") || "";
     const to = searchParams.get("to") || "";
     const search = searchParams.get("search") || "";
+    const clientId = searchParams.get("clientId") || "";
+    const feeMin = searchParams.get("feeMin") || "";
+    const feeMax = searchParams.get("feeMax") || "";
     const sortBy = searchParams.get("sortBy") || "newest";
     const page = Math.max(1, parseInt(searchParams.get("page") || "1", 10));
     const pageSize = Math.min(100, Math.max(1, parseInt(searchParams.get("pageSize") || "100", 10)));
@@ -56,6 +59,18 @@ export async function GET(request: NextRequest) {
         startDateFilter.lte = new Date(to);
       }
       where.startDate = startDateFilter;
+    }
+
+    if (clientId) {
+      where.client = { companyName: { contains: clientId } };
+    }
+
+    if (feeMin) {
+      where.feeAmount = { ...(where.feeAmount as Record<string, unknown> || {}), gte: parseInt(feeMin, 10) };
+    }
+
+    if (feeMax) {
+      where.feeAmount = { ...(where.feeAmount as Record<string, unknown> || {}), lte: parseInt(feeMax, 10) };
     }
 
     if (search) {

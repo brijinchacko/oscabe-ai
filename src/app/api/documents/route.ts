@@ -17,6 +17,8 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get("search") || "";
     const from = searchParams.get("from") || "";
     const to = searchParams.get("to") || "";
+    const fileType = searchParams.get("fileType") || "";
+    const sortBy = searchParams.get("sortBy") || "newest";
     const page = Math.max(1, parseInt(searchParams.get("page") || "1", 10));
     const pageSize = Math.min(100, Math.max(1, parseInt(searchParams.get("pageSize") || "50", 10)));
 
@@ -39,6 +41,28 @@ export async function GET(request: NextRequest) {
       where.createdAt = createdAtFilter;
     }
 
+    if (fileType) {
+      where.fileName = { contains: `.${fileType}` };
+    }
+
+    // Determine sort order
+    let orderBy: Record<string, string>;
+    switch (sortBy) {
+      case "oldest":
+        orderBy = { createdAt: "asc" };
+        break;
+      case "name_asc":
+        orderBy = { name: "asc" };
+        break;
+      case "name_desc":
+        orderBy = { name: "desc" };
+        break;
+      case "newest":
+      default:
+        orderBy = { createdAt: "desc" };
+        break;
+    }
+
     const [documents, total] = await Promise.all([
       prisma.document.findMany({
         where,
@@ -47,7 +71,7 @@ export async function GET(request: NextRequest) {
           candidate: { select: { id: true, firstName: true, lastName: true } },
           job: { select: { id: true, title: true } },
         },
-        orderBy: { createdAt: "desc" },
+        orderBy,
         skip: (page - 1) * pageSize,
         take: pageSize,
       }),

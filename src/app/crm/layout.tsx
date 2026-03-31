@@ -11,6 +11,7 @@ import { CRMAuthGuard } from "@/components/crm/crm-auth-guard";
 import { AttendanceHeader } from "@/components/crm/attendance-header";
 import { AttendanceHeartbeat } from "@/components/crm/attendance-heartbeat";
 import { NotificationBell } from "@/components/crm/notification-bell";
+import { ProductivityWidget } from "@/components/crm/productivity-widget";
 import {
   LayoutDashboard,
   Inbox,
@@ -114,6 +115,8 @@ interface SearchResults {
 export default function CRMLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [hasActiveSession, setHasActiveSession] = useState(false);
+  const [sessionChecked, setSessionChecked] = useState(false);
+  const [showCheckInBanner, setShowCheckInBanner] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<SearchResults | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -180,12 +183,13 @@ export default function CRMLayout({ children }: { children: React.ReactNode }) {
         const res = await fetch("/api/attendance");
         if (res.ok) {
           const data = await res.json();
-          setHasActiveSession(
-            data.session && data.session.status !== "CHECKED_OUT"
-          );
+          const active = data.session && data.session.status !== "CHECKED_OUT";
+          setHasActiveSession(active);
+          setSessionChecked(true);
+          setShowCheckInBanner(!active);
         }
       } catch {
-        // silently fail
+        setSessionChecked(true);
       }
     }
     checkSession();
@@ -201,21 +205,21 @@ export default function CRMLayout({ children }: { children: React.ReactNode }) {
   const sidebar = (
     <div className="flex h-full flex-col bg-[#0f172a] text-white">
       {/* Logo */}
-      <div className="flex h-16 items-center px-5">
+      <div className="flex h-12 items-center px-4">
         <Logo variant="light" size="sm" linkTo="/crm" />
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 overflow-y-auto px-3 py-4">
+      <nav className="flex-1 overflow-y-auto px-2 py-2">
         {NAV_GROUPS.map((group, groupIdx) => (
           <div key={group.label}>
             {groupIdx > 0 && (
-              <div className="mx-2 my-2 border-t border-white/10" />
+              <div className="mx-2 my-1.5 border-t border-white/10" />
             )}
-            <p className="mb-1 px-3 pt-1 text-[10px] font-semibold tracking-widest text-gray-500">
+            <p className="mb-0.5 px-2.5 pt-0.5 text-[9px] font-semibold tracking-widest text-gray-500">
               {group.label}
             </p>
-            <div className="space-y-0.5">
+            <div className="space-y-px">
               {group.items.map((item) => {
                 const active = isActive(item.href);
                 const Icon = item.icon;
@@ -224,13 +228,13 @@ export default function CRMLayout({ children }: { children: React.ReactNode }) {
                     key={item.href}
                     href={item.href}
                     onClick={() => setSidebarOpen(false)}
-                    className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+                    className={`flex items-center gap-2.5 rounded-md px-2.5 py-1.5 text-xs font-medium transition-colors ${
                       active
                         ? "border-l-2 border-indigo-400 bg-indigo-500/20 text-white"
                         : "text-gray-400 hover:bg-white/5 hover:text-white"
                     }`}
                   >
-                    <Icon className="size-5 shrink-0" />
+                    <Icon className="size-4 shrink-0" />
                     {item.label}
                   </Link>
                 );
@@ -241,21 +245,21 @@ export default function CRMLayout({ children }: { children: React.ReactNode }) {
       </nav>
 
       {/* User section */}
-      <div className="border-t border-white/10 p-4">
-        <div className="flex items-center gap-3">
+      <div className="border-t border-white/10 p-3">
+        <div className="flex items-center gap-2.5">
           {user?.image ? (
-            <img src={user.image} alt="" className="size-9 rounded-full" />
+            <img src={user.image} alt="" className="size-7 rounded-full" />
           ) : (
-            <div className="flex size-9 items-center justify-center rounded-full bg-indigo-500 text-sm font-bold text-white">
+            <div className="flex size-7 items-center justify-center rounded-full bg-indigo-500 text-[10px] font-bold text-white">
               {user?.name?.[0] || "U"}
             </div>
           )}
           {user && (
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-medium text-white">
+              <p className="truncate text-xs font-medium text-white">
                 {user.name || "User"}
               </p>
-              <p className="truncate text-xs text-gray-400">
+              <p className="truncate text-[10px] text-gray-400">
                 {user.email}
               </p>
             </div>
@@ -263,9 +267,9 @@ export default function CRMLayout({ children }: { children: React.ReactNode }) {
         </div>
         <button
           onClick={() => signOut({ callbackUrl: "/" })}
-          className="mt-2 flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-gray-400 transition-colors hover:bg-white/5 hover:text-white"
+          className="mt-1.5 flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-xs text-gray-400 transition-colors hover:bg-white/5 hover:text-white"
         >
-          <LogOut className="size-4" />
+          <LogOut className="size-3.5" />
           Sign Out
         </button>
       </div>
@@ -284,21 +288,21 @@ export default function CRMLayout({ children }: { children: React.ReactNode }) {
 
       {/* Mobile sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-64 transform transition-transform duration-200 ease-in-out lg:hidden ${
+        className={`fixed inset-y-0 left-0 z-50 w-56 transform transition-transform duration-200 ease-in-out lg:hidden ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         <button
           onClick={() => setSidebarOpen(false)}
-          className="absolute right-2 top-4 rounded-md p-1 text-gray-400 hover:text-white"
+          className="absolute right-2 top-3 rounded-md p-1 text-gray-400 hover:text-white"
         >
-          <X className="size-5" />
+          <X className="size-4" />
         </button>
         {sidebar}
       </aside>
 
       {/* Desktop sidebar */}
-      <aside className="hidden w-64 shrink-0 lg:block">{sidebar}</aside>
+      <aside className="hidden w-56 shrink-0 lg:block">{sidebar}</aside>
 
       {/* Headless heartbeat tracker */}
       <AttendanceHeartbeat hasActiveSession={hasActiveSession} />
@@ -307,40 +311,40 @@ export default function CRMLayout({ children }: { children: React.ReactNode }) {
       <div className="flex flex-1 flex-col overflow-hidden">
 
         {/* Top header bar */}
-        <header className="flex h-16 shrink-0 items-center gap-4 border-b border-gray-200 bg-white px-4 sm:px-6">
+        <header className="flex h-12 shrink-0 items-center gap-3 border-b border-gray-200 bg-white px-4">
           {/* Mobile hamburger */}
           <button
             onClick={() => setSidebarOpen(true)}
-            className="rounded-md p-1.5 text-gray-500 hover:bg-gray-100 hover:text-gray-700 lg:hidden"
+            className="rounded-md p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-700 lg:hidden"
           >
-            <Menu className="size-5" />
+            <Menu className="size-4" />
           </button>
 
           {/* Search */}
           <div className="relative flex-1 max-w-md" ref={searchRef}>
-            <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-gray-400 z-10" />
+            <Search className="absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-gray-400 z-10" />
             <Input
               placeholder="Search candidates, clients, jobs..."
-              className="pl-9"
+              className="h-8 pl-8 text-xs"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onFocus={() => { if (searchResults) setSearchOpen(true); }}
               onKeyDown={handleSearchKeyDown}
             />
             {searchOpen && searchQuery.trim() && (
-              <div className="absolute top-full left-0 right-0 z-50 mt-1 max-h-96 overflow-y-auto rounded-lg border border-gray-200 bg-white shadow-lg">
+              <div className="absolute top-full left-0 right-0 z-50 mt-1 max-h-80 overflow-y-auto rounded-lg border border-gray-200 bg-white shadow-lg">
                 {searchLoading && (
-                  <div className="px-4 py-3 text-sm text-gray-400">Searching...</div>
+                  <div className="px-3 py-2 text-xs text-gray-400">Searching...</div>
                 )}
                 {!searchLoading && !hasResults && (
-                  <div className="px-4 py-3 text-sm text-gray-400">No results found</div>
+                  <div className="px-3 py-2 text-xs text-gray-400">No results found</div>
                 )}
                 {!searchLoading && hasResults && (
                   <>
                     {searchResults!.candidates.length > 0 && (
                       <div>
-                        <div className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-gray-500 bg-gray-50">
-                          <Users className="size-3.5" />
+                        <div className="flex items-center gap-2 px-3 py-1.5 text-[10px] font-semibold text-gray-500 bg-gray-50">
+                          <Users className="size-3" />
                           Candidates
                         </div>
                         {searchResults!.candidates.map((c) => (
@@ -348,18 +352,18 @@ export default function CRMLayout({ children }: { children: React.ReactNode }) {
                             key={c.id}
                             href={`/crm/candidates/${c.id}`}
                             onClick={() => { setSearchOpen(false); setSearchQuery(""); }}
-                            className="flex flex-col px-3 py-2 hover:bg-gray-50 transition-colors"
+                            className="flex flex-col px-3 py-1.5 hover:bg-gray-50 transition-colors"
                           >
-                            <span className="text-sm font-medium text-gray-900">{c.name}</span>
-                            <span className="text-xs text-gray-500">{c.headline || c.email}</span>
+                            <span className="text-xs font-medium text-gray-900">{c.name}</span>
+                            <span className="text-[10px] text-gray-500">{c.headline || c.email}</span>
                           </Link>
                         ))}
                       </div>
                     )}
                     {searchResults!.clients.length > 0 && (
                       <div>
-                        <div className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-gray-500 bg-gray-50">
-                          <Building2 className="size-3.5" />
+                        <div className="flex items-center gap-2 px-3 py-1.5 text-[10px] font-semibold text-gray-500 bg-gray-50">
+                          <Building2 className="size-3" />
                           Clients
                         </div>
                         {searchResults!.clients.map((c) => (
@@ -367,18 +371,18 @@ export default function CRMLayout({ children }: { children: React.ReactNode }) {
                             key={c.id}
                             href={`/crm/clients/${c.id}`}
                             onClick={() => { setSearchOpen(false); setSearchQuery(""); }}
-                            className="flex flex-col px-3 py-2 hover:bg-gray-50 transition-colors"
+                            className="flex flex-col px-3 py-1.5 hover:bg-gray-50 transition-colors"
                           >
-                            <span className="text-sm font-medium text-gray-900">{c.companyName}</span>
-                            <span className="text-xs text-gray-500">{c.industry || "No industry"}</span>
+                            <span className="text-xs font-medium text-gray-900">{c.companyName}</span>
+                            <span className="text-[10px] text-gray-500">{c.industry || "No industry"}</span>
                           </Link>
                         ))}
                       </div>
                     )}
                     {searchResults!.jobs.length > 0 && (
                       <div>
-                        <div className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-gray-500 bg-gray-50">
-                          <Briefcase className="size-3.5" />
+                        <div className="flex items-center gap-2 px-3 py-1.5 text-[10px] font-semibold text-gray-500 bg-gray-50">
+                          <Briefcase className="size-3" />
                           Jobs
                         </div>
                         {searchResults!.jobs.map((j) => (
@@ -386,18 +390,18 @@ export default function CRMLayout({ children }: { children: React.ReactNode }) {
                             key={j.id}
                             href={`/crm/jobs/${j.id}`}
                             onClick={() => { setSearchOpen(false); setSearchQuery(""); }}
-                            className="flex flex-col px-3 py-2 hover:bg-gray-50 transition-colors"
+                            className="flex flex-col px-3 py-1.5 hover:bg-gray-50 transition-colors"
                           >
-                            <span className="text-sm font-medium text-gray-900">{j.title}</span>
-                            <span className="text-xs text-gray-500">{j.location || j.status}</span>
+                            <span className="text-xs font-medium text-gray-900">{j.title}</span>
+                            <span className="text-[10px] text-gray-500">{j.location || j.status}</span>
                           </Link>
                         ))}
                       </div>
                     )}
                     {searchResults!.contacts.length > 0 && (
                       <div>
-                        <div className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-gray-500 bg-gray-50">
-                          <Contact className="size-3.5" />
+                        <div className="flex items-center gap-2 px-3 py-1.5 text-[10px] font-semibold text-gray-500 bg-gray-50">
+                          <Contact className="size-3" />
                           Contacts
                         </div>
                         {searchResults!.contacts.map((c) => (
@@ -405,10 +409,10 @@ export default function CRMLayout({ children }: { children: React.ReactNode }) {
                             key={c.id}
                             href={`/crm/contacts/${c.id}`}
                             onClick={() => { setSearchOpen(false); setSearchQuery(""); }}
-                            className="flex flex-col px-3 py-2 hover:bg-gray-50 transition-colors"
+                            className="flex flex-col px-3 py-1.5 hover:bg-gray-50 transition-colors"
                           >
-                            <span className="text-sm font-medium text-gray-900">{c.name}</span>
-                            <span className="text-xs text-gray-500">{c.company || c.email || "Contact"}</span>
+                            <span className="text-xs font-medium text-gray-900">{c.name}</span>
+                            <span className="text-[10px] text-gray-500">{c.company || c.email || "Contact"}</span>
                           </Link>
                         ))}
                       </div>
@@ -420,29 +424,58 @@ export default function CRMLayout({ children }: { children: React.ReactNode }) {
           </div>
 
           {/* Quick actions - hidden on mobile */}
-          <div className="hidden items-center gap-2 sm:flex">
-            <Button variant="outline" size="sm">
-              <Plus className="size-3.5" />
-              Client
-            </Button>
-            <Button variant="outline" size="sm">
-              <Plus className="size-3.5" />
-              Candidate
-            </Button>
-            <Button variant="outline" size="sm">
-              <Plus className="size-3.5" />
-              Job
-            </Button>
+          <div className="hidden items-center gap-1.5 sm:flex">
+            <Link href="/crm/clients">
+              <Button variant="outline" size="sm" className="h-7 text-xs px-2">
+                <Plus className="size-3" />
+                Client
+              </Button>
+            </Link>
+            <Link href="/crm/candidates">
+              <Button variant="outline" size="sm" className="h-7 text-xs px-2">
+                <Plus className="size-3" />
+                Candidate
+              </Button>
+            </Link>
+            <Link href="/crm/jobs/new">
+              <Button variant="outline" size="sm" className="h-7 text-xs px-2">
+                <Plus className="size-3" />
+                Job
+              </Button>
+            </Link>
           </div>
 
           {/* Notification bell */}
           <NotificationBell />
         </header>
 
+        {/* Auto check-in banner */}
+        {sessionChecked && showCheckInBanner && (
+          <div className="flex items-center justify-between bg-amber-50 border-b border-amber-200 px-4 py-2">
+            <div className="flex items-center gap-2">
+              <Clock className="size-4 text-amber-600" />
+              <span className="text-xs font-medium text-amber-800">
+                You haven&apos;t checked in today. Check in to start tracking.
+              </span>
+            </div>
+            <Link href="/crm">
+              <Button
+                size="sm"
+                className="h-7 bg-amber-600 text-white hover:bg-amber-700 text-xs px-3"
+              >
+                Check In
+              </Button>
+            </Link>
+          </div>
+        )}
+
         {/* Page content */}
-        <main className="flex-1 overflow-y-auto bg-gray-50 p-6">
+        <main className="flex-1 overflow-y-auto bg-gray-50 p-4">
           <CRMAuthGuard>{children}</CRMAuthGuard>
         </main>
+
+        {/* Productivity Widget */}
+        {hasActiveSession && <ProductivityWidget />}
       </div>
     </div>
   );

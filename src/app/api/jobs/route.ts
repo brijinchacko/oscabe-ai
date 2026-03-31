@@ -46,6 +46,9 @@ export async function GET(request: NextRequest) {
     const location = searchParams.get("location") || "";
     const remote = searchParams.get("remote") || "";
     const hasApplications = searchParams.get("hasApplications") || "";
+    const industry = searchParams.get("industry") || "";
+    const salaryMin = searchParams.get("salaryMin") || "";
+    const salaryMax = searchParams.get("salaryMax") || "";
     const sortBy = searchParams.get("sortBy") || "newest";
 
     const where: Record<string, unknown> = {};
@@ -89,6 +92,18 @@ export async function GET(request: NextRequest) {
 
     if (hasApplications === "true") {
       where.applications = { some: {} };
+    }
+
+    if (industry) {
+      where.industry = industry;
+    }
+
+    if (salaryMin) {
+      where.salaryMin = { gte: parseInt(salaryMin, 10) };
+    }
+
+    if (salaryMax) {
+      where.salaryMax = { lte: parseInt(salaryMax, 10) };
     }
 
     // Determine sort order

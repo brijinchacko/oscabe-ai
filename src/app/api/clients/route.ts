@@ -36,6 +36,11 @@ export async function GET(request: NextRequest) {
     const assignedToId = searchParams.get("assignedToId") || "";
     const hasDocuments = searchParams.get("hasDocuments") || "";
     const hasJobs = searchParams.get("hasJobs") || "";
+    const hasContacts = searchParams.get("hasContacts") || "";
+    const source = searchParams.get("source") || "";
+    const location = searchParams.get("location") || "";
+    const from = searchParams.get("from") || "";
+    const to = searchParams.get("to") || "";
     const sortBy = searchParams.get("sortBy") || "newest";
 
     const where: Record<string, unknown> = {};
@@ -66,6 +71,25 @@ export async function GET(request: NextRequest) {
 
     if (hasJobs === "true") {
       where.jobs = { some: {} };
+    }
+
+    if (hasContacts === "true") {
+      where.contacts = { some: {} };
+    }
+
+    if (source) {
+      where.source = { contains: source };
+    }
+
+    if (location) {
+      where.location = { contains: location };
+    }
+
+    if (from || to) {
+      const createdAtFilter: Record<string, Date> = {};
+      if (from) createdAtFilter.gte = new Date(from);
+      if (to) createdAtFilter.lte = new Date(to);
+      where.createdAt = createdAtFilter;
     }
 
     // Determine sort order

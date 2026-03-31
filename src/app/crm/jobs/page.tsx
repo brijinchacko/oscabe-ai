@@ -9,10 +9,10 @@ import {
   AlertCircle,
   Briefcase,
   X,
+  Filter,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
@@ -27,15 +27,8 @@ import {
 /* ------------------------------------------------------------------ */
 
 const JOB_SOURCES = [
-  "DIRECT",
-  "HIRING_HUB",
-  "TEAM_NETWORK",
-  "SPLITFEE",
-  "GIIG",
-  "RECXCHANGE",
-  "RECRUITING_HUB",
-  "PARAFORM",
-  "OTHER",
+  "DIRECT", "HIRING_HUB", "TEAM_NETWORK", "SPLITFEE",
+  "GIIG", "RECXCHANGE", "RECRUITING_HUB", "PARAFORM", "OTHER",
 ] as const;
 
 const JOB_STATUSES = ["ACTIVE", "ON_HOLD", "FILLED", "CANCELLED", "DRAFT"] as const;
@@ -43,24 +36,44 @@ const JOB_STATUSES = ["ACTIVE", "ON_HOLD", "FILLED", "CANCELLED", "DRAFT"] as co
 const CONTRACT_TYPES = ["PERMANENT", "CONTRACT", "FIXED_TERM"] as const;
 
 const SOURCE_BADGE_COLORS: Record<string, string> = {
-  DIRECT: "bg-indigo-100 text-indigo-800",
-  HIRING_HUB: "bg-emerald-100 text-emerald-800",
-  TEAM_NETWORK: "bg-amber-100 text-amber-800",
-  SPLITFEE: "bg-red-100 text-red-800",
-  GIIG: "bg-violet-100 text-violet-800",
-  RECXCHANGE: "bg-pink-100 text-pink-800",
-  RECRUITING_HUB: "bg-cyan-100 text-cyan-800",
-  PARAFORM: "bg-lime-100 text-lime-800",
-  OTHER: "bg-gray-100 text-gray-800",
+  DIRECT: "bg-indigo-50 text-indigo-700",
+  HIRING_HUB: "bg-emerald-50 text-emerald-700",
+  TEAM_NETWORK: "bg-amber-50 text-amber-700",
+  SPLITFEE: "bg-red-50 text-red-700",
+  GIIG: "bg-violet-50 text-violet-700",
+  RECXCHANGE: "bg-pink-50 text-pink-700",
+  RECRUITING_HUB: "bg-cyan-50 text-cyan-700",
+  PARAFORM: "bg-lime-50 text-lime-700",
+  OTHER: "bg-gray-50 text-gray-600",
 };
 
-const STATUS_BADGE_COLORS: Record<string, string> = {
-  ACTIVE: "bg-green-100 text-green-800",
-  ON_HOLD: "bg-yellow-100 text-yellow-800",
-  FILLED: "bg-blue-100 text-blue-800",
-  CANCELLED: "bg-gray-100 text-gray-600",
-  DRAFT: "bg-slate-100 text-slate-600",
+const STATUS_DOT: Record<string, string> = {
+  ACTIVE: "bg-green-500",
+  ON_HOLD: "bg-yellow-500",
+  FILLED: "bg-blue-500",
+  CANCELLED: "bg-gray-400",
+  DRAFT: "bg-slate-400",
 };
+
+const STATUS_BG: Record<string, string> = {
+  ACTIVE: "bg-green-50 text-green-700",
+  ON_HOLD: "bg-yellow-50 text-yellow-700",
+  FILLED: "bg-blue-50 text-blue-700",
+  CANCELLED: "bg-gray-50 text-gray-600",
+  DRAFT: "bg-slate-50 text-slate-600",
+};
+
+const CONTRACT_BG: Record<string, string> = {
+  PERMANENT: "bg-indigo-50 text-indigo-700",
+  CONTRACT: "bg-amber-50 text-amber-700",
+  FIXED_TERM: "bg-cyan-50 text-cyan-700",
+};
+
+const INDUSTRIES = [
+  "Automotive", "Food & Beverage", "Pharmaceuticals", "Water & Wastewater",
+  "Oil & Gas", "Energy & Renewables", "Manufacturing", "Building Automation",
+  "Technology", "Other",
+];
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -80,6 +93,7 @@ interface Job {
   source: string | null;
   status: string;
   contractType: string | null;
+  industry: string | null;
   createdAt: string;
   client: { id: string; companyName: string } | null;
   assignedTo: {
@@ -99,12 +113,12 @@ function formatSalaryRate(job: Job): string {
   if (job.salaryMin || job.salaryMax) {
     const min = job.salaryMin ? `${(job.salaryMin / 1000).toFixed(0)}k` : "?";
     const max = job.salaryMax ? `${(job.salaryMax / 1000).toFixed(0)}k` : "?";
-    return `\u00A3${min} - \u00A3${max}`;
+    return `\u00A3${min}-\u00A3${max}`;
   }
   if (job.dayRateMin || job.dayRateMax) {
     const min = job.dayRateMin ?? "?";
     const max = job.dayRateMax ?? "?";
-    return `\u00A3${min} - \u00A3${max}/day`;
+    return `\u00A3${min}-\u00A3${max}/d`;
   }
   return "-";
 }
@@ -114,23 +128,7 @@ function daysOpen(createdAt: string): number {
 }
 
 function formatSource(source: string): string {
-  return source
-    .replace(/_/g, " ")
-    .replace(/\b\w/g, (c) => c.toUpperCase());
-}
-
-function rowBgClass(status: string): string {
-  switch (status) {
-    case "ACTIVE":
-      return "bg-green-50";
-    case "ON_HOLD":
-      return "bg-yellow-50";
-    case "FILLED":
-    case "CANCELLED":
-      return "bg-gray-50";
-    default:
-      return "";
-  }
+  return source.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
 /* ------------------------------------------------------------------ */
@@ -145,18 +143,22 @@ export default function JobsListPage() {
   const [error, setError] = useState("");
 
   // Filters
+  const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [sourceFilter, setSourceFilter] = useState("");
   const [contractFilter, setContractFilter] = useState("");
   const [clientFilter, setClientFilter] = useState("");
   const [locationFilter, setLocationFilter] = useState("");
+  const [industryFilter, setIndustryFilter] = useState("");
   const [remoteFilter, setRemoteFilter] = useState(false);
   const [hasAppsFilter, setHasAppsFilter] = useState(false);
+  const [salaryMinFilter, setSalaryMinFilter] = useState("");
+  const [salaryMaxFilter, setSalaryMaxFilter] = useState("");
   const [sortByFilter, setSortByFilter] = useState("newest");
   const [topClients, setTopClients] = useState<{ id: string; companyName: string }[]>([]);
 
-  const pageSize = 20;
+  const pageSize = 25;
 
   const activeFilterCount =
     (statusFilter ? 1 : 0) +
@@ -164,9 +166,18 @@ export default function JobsListPage() {
     (contractFilter ? 1 : 0) +
     (clientFilter ? 1 : 0) +
     (locationFilter ? 1 : 0) +
+    (industryFilter ? 1 : 0) +
     (remoteFilter ? 1 : 0) +
     (hasAppsFilter ? 1 : 0) +
+    (salaryMinFilter ? 1 : 0) +
+    (salaryMaxFilter ? 1 : 0) +
     (sortByFilter !== "newest" ? 1 : 0);
+
+  // Debounced search
+  useEffect(() => {
+    const timer = setTimeout(() => { setSearch(searchInput); setPage(1); }, 300);
+    return () => clearTimeout(timer);
+  }, [searchInput]);
 
   const fetchJobs = useCallback(async () => {
     setLoading(true);
@@ -181,8 +192,11 @@ export default function JobsListPage() {
       if (contractFilter) params.set("contractType", contractFilter);
       if (clientFilter) params.set("clientId", clientFilter);
       if (locationFilter) params.set("location", locationFilter);
+      if (industryFilter) params.set("industry", industryFilter);
       if (remoteFilter) params.set("remote", "true");
       if (hasAppsFilter) params.set("hasApplications", "true");
+      if (salaryMinFilter) params.set("salaryMin", salaryMinFilter);
+      if (salaryMaxFilter) params.set("salaryMax", salaryMaxFilter);
       if (sortByFilter) params.set("sortBy", sortByFilter);
 
       const res = await fetch(`/api/jobs?${params.toString()}`);
@@ -196,179 +210,134 @@ export default function JobsListPage() {
     } finally {
       setLoading(false);
     }
-  }, [page, search, statusFilter, sourceFilter, contractFilter, clientFilter, locationFilter, remoteFilter, hasAppsFilter, sortByFilter]);
+  }, [page, search, statusFilter, sourceFilter, contractFilter, clientFilter, locationFilter, industryFilter, remoteFilter, hasAppsFilter, salaryMinFilter, salaryMaxFilter, sortByFilter]);
 
   useEffect(() => {
     fetchJobs();
   }, [fetchJobs]);
 
-  // Debounced search
-  const [searchInput, setSearchInput] = useState("");
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setSearch(searchInput);
-      setPage(1);
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [searchInput]);
+  function clearAllFilters() {
+    setStatusFilter("");
+    setSourceFilter("");
+    setContractFilter("");
+    setClientFilter("");
+    setLocationFilter("");
+    setIndustryFilter("");
+    setRemoteFilter(false);
+    setHasAppsFilter(false);
+    setSalaryMinFilter("");
+    setSalaryMaxFilter("");
+    setSortByFilter("newest");
+    setSearchInput("");
+    setSearch("");
+    setPage(1);
+  }
 
   const totalPages = Math.ceil(total / pageSize);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Jobs</h1>
-          <p className="text-sm text-gray-500">
-            {total} job{total !== 1 ? "s" : ""} total
-          </p>
+          <h1 className="text-lg font-semibold text-gray-900">Jobs</h1>
+          <p className="text-[11px] text-gray-500">{total} total</p>
         </div>
         <Link href="/crm/jobs/new">
-          <Button>
-            <Plus className="size-4" />
+          <Button size="sm" className="h-7 text-xs px-2">
+            <Plus className="size-3" />
             New Job
           </Button>
         </Link>
       </div>
 
       {/* Filters */}
-      <div className="rounded-lg border border-gray-200 bg-white p-4 space-y-3">
-        <div className="flex flex-wrap items-center gap-3">
-          <div className="relative flex-1 min-w-[200px] max-w-sm">
-            <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-gray-400" />
-            <Input
-              placeholder="Search jobs..."
+      <div className="rounded-lg border border-gray-200 bg-white px-3 py-2.5">
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="flex items-center gap-1.5 text-xs font-medium text-gray-600">
+            <Filter className="size-3" />
+            Filters
+            {activeFilterCount > 0 && (
+              <span className="inline-flex items-center justify-center rounded-full bg-indigo-100 text-indigo-700 text-[10px] font-semibold min-w-[18px] h-[18px] px-1">
+                {activeFilterCount}
+              </span>
+            )}
+          </div>
+
+          <div className="relative">
+            <Search className="absolute left-2 top-1/2 size-3 -translate-y-1/2 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search..."
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
-              className="pl-9"
+              className="h-8 w-[140px] rounded-md border border-gray-200 bg-white pl-7 pr-2 text-xs text-gray-900 placeholder:text-gray-400 focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400"
             />
           </div>
 
-          <Select
-            value={statusFilter}
-            onValueChange={(v) => {
-              setStatusFilter(v === "all" ? "" : (v ?? ""));
-              setPage(1);
-            }}
-          >
-            <SelectTrigger className="w-[140px]">
-              <SelectValue placeholder="All Statuses" />
-            </SelectTrigger>
+          <Select value={statusFilter} onValueChange={(v) => { setStatusFilter(v === "all" ? "" : (v ?? "")); setPage(1); }}>
+            <SelectTrigger className="h-8 w-[110px] text-xs"><SelectValue placeholder="Status" /></SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Statuses</SelectItem>
-              {JOB_STATUSES.map((s) => (
-                <SelectItem key={s} value={s}>
-                  {s.replace(/_/g, " ")}
-                </SelectItem>
-              ))}
+              {JOB_STATUSES.map((s) => (<SelectItem key={s} value={s}>{s.replace(/_/g, " ")}</SelectItem>))}
             </SelectContent>
           </Select>
 
-          <Select
-            value={contractFilter}
-            onValueChange={(v) => {
-              setContractFilter(v === "all" ? "" : (v ?? ""));
-              setPage(1);
-            }}
-          >
-            <SelectTrigger className="w-[160px]">
-              <SelectValue placeholder="All Types" />
-            </SelectTrigger>
+          <Select value={contractFilter} onValueChange={(v) => { setContractFilter(v === "all" ? "" : (v ?? "")); setPage(1); }}>
+            <SelectTrigger className="h-8 w-[120px] text-xs"><SelectValue placeholder="Contract" /></SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Types</SelectItem>
-              {CONTRACT_TYPES.map((t) => (
-                <SelectItem key={t} value={t}>
-                  {t.replace(/_/g, " ")}
-                </SelectItem>
-              ))}
+              {CONTRACT_TYPES.map((t) => (<SelectItem key={t} value={t}>{t.replace(/_/g, " ")}</SelectItem>))}
             </SelectContent>
           </Select>
 
-          <Select
-            value={clientFilter}
-            onValueChange={(v) => {
-              setClientFilter(v === "all" ? "" : (v ?? ""));
-              setPage(1);
-            }}
-          >
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="All Clients" />
-            </SelectTrigger>
+          <Select value={clientFilter} onValueChange={(v) => { setClientFilter(v === "all" ? "" : (v ?? "")); setPage(1); }}>
+            <SelectTrigger className="h-8 w-[140px] text-xs"><SelectValue placeholder="Client" /></SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Clients</SelectItem>
-              {topClients.map((c) => (
-                <SelectItem key={c.id} value={c.id}>
-                  {c.companyName}
-                </SelectItem>
-              ))}
+              {topClients.map((c) => (<SelectItem key={c.id} value={c.id}>{c.companyName}</SelectItem>))}
             </SelectContent>
           </Select>
 
-          <Select
-            value={sourceFilter}
-            onValueChange={(v) => {
-              setSourceFilter(v === "all" ? "" : (v ?? ""));
-              setPage(1);
-            }}
-          >
-            <SelectTrigger className="w-[160px]">
-              <SelectValue placeholder="All Sources" />
-            </SelectTrigger>
+          <Select value={sourceFilter} onValueChange={(v) => { setSourceFilter(v === "all" ? "" : (v ?? "")); setPage(1); }}>
+            <SelectTrigger className="h-8 w-[120px] text-xs"><SelectValue placeholder="Source" /></SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Sources</SelectItem>
-              {JOB_SOURCES.map((s) => (
-                <SelectItem key={s} value={s}>
-                  {formatSource(s)}
-                </SelectItem>
-              ))}
+              {JOB_SOURCES.map((s) => (<SelectItem key={s} value={s}>{formatSource(s)}</SelectItem>))}
             </SelectContent>
           </Select>
-        </div>
 
-        <div className="flex flex-wrap items-center gap-3">
-          <Input
-            placeholder="Filter by location..."
+          <Select value={industryFilter} onValueChange={(v) => { setIndustryFilter(v === "all" ? "" : (v ?? "")); setPage(1); }}>
+            <SelectTrigger className="h-8 w-[120px] text-xs"><SelectValue placeholder="Industry" /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Industries</SelectItem>
+              {INDUSTRIES.map((ind) => (<SelectItem key={ind} value={ind}>{ind}</SelectItem>))}
+            </SelectContent>
+          </Select>
+
+          <input
+            type="text"
+            placeholder="Location..."
             value={locationFilter}
-            onChange={(e) => {
-              setLocationFilter(e.target.value);
-              setPage(1);
-            }}
-            className="w-[200px]"
+            onChange={(e) => { setLocationFilter(e.target.value); setPage(1); }}
+            className="h-8 w-[100px] rounded-md border border-gray-200 bg-white px-2 text-xs text-gray-900 placeholder:text-gray-400 focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400"
           />
 
-          <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-700">
-            <Checkbox
-              checked={remoteFilter}
-              onCheckedChange={(checked) => {
-                setRemoteFilter(!!checked);
-                setPage(1);
-              }}
-            />
-            Remote Only
+          <label className="flex items-center gap-1.5 cursor-pointer text-xs text-gray-600">
+            <Checkbox checked={remoteFilter} onCheckedChange={(checked) => { setRemoteFilter(!!checked); setPage(1); }} />
+            Remote
           </label>
 
-          <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-700">
-            <Checkbox
-              checked={hasAppsFilter}
-              onCheckedChange={(checked) => {
-                setHasAppsFilter(!!checked);
-                setPage(1);
-              }}
-            />
-            Has Applications
+          <label className="flex items-center gap-1.5 cursor-pointer text-xs text-gray-600">
+            <Checkbox checked={hasAppsFilter} onCheckedChange={(checked) => { setHasAppsFilter(!!checked); setPage(1); }} />
+            Has Apps
           </label>
 
-          <Select
-            value={sortByFilter}
-            onValueChange={(v) => {
-              setSortByFilter(v ?? "newest");
-              setPage(1);
-            }}
-          >
-            <SelectTrigger className="w-[140px]">
-              <SelectValue placeholder="Sort by" />
-            </SelectTrigger>
+          <input type="number" placeholder="Salary min" value={salaryMinFilter} onChange={(e) => { setSalaryMinFilter(e.target.value); setPage(1); }} className="h-8 w-[85px] rounded-md border border-gray-200 bg-white px-2 text-xs text-gray-900 placeholder:text-gray-400 focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400" />
+          <input type="number" placeholder="Salary max" value={salaryMaxFilter} onChange={(e) => { setSalaryMaxFilter(e.target.value); setPage(1); }} className="h-8 w-[85px] rounded-md border border-gray-200 bg-white px-2 text-xs text-gray-900 placeholder:text-gray-400 focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400" />
+
+          <Select value={sortByFilter} onValueChange={(v) => { setSortByFilter(v ?? "newest"); setPage(1); }}>
+            <SelectTrigger className="h-8 w-[100px] text-xs"><SelectValue placeholder="Sort" /></SelectTrigger>
             <SelectContent>
               <SelectItem value="newest">Newest</SelectItem>
               <SelectItem value="oldest">Oldest</SelectItem>
@@ -377,183 +346,113 @@ export default function JobsListPage() {
           </Select>
 
           {activeFilterCount > 0 && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => {
-                setStatusFilter("");
-                setSourceFilter("");
-                setContractFilter("");
-                setClientFilter("");
-                setLocationFilter("");
-                setRemoteFilter(false);
-                setHasAppsFilter(false);
-                setSortByFilter("newest");
-                setPage(1);
-              }}
-            >
-              <X className="mr-1 size-3" />
-              Clear all ({activeFilterCount})
-            </Button>
+            <button onClick={clearAllFilters} className="text-xs text-indigo-600 hover:text-indigo-800 font-medium whitespace-nowrap">
+              Clear All
+            </button>
           )}
         </div>
       </div>
 
       {/* Error */}
       {error && (
-        <div className="flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
-          <AlertCircle className="size-4 shrink-0" />
+        <div className="flex items-center gap-2 rounded-md border border-red-200 bg-red-50 p-2 text-xs text-red-700">
+          <AlertCircle className="size-3 shrink-0" />
           {error}
         </div>
       )}
 
       {/* Table */}
-      <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b border-gray-200 bg-gray-50">
-              <th className="px-4 py-3 text-left font-medium text-gray-600">Title</th>
-              <th className="px-4 py-3 text-left font-medium text-gray-600">Client</th>
-              <th className="px-4 py-3 text-left font-medium text-gray-600">Location</th>
-              <th className="px-4 py-3 text-left font-medium text-gray-600">Salary/Rate</th>
-              <th className="px-4 py-3 text-right font-medium text-gray-600">Fee</th>
-              <th className="px-4 py-3 text-left font-medium text-gray-600">Source</th>
-              <th className="px-4 py-3 text-left font-medium text-gray-600">Status</th>
-              <th className="px-4 py-3 text-center font-medium text-gray-600">Candidates</th>
-              <th className="px-4 py-3 text-center font-medium text-gray-600">Days Open</th>
-              <th className="px-4 py-3 text-left font-medium text-gray-600">Assigned To</th>
-            </tr>
-          </thead>
-          <tbody>
-            {loading ? (
-              <tr>
-                <td colSpan={10} className="px-4 py-12 text-center">
-                  <Loader2 className="mx-auto size-6 animate-spin text-gray-400" />
-                  <p className="mt-2 text-sm text-gray-500">Loading jobs...</p>
-                </td>
+      <div className="overflow-hidden rounded-lg border border-gray-200 bg-white">
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="sticky top-0 z-10 bg-white border-b border-gray-200">
+                <th className="px-3 py-1.5 text-left text-[11px] uppercase tracking-wider text-gray-500 font-medium">Title</th>
+                <th className="px-3 py-1.5 text-left text-[11px] uppercase tracking-wider text-gray-500 font-medium">Client</th>
+                <th className="px-3 py-1.5 text-left text-[11px] uppercase tracking-wider text-gray-500 font-medium">Location</th>
+                <th className="px-3 py-1.5 text-right text-[11px] uppercase tracking-wider text-gray-500 font-medium">Salary/Rate</th>
+                <th className="px-3 py-1.5 text-left text-[11px] uppercase tracking-wider text-gray-500 font-medium">Type</th>
+                <th className="px-3 py-1.5 text-left text-[11px] uppercase tracking-wider text-gray-500 font-medium">Source</th>
+                <th className="px-3 py-1.5 text-left text-[11px] uppercase tracking-wider text-gray-500 font-medium">Status</th>
+                <th className="px-3 py-1.5 text-right text-[11px] uppercase tracking-wider text-gray-500 font-medium">Apps</th>
+                <th className="px-3 py-1.5 text-right text-[11px] uppercase tracking-wider text-gray-500 font-medium">Days</th>
               </tr>
-            ) : jobs.length === 0 ? (
-              <tr>
-                <td colSpan={10} className="px-4 py-12 text-center">
-                  <Briefcase className="mx-auto size-10 text-gray-300" />
-                  <p className="mt-2 text-sm text-gray-500">No jobs found</p>
-                </td>
-              </tr>
-            ) : (
-              jobs.map((job) => {
-                const days = daysOpen(job.createdAt);
-                const candidateCount = job._count.applications;
-                const daysClass =
-                  days > 14 && candidateCount === 0
-                    ? "text-red-600 font-semibold"
-                    : "text-gray-700";
+            </thead>
+            <tbody>
+              {loading ? (
+                <tr><td colSpan={9} className="px-3 py-8 text-center"><Loader2 className="mx-auto size-5 animate-spin text-gray-400" /></td></tr>
+              ) : jobs.length === 0 ? (
+                <tr><td colSpan={9} className="px-3 py-8 text-center text-xs text-gray-400"><Briefcase className="mx-auto mb-1 size-6 text-gray-300" />No jobs found</td></tr>
+              ) : (
+                jobs.map((job, idx) => {
+                  const days = daysOpen(job.createdAt);
+                  const candidateCount = job._count.applications;
+                  const daysClass = days > 14 && candidateCount === 0 ? "text-red-600 font-semibold" : "text-gray-600";
 
-                return (
-                  <tr
-                    key={job.id}
-                    className={`border-b border-gray-100 transition-colors hover:bg-gray-50/50 ${rowBgClass(job.status)}`}
-                  >
-                    <td className="px-4 py-3">
-                      <Link
-                        href={`/crm/jobs/${job.id}`}
-                        className="font-medium text-indigo-600 hover:text-indigo-800 hover:underline"
-                      >
-                        {job.title}
-                      </Link>
-                    </td>
-                    <td className="px-4 py-3 text-gray-700">
-                      {job.client ? (
-                        <Link
-                          href={`/crm/clients/${job.client.id}`}
-                          className="hover:text-indigo-600 hover:underline"
-                        >
-                          {job.client.companyName}
+                  return (
+                    <tr
+                      key={job.id}
+                      className={`border-b border-gray-100 transition-colors hover:bg-gray-50 ${
+                        idx % 2 === 0 ? "bg-white" : "bg-gray-50/50"
+                      }`}
+                      style={{ height: "32px" }}
+                    >
+                      <td className="px-3 py-1.5">
+                        <Link href={`/crm/jobs/${job.id}`} className="text-xs font-medium text-indigo-600 hover:text-indigo-800 hover:underline">
+                          {job.title}
                         </Link>
-                      ) : (
-                        job.companyName || "-"
-                      )}
-                    </td>
-                    <td className="px-4 py-3 text-gray-700">
-                      {job.location || "-"}
-                    </td>
-                    <td className="px-4 py-3 text-gray-700">
-                      {formatSalaryRate(job)}
-                    </td>
-                    <td className="px-4 py-3 text-right text-gray-700">
-                      {job.feeAmount
-                        ? `\u00A3${job.feeAmount.toLocaleString()}`
-                        : job.feePercent
-                          ? `${job.feePercent}%`
-                          : "-"}
-                    </td>
-                    <td className="px-4 py-3">
-                      {job.source ? (
-                        <span
-                          className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${SOURCE_BADGE_COLORS[job.source] || SOURCE_BADGE_COLORS.OTHER}`}
-                        >
-                          {formatSource(job.source)}
+                      </td>
+                      <td className="px-3 py-1.5 text-xs text-gray-600">
+                        {job.client ? (
+                          <Link href={`/crm/clients/${job.client.id}`} className="hover:text-indigo-600 hover:underline">{job.client.companyName}</Link>
+                        ) : (job.companyName || "-")}
+                      </td>
+                      <td className="px-3 py-1.5 text-xs text-gray-600">{job.location || "-"}</td>
+                      <td className="px-3 py-1.5 text-right font-mono text-xs tabular-nums text-gray-600">{formatSalaryRate(job)}</td>
+                      <td className="px-3 py-1.5">
+                        {job.contractType ? (
+                          <span className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-medium ${CONTRACT_BG[job.contractType] ?? "bg-gray-50 text-gray-600"}`}>
+                            {job.contractType.replace(/_/g, " ")}
+                          </span>
+                        ) : <span className="text-[10px] text-gray-300">-</span>}
+                      </td>
+                      <td className="px-3 py-1.5">
+                        {job.source ? (
+                          <span className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-medium ${SOURCE_BADGE_COLORS[job.source] || SOURCE_BADGE_COLORS.OTHER}`}>
+                            {formatSource(job.source)}
+                          </span>
+                        ) : "-"}
+                      </td>
+                      <td className="px-3 py-1.5">
+                        <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium ${STATUS_BG[job.status] || "bg-gray-50 text-gray-600"}`}>
+                          <span className={`size-1.5 rounded-full ${STATUS_DOT[job.status] ?? "bg-gray-400"}`} />
+                          {job.status.replace(/_/g, " ")}
                         </span>
-                      ) : (
-                        "-"
-                      )}
-                    </td>
-                    <td className="px-4 py-3">
-                      <span
-                        className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${STATUS_BADGE_COLORS[job.status] || "bg-gray-100 text-gray-600"}`}
-                      >
-                        {job.status.replace(/_/g, " ")}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3 text-center text-gray-700">
-                      {candidateCount}
-                    </td>
-                    <td className={`px-4 py-3 text-center ${daysClass}`}>
-                      {days}
-                    </td>
-                    <td className="px-4 py-3 text-gray-700">
-                      {job.assignedTo
-                        ? `${job.assignedTo.firstName ?? ""} ${job.assignedTo.lastName ?? ""}`.trim() ||
-                          job.assignedTo.email
-                        : "-"}
-                    </td>
-                  </tr>
-                );
-              })
-            )}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="flex items-center justify-between">
-          <p className="text-sm text-gray-500">
-            Showing {(page - 1) * pageSize + 1}-
-            {Math.min(page * pageSize, total)} of {total}
-          </p>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={page <= 1}
-              onClick={() => setPage((p) => p - 1)}
-            >
-              Previous
-            </Button>
-            <span className="text-sm text-gray-600">
-              Page {page} of {totalPages}
-            </span>
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={page >= totalPages}
-              onClick={() => setPage((p) => p + 1)}
-            >
-              Next
-            </Button>
-          </div>
+                      </td>
+                      <td className="px-3 py-1.5 text-right font-mono text-xs tabular-nums text-gray-600">{candidateCount}</td>
+                      <td className={`px-3 py-1.5 text-right font-mono text-xs tabular-nums ${daysClass}`}>{days}</td>
+                    </tr>
+                  );
+                })
+              )}
+            </tbody>
+          </table>
         </div>
-      )}
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-between border-t border-gray-200 px-3 py-2">
+            <p className="text-[11px] text-gray-500">
+              {(page - 1) * pageSize + 1}-{Math.min(page * pageSize, total)} of {total}
+            </p>
+            <div className="flex items-center gap-1">
+              <button onClick={() => setPage((p) => p - 1)} disabled={page <= 1} className="rounded px-2 py-1 text-[11px] text-gray-600 hover:bg-gray-100 disabled:opacity-40">Prev</button>
+              <span className="text-[11px] text-gray-500">{page}/{totalPages}</span>
+              <button onClick={() => setPage((p) => p + 1)} disabled={page >= totalPages} className="rounded px-2 py-1 text-[11px] text-gray-600 hover:bg-gray-100 disabled:opacity-40">Next</button>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

@@ -25,6 +25,7 @@ import {
   CheckCircle2,
   Timer,
   X,
+  Zap,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -93,6 +94,8 @@ export function AttendanceDashboardCard() {
   const [checkInNote, setCheckInNote] = useState("");
   const [checkOutSummary, setCheckOutSummary] = useState("");
   const [dailyReport, setDailyReport] = useState<DailyReport | null>(null);
+  const [productivityPct, setProductivityPct] = useState(0);
+  const [miniTargets, setMiniTargets] = useState<{ label: string; current: number; target: number }[]>([]);
 
   const fetchAttendance = useCallback(async () => {
     try {
@@ -108,9 +111,58 @@ export function AttendanceDashboardCard() {
     }
   }, []);
 
+  const fetchProductivity = useCallback(async () => {
+    try {
+      const [prodRes, targetRes] = await Promise.all([
+        fetch("/api/attendance/productivity"),
+        fetch("/api/attendance/targets"),
+      ]);
+      if (prodRes.ok) {
+        const data = await prodRes.json();
+        setProductivityPct(data.percentage || 0);
+        // Map breakdown to mini targets
+        const breakdown = data.breakdown || [];
+        const countMap: Record<string, number> = {};
+        for (const b of breakdown) {
+          if (b.type === "CANDIDATE_ADDED") countMap["candidatesSourced"] = b.count;
+          if (b.type === "EMAIL_SENT") countMap["emailsSent"] = b.count;
+          if (b.type === "CALL") countMap["callsMade"] = b.count;
+          if (b.type === "APPLICATION") countMap["applicationsSubmitted"] = b.count;
+          if (b.type === "INTERVIEW_SCHEDULED") countMap["interviewsScheduled"] = b.count;
+        }
+        if (targetRes.ok) {
+          const td = await targetRes.json();
+          const userTargets = td.userTargets || {};
+          const labelMap: Record<string, string> = {
+            candidatesSourced: "Candidates",
+            emailsSent: "Emails",
+            callsMade: "Calls",
+            applicationsSubmitted: "Apps",
+            interviewsScheduled: "Interviews",
+            dataEntries: "Entries",
+            screenings: "Screenings",
+          };
+          const items = Object.entries(userTargets)
+            .slice(0, 4)
+            .map(([key, target]) => ({
+              label: labelMap[key] || key,
+              current: countMap[key] || 0,
+              target: target as number,
+            }));
+          setMiniTargets(items);
+        }
+      }
+    } catch {
+      // silently fail
+    }
+  }, []);
+
   useEffect(() => {
     fetchAttendance();
-  }, [fetchAttendance]);
+    fetchProductivity();
+    const interval = setInterval(fetchProductivity, 60000);
+    return () => clearInterval(interval);
+  }, [fetchAttendance, fetchProductivity]);
 
   useEffect(() => {
     if (!attendance?.checkInAt || attendance.status === "CHECKED_OUT") return;
@@ -279,6 +331,49 @@ export function AttendanceDashboardCard() {
                   <span className="ml-1.5">Check Out</span>
                 </Button>
               </div>
+            </div>
+
+            {/* Mini target progress + productivity score */}
+            <div className="mt-3 border-t border-gray-100 pt-3">
+              <div className="flex items-center justify-between mb-2">
+                <span className="flex items-center gap-1 text-[10px] font-medium text-gray-500">
+                  <Zap className="size-3 text-yellow-500" />
+                  Daily Productivity
+                </span>
+                <span
+                  className={`text-xs font-bold ${
+                    productivityPct >= 80
+                      ? "text-green-600"
+                      : productivityPct >= 50
+                        ? "text-amber-600"
+                        : "text-red-600"
+                  }`}
+                >
+                  {productivityPct}%
+                </span>
+              </div>
+              {miniTargets.length > 0 && (
+                <div className="space-y-1.5">
+                  {miniTargets.map((t) => {
+                    const pct = t.target > 0 ? Math.min(100, Math.round((t.current / t.target) * 100)) : 0;
+                    const barColor = pct >= 80 ? "#22C55E" : pct >= 50 ? "#F59E0B" : "#EF4444";
+                    return (
+                      <div key={t.label}>
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] text-gray-500">{t.label}</span>
+                          <span className="text-[10px] font-medium text-gray-600">{t.current}/{t.target}</span>
+                        </div>
+                        <div className="h-1 rounded-full bg-gray-100">
+                          <div
+                            className="h-1 rounded-full transition-all"
+                            style={{ width: `${pct}%`, backgroundColor: barColor }}
+                          />
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </div>
         ) : dailyReport ? (

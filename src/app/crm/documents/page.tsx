@@ -16,7 +16,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Dialog,
@@ -55,16 +54,8 @@ interface DocumentItem {
   job?: { id: string; title: string } | null;
 }
 
-interface ClientOption {
-  id: string;
-  companyName: string;
-}
-
-interface CandidateOption {
-  id: string;
-  firstName: string;
-  lastName: string;
-}
+interface ClientOption { id: string; companyName: string; }
+interface CandidateOption { id: string; firstName: string; lastName: string; }
 
 const CATEGORIES = [
   { value: "", label: "All Categories" },
@@ -79,31 +70,64 @@ const CATEGORIES = [
   { value: "OTHER", label: "Other" },
 ];
 
-const CATEGORY_COLORS: Record<string, string> = {
-  GENERAL: "bg-gray-100 text-gray-700",
-  CV: "bg-blue-100 text-blue-700",
-  CONTRACT: "bg-purple-100 text-purple-700",
-  JD: "bg-amber-100 text-amber-700",
-  PROFILE: "bg-green-100 text-green-700",
-  TERMS: "bg-red-100 text-red-700",
-  COVER_LETTER: "bg-pink-100 text-pink-700",
-  SCREENING: "bg-cyan-100 text-cyan-700",
-  OTHER: "bg-gray-100 text-gray-700",
+const CATEGORY_DOT: Record<string, string> = {
+  GENERAL: "bg-gray-400",
+  CV: "bg-blue-500",
+  CONTRACT: "bg-purple-500",
+  JD: "bg-amber-500",
+  PROFILE: "bg-green-500",
+  TERMS: "bg-red-500",
+  COVER_LETTER: "bg-pink-500",
+  SCREENING: "bg-cyan-500",
+  OTHER: "bg-gray-400",
 };
 
+const CATEGORY_BG: Record<string, string> = {
+  GENERAL: "bg-gray-50 text-gray-600",
+  CV: "bg-blue-50 text-blue-700",
+  CONTRACT: "bg-purple-50 text-purple-700",
+  JD: "bg-amber-50 text-amber-700",
+  PROFILE: "bg-green-50 text-green-700",
+  TERMS: "bg-red-50 text-red-700",
+  COVER_LETTER: "bg-pink-50 text-pink-700",
+  SCREENING: "bg-cyan-50 text-cyan-700",
+  OTHER: "bg-gray-50 text-gray-600",
+};
+
+const FILE_TYPE_OPTIONS = [
+  { value: "", label: "All Files" },
+  { value: "pdf", label: "PDF" },
+  { value: "docx", label: "DOCX" },
+  { value: "xlsx", label: "XLSX" },
+];
+
+const SORT_OPTIONS = [
+  { value: "newest", label: "Newest" },
+  { value: "oldest", label: "Oldest" },
+  { value: "name_asc", label: "Name A-Z" },
+  { value: "name_desc", label: "Name Z-A" },
+];
+
 function formatFileSize(bytes: number | null) {
-  if (!bytes) return "—";
+  if (!bytes) return "-";
   if (bytes < 1024) return `${bytes} B`;
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
 function formatDate(dateStr: string) {
-  return new Date(dateStr).toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
+  const d = new Date(dateStr);
+  const now = new Date();
+  const diffDays = Math.floor((now.getTime() - d.getTime()) / 86400000);
+  if (diffDays === 0) return "Today";
+  if (diffDays === 1) return "1d";
+  if (diffDays < 7) return `${diffDays}d`;
+  return d.toLocaleDateString("en-GB", { day: "2-digit", month: "short" });
+}
+
+function getFileExt(fileName: string): string {
+  const parts = fileName.split(".");
+  return parts.length > 1 ? parts.pop()!.toLowerCase() : "";
 }
 
 // ---------------------------------------------------------------------------
@@ -131,7 +155,6 @@ function UploadDialog({
   async function handleUpload() {
     if (!file) return;
     setUploading(true);
-
     try {
       const formData = new FormData();
       formData.append("file", file);
@@ -163,90 +186,47 @@ function UploadDialog({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger
         render={
-          <Button>
-            <Upload className="mr-2 size-4" />
-            Upload Document
+          <Button size="sm" className="h-7 text-xs px-2">
+            <Upload className="size-3" />
+            Upload
           </Button>
         }
       />
       <DialogContent className="max-w-md">
-        <DialogHeader>
-          <DialogTitle>Upload Document</DialogTitle>
-        </DialogHeader>
-        <div className="space-y-4">
+        <DialogHeader><DialogTitle>Upload Document</DialogTitle></DialogHeader>
+        <div className="space-y-3">
+          <div><Label className="text-xs">File</Label><Input type="file" className="h-8 text-xs" onChange={(e) => { const f = e.target.files?.[0] || null; setFile(f); if (f && !name) setName(f.name.replace(/\.[^.]+$/, "")); }} /></div>
+          <div><Label className="text-xs">Name</Label><Input className="h-8 text-xs" value={name} onChange={(e) => setName(e.target.value)} placeholder="Document name" /></div>
           <div>
-            <Label>File</Label>
-            <Input
-              type="file"
-              onChange={(e) => {
-                const f = e.target.files?.[0] || null;
-                setFile(f);
-                if (f && !name) setName(f.name.replace(/\.[^.]+$/, ""));
-              }}
-            />
-          </div>
-          <div>
-            <Label>Name</Label>
-            <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Document name" />
-          </div>
-          <div>
-            <Label>Category</Label>
+            <Label className="text-xs">Category</Label>
             <Select value={category} onValueChange={(v) => setCategory(v ?? "")}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {CATEGORIES.filter((c) => c.value).map((c) => (
-                  <SelectItem key={c.value} value={c.value}>
-                    {c.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
+              <SelectTrigger className="h-8 text-xs"><SelectValue /></SelectTrigger>
+              <SelectContent>{CATEGORIES.filter((c) => c.value).map((c) => (<SelectItem key={c.value} value={c.value}>{c.label}</SelectItem>))}</SelectContent>
             </Select>
           </div>
           <div>
-            <Label>Client (optional)</Label>
+            <Label className="text-xs">Client</Label>
             <Select value={clientId} onValueChange={(v) => setClientId(v ?? "")}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select client..." />
-              </SelectTrigger>
+              <SelectTrigger className="h-8 text-xs"><SelectValue placeholder="Select client..." /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="none">None</SelectItem>
-                {clients.map((c) => (
-                  <SelectItem key={c.id} value={c.id}>
-                    {c.companyName}
-                  </SelectItem>
-                ))}
+                {clients.map((c) => (<SelectItem key={c.id} value={c.id}>{c.companyName}</SelectItem>))}
               </SelectContent>
             </Select>
           </div>
           <div>
-            <Label>Candidate (optional)</Label>
+            <Label className="text-xs">Candidate</Label>
             <Select value={candidateId} onValueChange={(v) => setCandidateId(v ?? "")}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select candidate..." />
-              </SelectTrigger>
+              <SelectTrigger className="h-8 text-xs"><SelectValue placeholder="Select candidate..." /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="none">None</SelectItem>
-                {candidates.map((c) => (
-                  <SelectItem key={c.id} value={c.id}>
-                    {c.firstName} {c.lastName}
-                  </SelectItem>
-                ))}
+                {candidates.map((c) => (<SelectItem key={c.id} value={c.id}>{c.firstName} {c.lastName}</SelectItem>))}
               </SelectContent>
             </Select>
           </div>
-          <div>
-            <Label>Notes</Label>
-            <Textarea
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              placeholder="Optional notes..."
-              rows={2}
-            />
-          </div>
-          <Button onClick={handleUpload} disabled={!file || uploading} className="w-full">
-            {uploading ? <Loader2 className="mr-2 size-4 animate-spin" /> : <Upload className="mr-2 size-4" />}
+          <div><Label className="text-xs">Notes</Label><Textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Optional notes..." rows={2} className="text-xs" /></div>
+          <Button onClick={handleUpload} disabled={!file || uploading} size="sm" className="w-full">
+            {uploading ? <Loader2 className="size-3 animate-spin" /> : <Upload className="size-3" />}
             {uploading ? "Uploading..." : "Upload"}
           </Button>
         </div>
@@ -263,17 +243,35 @@ export default function DocumentsPage() {
   const [documents, setDocuments] = useState<DocumentItem[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
   const [clientFilter, setClientFilter] = useState("");
   const [candidateFilter, setCandidateFilter] = useState("");
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
+  const [fileTypeFilter, setFileTypeFilter] = useState("");
+  const [sortBy, setSortBy] = useState("newest");
   const [page, setPage] = useState(1);
   const [clients, setClients] = useState<ClientOption[]>([]);
   const [candidates, setCandidates] = useState<CandidateOption[]>([]);
   const [deleting, setDeleting] = useState<string | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  const activeFilterCount =
+    (category ? 1 : 0) +
+    (clientFilter ? 1 : 0) +
+    (candidateFilter ? 1 : 0) +
+    (dateFrom ? 1 : 0) +
+    (dateTo ? 1 : 0) +
+    (fileTypeFilter ? 1 : 0) +
+    (sortBy !== "newest" ? 1 : 0);
+
+  // Debounced search
+  useEffect(() => {
+    const timer = setTimeout(() => { setSearch(searchInput); setPage(1); }, 300);
+    return () => clearTimeout(timer);
+  }, [searchInput]);
 
   const fetchDocuments = useCallback(async () => {
     setLoading(true);
@@ -282,9 +280,11 @@ export default function DocumentsPage() {
       if (search) params.set("search", search);
       if (category && category !== "all") params.set("category", category);
       if (clientFilter && clientFilter !== "all") params.set("clientId", clientFilter);
-      if (candidateFilter) params.set("candidateId", candidateFilter);
+      if (candidateFilter && candidateFilter !== "all") params.set("candidateId", candidateFilter);
       if (dateFrom) params.set("from", dateFrom);
       if (dateTo) params.set("to", dateTo);
+      if (fileTypeFilter) params.set("fileType", fileTypeFilter);
+      if (sortBy) params.set("sortBy", sortBy);
       params.set("page", String(page));
       params.set("pageSize", "50");
 
@@ -299,22 +299,13 @@ export default function DocumentsPage() {
     } finally {
       setLoading(false);
     }
-  }, [search, category, clientFilter, candidateFilter, dateFrom, dateTo, page]);
+  }, [search, category, clientFilter, candidateFilter, dateFrom, dateTo, fileTypeFilter, sortBy, page]);
+
+  useEffect(() => { fetchDocuments(); }, [fetchDocuments]);
 
   useEffect(() => {
-    fetchDocuments();
-  }, [fetchDocuments]);
-
-  // Load clients and candidates for filters
-  useEffect(() => {
-    fetch("/api/clients?pageSize=100")
-      .then((r) => r.json())
-      .then((data) => setClients(data.clients || []))
-      .catch(() => {});
-    fetch("/api/candidates?pageSize=100")
-      .then((r) => r.json())
-      .then((data) => setCandidates(data.candidates || []))
-      .catch(() => {});
+    fetch("/api/clients?pageSize=100").then((r) => r.json()).then((data) => setClients(data.clients || [])).catch(() => {});
+    fetch("/api/candidates?pageSize=100").then((r) => r.json()).then((data) => setCandidates(data.candidates || [])).catch(() => {});
   }, []);
 
   async function handleDelete(id: string) {
@@ -322,208 +313,163 @@ export default function DocumentsPage() {
     setDeleting(id);
     try {
       const res = await fetch(`/api/documents/${id}`, { method: "DELETE" });
-      if (res.ok) {
-        fetchDocuments();
-      }
-    } catch (err) {
-      console.error("Delete failed:", err);
-    } finally {
-      setDeleting(null);
-    }
+      if (res.ok) fetchDocuments();
+    } catch (err) { console.error("Delete failed:", err); } finally { setDeleting(null); }
+  }
+
+  function clearAllFilters() {
+    setSearchInput("");
+    setSearch("");
+    setCategory("");
+    setClientFilter("");
+    setCandidateFilter("");
+    setDateFrom("");
+    setDateTo("");
+    setFileTypeFilter("");
+    setSortBy("newest");
+    setPage(1);
   }
 
   const totalPages = Math.ceil(total / 50);
 
+  // Client-side file type filter
+  const filteredDocs = fileTypeFilter
+    ? documents.filter((doc) => {
+        const ext = getFileExt(doc.fileName);
+        if (fileTypeFilter === "pdf") return ext === "pdf";
+        if (fileTypeFilter === "docx") return ext === "docx" || ext === "doc";
+        if (fileTypeFilter === "xlsx") return ext === "xlsx" || ext === "xls";
+        return true;
+      })
+    : documents;
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-3">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Documents</h1>
-          <p className="mt-1 text-sm text-gray-500">
-            Manage all documents, CVs, contracts, and job descriptions
-          </p>
+          <h1 className="text-lg font-semibold text-gray-900">Documents</h1>
+          <p className="text-[11px] text-gray-500">{total} total</p>
         </div>
         <UploadDialog clients={clients} candidates={candidates} onUploaded={fetchDocuments} />
       </div>
 
       {/* Filters */}
-      <div className="rounded-lg border border-gray-200 bg-white p-4">
-        <div className="flex flex-wrap items-center gap-3">
-          <div className="relative flex-1 min-w-[200px]">
-            <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-gray-400" />
-            <Input
-              placeholder="Search by filename..."
-              className="pl-9"
-              value={search}
-              onChange={(e) => {
-                setSearch(e.target.value);
-                setPage(1);
-              }}
-            />
+      <div className="rounded-lg border border-gray-200 bg-white px-3 py-2.5">
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="flex items-center gap-1.5 text-xs font-medium text-gray-600">
+            <Filter className="size-3" />
+            Filters
+            {activeFilterCount > 0 && (
+              <span className="inline-flex items-center justify-center rounded-full bg-indigo-100 text-indigo-700 text-[10px] font-semibold min-w-[18px] h-[18px] px-1">
+                {activeFilterCount}
+              </span>
+            )}
           </div>
-          <Select value={category} onValueChange={(v) => { setCategory(v ?? ""); setPage(1); }}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="All Categories" />
-            </SelectTrigger>
-            <SelectContent>
-              {CATEGORIES.map((c) => (
-                <SelectItem key={c.value || "all"} value={c.value || "all"}>
-                  {c.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
+
+          <div className="relative">
+            <Search className="absolute left-2 top-1/2 size-3 -translate-y-1/2 text-gray-400" />
+            <input type="text" placeholder="Search..." value={searchInput} onChange={(e) => setSearchInput(e.target.value)} className="h-8 w-[140px] rounded-md border border-gray-200 bg-white pl-7 pr-2 text-xs text-gray-900 placeholder:text-gray-400 focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400" />
+          </div>
+
+          <Select value={category} onValueChange={(v) => { setCategory(v === "all" ? "" : (v ?? "")); setPage(1); }}>
+            <SelectTrigger className="h-8 w-[120px] text-xs"><SelectValue placeholder="Category" /></SelectTrigger>
+            <SelectContent>{CATEGORIES.map((c) => (<SelectItem key={c.value || "all"} value={c.value || "all"}>{c.label}</SelectItem>))}</SelectContent>
           </Select>
+
           <Select value={clientFilter} onValueChange={(v) => { setClientFilter(!v || v === "all" ? "" : v); setPage(1); }}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="All Clients" />
-            </SelectTrigger>
+            <SelectTrigger className="h-8 w-[130px] text-xs"><SelectValue placeholder="Client" /></SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Clients</SelectItem>
-              {clients.map((c) => (
-                <SelectItem key={c.id} value={c.id}>
-                  {c.companyName}
-                </SelectItem>
-              ))}
+              {clients.map((c) => (<SelectItem key={c.id} value={c.id}>{c.companyName}</SelectItem>))}
             </SelectContent>
           </Select>
-          <div className="flex items-center gap-2">
-            <Label className="text-xs text-gray-500 whitespace-nowrap">From</Label>
-            <Input
-              type="date"
-              value={dateFrom}
-              onChange={(e) => { setDateFrom(e.target.value); setPage(1); }}
-              className="w-[150px]"
-            />
-          </div>
-          <div className="flex items-center gap-2">
-            <Label className="text-xs text-gray-500 whitespace-nowrap">To</Label>
-            <Input
-              type="date"
-              value={dateTo}
-              onChange={(e) => { setDateTo(e.target.value); setPage(1); }}
-              className="w-[150px]"
-            />
-          </div>
-          {(search || category || clientFilter || candidateFilter || dateFrom || dateTo) && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => {
-                setSearch("");
-                setCategory("");
-                setClientFilter("");
-                setCandidateFilter("");
-                setDateFrom("");
-                setDateTo("");
-                setPage(1);
-              }}
-            >
-              <X className="mr-1 size-3" />
-              Clear
-            </Button>
+
+          <Select value={candidateFilter} onValueChange={(v) => { setCandidateFilter(!v || v === "all" ? "" : v); setPage(1); }}>
+            <SelectTrigger className="h-8 w-[130px] text-xs"><SelectValue placeholder="Candidate" /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Candidates</SelectItem>
+              {candidates.map((c) => (<SelectItem key={c.id} value={c.id}>{c.firstName} {c.lastName}</SelectItem>))}
+            </SelectContent>
+          </Select>
+
+          <input type="date" value={dateFrom} onChange={(e) => { setDateFrom(e.target.value); setPage(1); }} className="h-8 w-[120px] rounded-md border border-gray-200 bg-white px-2 text-xs text-gray-900 focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400" />
+          <input type="date" value={dateTo} onChange={(e) => { setDateTo(e.target.value); setPage(1); }} className="h-8 w-[120px] rounded-md border border-gray-200 bg-white px-2 text-xs text-gray-900 focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400" />
+
+          <Select value={fileTypeFilter} onValueChange={(v) => { setFileTypeFilter(v === "all" ? "" : (v ?? "")); setPage(1); }}>
+            <SelectTrigger className="h-8 w-[90px] text-xs"><SelectValue placeholder="Type" /></SelectTrigger>
+            <SelectContent>{FILE_TYPE_OPTIONS.map((ft) => (<SelectItem key={ft.value || "all"} value={ft.value || "all"}>{ft.label}</SelectItem>))}</SelectContent>
+          </Select>
+
+          <Select value={sortBy} onValueChange={(v) => { setSortBy(v ?? "newest"); setPage(1); }}>
+            <SelectTrigger className="h-8 w-[100px] text-xs"><SelectValue placeholder="Sort" /></SelectTrigger>
+            <SelectContent>{SORT_OPTIONS.map((opt) => (<SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>))}</SelectContent>
+          </Select>
+
+          {activeFilterCount > 0 && (
+            <button onClick={clearAllFilters} className="text-xs text-indigo-600 hover:text-indigo-800 font-medium whitespace-nowrap">Clear All</button>
           )}
         </div>
       </div>
 
-      {/* Stats */}
-      <div className="flex gap-4">
-        <div className="rounded-lg border bg-white px-4 py-3">
-          <p className="text-sm text-gray-500">Total Documents</p>
-          <p className="text-2xl font-bold">{total}</p>
-        </div>
-      </div>
-
-      {/* Document List */}
-      <div className="rounded-lg border border-gray-200 bg-white">
+      {/* Document Table */}
+      <div className="overflow-hidden rounded-lg border border-gray-200 bg-white">
         {loading ? (
-          <div className="flex items-center justify-center p-12">
-            <Loader2 className="size-8 animate-spin text-gray-400" />
-          </div>
-        ) : documents.length === 0 ? (
-          <div className="p-12 text-center text-gray-500">
-            <FileText className="mx-auto size-12 text-gray-300" />
-            <p className="mt-3 font-medium">No documents found</p>
-            <p className="text-sm">Upload documents or run the data import</p>
+          <div className="flex items-center justify-center p-8"><Loader2 className="size-5 animate-spin text-gray-400" /></div>
+        ) : filteredDocs.length === 0 ? (
+          <div className="p-8 text-center text-xs text-gray-400">
+            <FileText className="mx-auto size-8 text-gray-300 mb-1" />
+            No documents found
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+            <table className="w-full">
               <thead>
-                <tr className="border-b bg-gray-50 text-left text-gray-600">
-                  <th className="px-4 py-3 font-medium">Document</th>
-                  <th className="px-4 py-3 font-medium">Category</th>
-                  <th className="px-4 py-3 font-medium">Client / Candidate</th>
-                  <th className="px-4 py-3 font-medium">Size</th>
-                  <th className="px-4 py-3 font-medium">Date</th>
-                  <th className="px-4 py-3 font-medium">Actions</th>
+                <tr className="sticky top-0 z-10 bg-white border-b border-gray-200">
+                  <th className="px-3 py-1.5 text-left text-[11px] uppercase tracking-wider text-gray-500 font-medium">Document</th>
+                  <th className="px-3 py-1.5 text-left text-[11px] uppercase tracking-wider text-gray-500 font-medium">Category</th>
+                  <th className="px-3 py-1.5 text-left text-[11px] uppercase tracking-wider text-gray-500 font-medium">Client / Candidate</th>
+                  <th className="px-3 py-1.5 text-right text-[11px] uppercase tracking-wider text-gray-500 font-medium">Size</th>
+                  <th className="px-3 py-1.5 text-left text-[11px] uppercase tracking-wider text-gray-500 font-medium">Date</th>
+                  <th className="px-3 py-1.5 text-left text-[11px] uppercase tracking-wider text-gray-500 font-medium">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {documents.map((doc) => (
-                  <tr key={doc.id} className="border-b hover:bg-gray-50">
-                    <td className="px-4 py-3">
-                      <div className="flex items-center gap-3">
-                        <File className="size-5 shrink-0 text-gray-400" />
+                {filteredDocs.map((doc, idx) => (
+                  <tr key={doc.id} className={`border-b border-gray-100 transition-colors hover:bg-gray-50 ${idx % 2 === 0 ? "bg-white" : "bg-gray-50/50"}`} style={{ height: "32px" }}>
+                    <td className="px-3 py-1.5">
+                      <div className="flex items-center gap-2">
+                        <File className="size-3.5 shrink-0 text-gray-400" />
                         <div>
-                          <p className="font-medium text-gray-900">{doc.name}</p>
-                          <p className="text-xs text-gray-500">{doc.fileName}</p>
+                          <p className="text-xs font-medium text-gray-900 truncate max-w-[200px]">{doc.name}</p>
+                          <p className="text-[10px] text-gray-400">{doc.fileName}</p>
                         </div>
                       </div>
                     </td>
-                    <td className="px-4 py-3">
-                      <Badge variant="secondary" className={CATEGORY_COLORS[doc.category] || ""}>
+                    <td className="px-3 py-1.5">
+                      <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium ${CATEGORY_BG[doc.category] || "bg-gray-50 text-gray-600"}`}>
+                        <span className={`size-1.5 rounded-full ${CATEGORY_DOT[doc.category] || "bg-gray-400"}`} />
                         {doc.category}
-                      </Badge>
+                      </span>
                     </td>
-                    <td className="px-4 py-3 text-gray-600">
-                      {doc.client?.companyName && (
-                        <span className="block">{doc.client.companyName}</span>
-                      )}
-                      {doc.candidate && (
-                        <span className="block text-xs">
-                          {doc.candidate.firstName} {doc.candidate.lastName}
-                        </span>
-                      )}
-                      {doc.job && (
-                        <span className="block text-xs text-gray-400">{doc.job.title}</span>
-                      )}
-                      {!doc.client && !doc.candidate && !doc.job && (
-                        <span className="text-gray-400">—</span>
-                      )}
+                    <td className="px-3 py-1.5 text-xs text-gray-600">
+                      {doc.client?.companyName && <span className="block">{doc.client.companyName}</span>}
+                      {doc.candidate && <span className="block text-[10px]">{doc.candidate.firstName} {doc.candidate.lastName}</span>}
+                      {!doc.client && !doc.candidate && <span className="text-gray-300">-</span>}
                     </td>
-                    <td className="px-4 py-3 text-gray-500">{formatFileSize(doc.fileSize)}</td>
-                    <td className="px-4 py-3 text-gray-500">{formatDate(doc.createdAt)}</td>
-                    <td className="px-4 py-3">
-                      <div className="flex items-center gap-1">
+                    <td className="px-3 py-1.5 text-right font-mono text-xs tabular-nums text-gray-500">{formatFileSize(doc.fileSize)}</td>
+                    <td className="px-3 py-1.5 text-xs text-gray-400">{formatDate(doc.createdAt)}</td>
+                    <td className="px-3 py-1.5">
+                      <div className="flex items-center gap-0.5">
                         {doc.mimeType?.includes("pdf") && (
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => setPreviewUrl(doc.filePath)}
-                            title="Preview"
-                          >
-                            <Eye className="size-4" />
-                          </Button>
+                          <button onClick={() => setPreviewUrl(doc.filePath)} title="Preview" className="rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600"><Eye className="size-3" /></button>
                         )}
                         <a href={doc.filePath} download={doc.fileName}>
-                          <Button variant="ghost" size="sm" title="Download">
-                            <Download className="size-4" />
-                          </Button>
+                          <button title="Download" className="rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600"><Download className="size-3" /></button>
                         </a>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleDelete(doc.id)}
-                          disabled={deleting === doc.id}
-                          title="Delete"
-                        >
-                          {deleting === doc.id ? (
-                            <Loader2 className="size-4 animate-spin" />
-                          ) : (
-                            <Trash2 className="size-4 text-red-500" />
-                          )}
-                        </Button>
+                        <button onClick={() => handleDelete(doc.id)} disabled={deleting === doc.id} title="Delete" className="rounded p-1 text-gray-400 hover:bg-red-50 hover:text-red-500">
+                          {deleting === doc.id ? <Loader2 className="size-3 animate-spin" /> : <Trash2 className="size-3" />}
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -535,27 +481,11 @@ export default function DocumentsPage() {
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="flex items-center justify-between border-t px-4 py-3">
-            <p className="text-sm text-gray-500">
-              Page {page} of {totalPages} ({total} documents)
-            </p>
-            <div className="flex gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={page <= 1}
-                onClick={() => setPage((p) => p - 1)}
-              >
-                Previous
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={page >= totalPages}
-                onClick={() => setPage((p) => p + 1)}
-              >
-                Next
-              </Button>
+          <div className="flex items-center justify-between border-t border-gray-200 px-3 py-2">
+            <p className="text-[11px] text-gray-500">Page {page}/{totalPages} ({total})</p>
+            <div className="flex gap-1">
+              <button onClick={() => setPage((p) => p - 1)} disabled={page <= 1} className="rounded px-2 py-1 text-[11px] text-gray-600 hover:bg-gray-100 disabled:opacity-40">Prev</button>
+              <button onClick={() => setPage((p) => p + 1)} disabled={page >= totalPages} className="rounded px-2 py-1 text-[11px] text-gray-600 hover:bg-gray-100 disabled:opacity-40">Next</button>
             </div>
           </div>
         )}
@@ -565,9 +495,7 @@ export default function DocumentsPage() {
       {previewUrl && (
         <Dialog open={!!previewUrl} onOpenChange={(open) => { if (!open) setPreviewUrl(null); }}>
           <DialogContent className="max-w-4xl h-[80vh]">
-            <DialogHeader>
-              <DialogTitle>Document Preview</DialogTitle>
-            </DialogHeader>
+            <DialogHeader><DialogTitle>Document Preview</DialogTitle></DialogHeader>
             <iframe src={previewUrl} className="w-full flex-1 rounded border" style={{ height: "calc(80vh - 80px)" }} />
           </DialogContent>
         </Dialog>

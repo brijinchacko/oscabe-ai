@@ -24,6 +24,9 @@ import {
   CheckCircle2,
   Timer,
   X,
+  Zap,
+  AlertTriangle,
+  TrendingUp,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -222,11 +225,40 @@ export default function AttendancePage() {
   const [logSubmitting, setLogSubmitting] = useState(false);
 
   // Reports tab state
-  const [pageTab, setPageTab] = useState<"team" | "reports">("team");
+  const [pageTab, setPageTab] = useState<"team" | "reports" | "productivity">("team");
   const [reports, setReports] = useState<ReportEntry[]>([]);
   const [reportsLoading, setReportsLoading] = useState(false);
   const [reportFrom, setReportFrom] = useState("");
   const [reportTo, setReportTo] = useState("");
+
+  // Productivity tab state
+  interface HeatmapEntry {
+    userId: string;
+    userName: string;
+    days: { date: string; hours: number }[];
+  }
+  interface LeaderboardEntry {
+    userId: string;
+    userName: string;
+    score: number;
+    percentage: number;
+  }
+  interface AlertEntry {
+    type: "late" | "break" | "low_activity";
+    userName: string;
+    detail: string;
+  }
+  interface TargetRow {
+    userId: string;
+    userName: string;
+    targets: Record<string, number>;
+    actuals: Record<string, number>;
+  }
+  const [heatmap, setHeatmap] = useState<HeatmapEntry[]>([]);
+  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
+  const [alerts, setAlerts] = useState<AlertEntry[]>([]);
+  const [targetRows, setTargetRows] = useState<TargetRow[]>([]);
+  const [productivityLoading, setProductivityLoading] = useState(false);
 
   const fetchMembers = useCallback(async () => {
     try {
@@ -289,11 +321,155 @@ export default function AttendancePage() {
     }
   }, [reportFrom, reportTo]);
 
+  const fetchProductivity = useCallback(async () => {
+    setProductivityLoading(true);
+    try {
+      // Fetch team members first
+      const teamRes = await fetch("/api/attendance/team");
+      if (!teamRes.ok) return;
+      const teamData = await teamRes.json();
+      const team: TeamMember[] = teamData.team || [];
+
+      // Build heatmap from reports (last 7 days)
+      const today = new Date();
+      const weekAgo = new Date(today);
+      weekAgo.setDate(weekAgo.getDate() - 6);
+      const fromStr = weekAgo.toISOString().split("T")[0];
+      const toStr = today.toISOString().split("T")[0];
+
+      const reportsRes = await fetch(`/api/attendance/reports?from=${fromStr}&to=${toStr}`);
+      let reportEntries: ReportEntry[] = [];
+      if (reportsRes.ok) {
+        const rd = await reportsRes.json();
+        reportEntries = rd.reports || [];
+      }
+
+      // Build day labels (Mon-Sun)
+      const dayLabels: string[] = [];
+      for (let i = 0; i < 7; i++) {
+        const d = new Date(weekAgo);
+        d.setDate(d.getDate() + i);
+        dayLabels.push(d.toISOString().split("T")[0]);
+      }
+
+      // Build heatmap entries
+      const memberMap = new Map<string, { name: string; days: Map<string, number> }>();
+      for (const m of team) {
+        const daysMap = new Map<string, number>();
+        for (const dl of dayLabels) daysMap.set(dl, 0);
+        memberMap.set(m.id, { name: m.name, days: daysMap });
+      }
+      for (const r of reportEntries) {
+        // Find member by name
+        const member = team.find((m) => m.name === r.userName);
+        if (member && memberMap.has(member.id)) {
+          const entry = memberMap.get(member.id)!;
+          const existing = entry.days.get(r.date) || 0;
+          entry.days.set(r.date, existing + parseFloat(r.totalHours || "0"));
+        }
+      }
+      const heatmapData: HeatmapEntry[] = [];
+      memberMap.forEach((val, userId) => {
+        heatmapData.push({
+          userId,
+          userName: val.name,
+          days: dayLabels.map((d) => ({ date: d, hours: val.days.get(d) || 0 })),
+        });
+      });
+      setHeatmap(heatmapData);
+
+      // Build leaderboard (productivity scores) - fetch for each active member
+      const leaderboardData: LeaderboardEntry[] = [];
+      for (const m of team.slice(0, 20)) {
+        try {
+          const pRes = await fetch(`/api/attendance/productivity?userId=${m.id}`);
+          if (pRes.ok) {
+            const pData = await pRes.json();
+            leaderboardData.push({
+              userId: m.id,
+              userName: m.name,
+              score: pData.score || 0,
+              percentage: pData.percentage || 0,
+            });
+          }
+        } catch {
+          // skip
+        }
+      }
+      leaderboardData.sort((a, b) => b.score - a.score);
+      setLeaderboard(leaderboardData);
+
+      // Build alerts
+      const alertsList: AlertEntry[] = [];
+      for (const r of reportEntries.filter((rr) => rr.date === toStr)) {
+        // Late check-in (after 10 AM)
+        if (r.checkIn) {
+          const checkInDate = new Date(r.checkIn);
+          if (checkInDate.getHours() >= 10) {
+            alertsList.push({
+              type: "late",
+              userName: r.userName,
+              detail: `Checked in at ${checkInDate.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`,
+            });
+          }
+        }
+        // Excessive breaks
+        const breakHrs = parseFloat(r.breakHours || "0");
+        if (breakHrs > 1) {
+          alertsList.push({
+            type: "break",
+            userName: r.userName,
+            detail: `${(breakHrs * 60).toFixed(0)} min total breaks`,
+          });
+        }
+      }
+      // Low activity
+      for (const lb of leaderboardData) {
+        if (lb.percentage < 30) {
+          alertsList.push({
+            type: "low_activity",
+            userName: lb.userName,
+            detail: `Productivity score: ${lb.percentage}%`,
+          });
+        }
+      }
+      setAlerts(alertsList);
+
+      // Build target tracking - simplified
+      const targetRes = await fetch("/api/attendance/targets");
+      let allTargets: Record<string, Record<string, number>> = {};
+      if (targetRes.ok) {
+        const td = await targetRes.json();
+        allTargets = td.targets || {};
+      }
+      const rows: TargetRow[] = [];
+      for (const lb of leaderboardData.slice(0, 10)) {
+        const m = team.find((t) => t.id === lb.userId);
+        const role = m?.role?.toUpperCase() || "RECRUITER";
+        const roleTargets = allTargets[role] || allTargets["RECRUITER"] || {};
+        rows.push({
+          userId: lb.userId,
+          userName: lb.userName,
+          targets: roleTargets,
+          actuals: {}, // Would need per-user breakdown; simplified
+        });
+      }
+      setTargetRows(rows);
+    } catch {
+      // silently fail
+    } finally {
+      setProductivityLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
     if (pageTab === "reports") {
       fetchReports();
     }
-  }, [pageTab, fetchReports]);
+    if (pageTab === "productivity") {
+      fetchProductivity();
+    }
+  }, [pageTab, fetchReports, fetchProductivity]);
 
   function openDetail(memberId: string) {
     setSelectedMemberId(memberId);
@@ -435,6 +611,19 @@ export default function AttendancePage() {
           <span className="flex items-center gap-1.5">
             <BarChart3 className="size-3.5" />
             Reports
+          </span>
+        </button>
+        <button
+          onClick={() => setPageTab("productivity")}
+          className={`rounded-md px-4 py-1.5 text-sm font-medium transition-colors ${
+            pageTab === "productivity"
+              ? "bg-white text-gray-900 shadow-sm"
+              : "text-gray-500 hover:text-gray-700"
+          }`}
+        >
+          <span className="flex items-center gap-1.5">
+            <Zap className="size-3.5" />
+            Productivity
           </span>
         </button>
       </div>
@@ -681,6 +870,193 @@ export default function AttendancePage() {
                   ))}
                 </tbody>
               </table>
+            </div>
+          )}
+        </div>
+      )}
+
+      {pageTab === "productivity" && (
+        <div>
+          {productivityLoading ? (
+            <div className="flex items-center justify-center py-20">
+              <Loader2 className="size-8 animate-spin text-gray-400" />
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {/* Weekly Heatmap */}
+              <div className="rounded-lg border border-gray-200 bg-white p-4">
+                <h3 className="mb-3 flex items-center gap-1.5 text-xs font-semibold text-gray-700">
+                  <Calendar className="size-3.5" />
+                  Weekly Hours Heatmap
+                </h3>
+                {heatmap.length === 0 ? (
+                  <p className="py-4 text-center text-xs text-gray-400">No data available</p>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-xs">
+                      <thead>
+                        <tr>
+                          <th className="px-2 py-1 text-left font-medium text-gray-500 w-32">Member</th>
+                          {heatmap[0]?.days.map((d) => (
+                            <th key={d.date} className="px-1 py-1 text-center font-medium text-gray-500 w-16">
+                              {new Date(d.date + "T12:00:00").toLocaleDateString([], { weekday: "short" })}
+                            </th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {heatmap.map((row) => (
+                          <tr key={row.userId}>
+                            <td className="px-2 py-1 font-medium text-gray-700 truncate max-w-[120px]">{row.userName}</td>
+                            {row.days.map((d) => {
+                              let bg = "bg-gray-100";
+                              if (d.hours > 0 && d.hours < 4) bg = "bg-green-100";
+                              else if (d.hours >= 4 && d.hours < 6) bg = "bg-green-200";
+                              else if (d.hours >= 6 && d.hours < 8) bg = "bg-green-400";
+                              else if (d.hours >= 8) bg = "bg-green-600";
+                              return (
+                                <td key={d.date} className="px-1 py-1 text-center">
+                                  <div
+                                    className={`mx-auto flex h-6 w-10 items-center justify-center rounded text-[10px] font-medium ${bg} ${d.hours >= 6 ? "text-white" : "text-gray-600"}`}
+                                    title={`${d.hours.toFixed(1)}h`}
+                                  >
+                                    {d.hours > 0 ? d.hours.toFixed(1) : "-"}
+                                  </div>
+                                </td>
+                              );
+                            })}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+
+              <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                {/* Productivity Leaderboard */}
+                <div className="rounded-lg border border-gray-200 bg-white p-4">
+                  <h3 className="mb-3 flex items-center gap-1.5 text-xs font-semibold text-gray-700">
+                    <TrendingUp className="size-3.5" />
+                    Productivity Leaderboard
+                  </h3>
+                  {leaderboard.length === 0 ? (
+                    <p className="py-4 text-center text-xs text-gray-400">No data available</p>
+                  ) : (
+                    <div className="space-y-1.5">
+                      {leaderboard.map((entry, idx) => {
+                        const barColor = entry.percentage >= 80 ? "#22C55E" : entry.percentage >= 50 ? "#F59E0B" : "#EF4444";
+                        return (
+                          <div key={entry.userId} className="flex items-center gap-2">
+                            <span className="w-5 text-right text-[10px] font-bold text-gray-400">
+                              #{idx + 1}
+                            </span>
+                            <span className="w-24 truncate text-xs text-gray-700">{entry.userName}</span>
+                            <div className="flex-1">
+                              <div className="h-1.5 rounded-full bg-gray-100">
+                                <div
+                                  className="h-1.5 rounded-full transition-all"
+                                  style={{ width: `${entry.percentage}%`, backgroundColor: barColor }}
+                                />
+                              </div>
+                            </div>
+                            <span className="w-12 text-right text-xs font-semibold" style={{ color: barColor }}>
+                              {entry.percentage}%
+                            </span>
+                            <span className="w-10 text-right text-[10px] text-gray-400">
+                              {entry.score}pts
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+
+                {/* Alerts */}
+                <div className="rounded-lg border border-gray-200 bg-white p-4">
+                  <h3 className="mb-3 flex items-center gap-1.5 text-xs font-semibold text-gray-700">
+                    <AlertTriangle className="size-3.5 text-amber-500" />
+                    Alerts
+                  </h3>
+                  {alerts.length === 0 ? (
+                    <p className="py-4 text-center text-xs text-gray-400">No alerts today</p>
+                  ) : (
+                    <div className="space-y-1.5 max-h-64 overflow-y-auto">
+                      {alerts.map((alert, idx) => {
+                        const colors = {
+                          late: "border-l-amber-400 bg-amber-50",
+                          break: "border-l-orange-400 bg-orange-50",
+                          low_activity: "border-l-red-400 bg-red-50",
+                        };
+                        const labels = {
+                          late: "Late Check-in",
+                          break: "Excessive Break",
+                          low_activity: "Low Activity",
+                        };
+                        return (
+                          <div
+                            key={idx}
+                            className={`rounded border-l-2 px-2 py-1.5 ${colors[alert.type]}`}
+                          >
+                            <div className="flex items-center justify-between">
+                              <span className="text-[10px] font-semibold text-gray-600">
+                                {labels[alert.type]}
+                              </span>
+                              <span className="text-[10px] text-gray-400">{alert.userName}</span>
+                            </div>
+                            <p className="text-[10px] text-gray-500">{alert.detail}</p>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Target Tracking */}
+              <div className="rounded-lg border border-gray-200 bg-white p-4">
+                <h3 className="mb-3 flex items-center gap-1.5 text-xs font-semibold text-gray-700">
+                  <Zap className="size-3.5 text-yellow-500" />
+                  Target Tracking (Today)
+                </h3>
+                {targetRows.length === 0 ? (
+                  <p className="py-4 text-center text-xs text-gray-400">No target data</p>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-xs">
+                      <thead>
+                        <tr className="border-b bg-gray-50 text-left text-gray-500">
+                          <th className="px-2 py-1.5 font-medium">Member</th>
+                          {Object.keys(targetRows[0]?.targets || {}).map((key) => (
+                            <th key={key} className="px-2 py-1.5 font-medium text-center">
+                              {key.replace(/([A-Z])/g, " $1").trim()}
+                            </th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {targetRows.map((row) => (
+                          <tr key={row.userId} className="border-b border-gray-100 last:border-0">
+                            <td className="px-2 py-1.5 font-medium text-gray-700">{row.userName}</td>
+                            {Object.entries(row.targets).map(([key, target]) => {
+                              const actual = row.actuals[key] || 0;
+                              const pct = target > 0 ? Math.round((actual / target) * 100) : 0;
+                              const color = pct >= 80 ? "text-green-600" : pct >= 50 ? "text-amber-600" : "text-red-600";
+                              return (
+                                <td key={key} className="px-2 py-1.5 text-center">
+                                  <span className={`font-medium ${color}`}>{actual}</span>
+                                  <span className="text-gray-400">/{target}</span>
+                                </td>
+                              );
+                            })}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
             </div>
           )}
         </div>
