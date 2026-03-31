@@ -12,6 +12,7 @@ import { AttendanceHeader } from "@/components/crm/attendance-header";
 import { AttendanceHeartbeat } from "@/components/crm/attendance-heartbeat";
 import { NotificationBell } from "@/components/crm/notification-bell";
 import { ProductivityWidget } from "@/components/crm/productivity-widget";
+import { EmailSidebar } from "@/components/crm/email-sidebar";
 import {
   LayoutDashboard,
   Inbox,
@@ -114,6 +115,7 @@ interface SearchResults {
 
 export default function CRMLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [emailSidebarOpen, setEmailSidebarOpen] = useState(false);
   const [hasActiveSession, setHasActiveSession] = useState(false);
   const [sessionChecked, setSessionChecked] = useState(false);
   const [showCheckInBanner, setShowCheckInBanner] = useState(false);
@@ -445,8 +447,19 @@ export default function CRMLayout({ children }: { children: React.ReactNode }) {
             </Link>
           </div>
 
-          {/* Notification bell */}
-          <NotificationBell />
+          {/* Outlook mail toggle + Notification bell - far right */}
+          <div className="ml-auto flex items-center gap-1 shrink-0">
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              onClick={() => setEmailSidebarOpen((prev) => !prev)}
+              title="Toggle Outlook emails"
+              className={emailSidebarOpen ? "bg-indigo-50 text-indigo-600" : ""}
+            >
+              <Mail className="size-4" />
+            </Button>
+            <NotificationBell />
+          </div>
         </header>
 
         {/* Auto check-in banner */}
@@ -469,10 +482,19 @@ export default function CRMLayout({ children }: { children: React.ReactNode }) {
           </div>
         )}
 
-        {/* Page content */}
-        <main className="flex-1 overflow-y-auto bg-gray-50 p-4">
-          <CRMAuthGuard>{children}</CRMAuthGuard>
-        </main>
+        {/* Page content + Email Sidebar */}
+        <div className="flex flex-1 overflow-hidden">
+          <main className="flex-1 overflow-y-auto bg-gray-50 p-4">
+            <CRMAuthGuard>{children}</CRMAuthGuard>
+          </main>
+
+          {/* Email Sidebar Panel */}
+          {emailSidebarOpen && (
+            <aside className="hidden w-80 shrink-0 sm:block">
+              <EmailSidebar onClose={() => setEmailSidebarOpen(false)} />
+            </aside>
+          )}
+        </div>
 
         {/* Productivity Widget */}
         {hasActiveSession && <ProductivityWidget />}

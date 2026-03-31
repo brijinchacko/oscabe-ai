@@ -34,6 +34,12 @@ model User {
   interviewerInterviews Interview[] @relation("InterviewerInterviews")
   workSessions  EmployeeWorkSession[]
   notifications Notification[]
+
+  microsoftAccessToken  String?
+  microsoftRefreshToken String?
+  microsoftTokenExpiry  DateTime?
+  microsoftEmail        String?
+  microsoftConnected    Boolean  @default(false)
 }
 
 model Employer {

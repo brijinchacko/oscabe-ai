@@ -91,6 +91,9 @@ interface Integrations {
   openrouter: boolean;
   resend: boolean;
   stripe: boolean;
+  microsoft: boolean;
+  microsoftConfigured: boolean;
+  microsoftEmail: string | null;
 }
 
 const ROLES = ["ADMIN", "SALES", "RECRUITER", "CANDIDATE"] as const;
@@ -850,13 +853,62 @@ function EmailTab() {
 
 function IntegrationsTab() {
   const [integrations, setIntegrations] = useState<Integrations | null>(null);
+  const [syncing, setSyncing] = useState(false);
+  const [disconnecting, setDisconnecting] = useState(false);
 
-  useEffect(() => {
+  const fetchIntegrations = useCallback(() => {
     fetch("/api/settings/integrations")
       .then((r) => r.json())
       .then(setIntegrations)
       .catch(() => toast.error("Failed to check integrations"));
   }, []);
+
+  useEffect(() => {
+    fetchIntegrations();
+  }, [fetchIntegrations]);
+
+  // Check for connection success from URL params
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("connected") === "microsoft") {
+      toast.success("Microsoft 365 connected successfully!");
+      // Clean URL
+      window.history.replaceState({}, "", window.location.pathname + "?tab=integrations");
+      fetchIntegrations();
+    }
+    if (params.get("error")) {
+      toast.error(`Connection failed: ${params.get("error")}`);
+      window.history.replaceState({}, "", window.location.pathname + "?tab=integrations");
+    }
+  }, [fetchIntegrations]);
+
+  async function handleMicrosoftSync() {
+    setSyncing(true);
+    try {
+      const res = await fetch("/api/microsoft/emails/sync", { method: "POST" });
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      toast.success(`Synced ${data.syncCount} emails`);
+    } catch {
+      toast.error("Email sync failed");
+    } finally {
+      setSyncing(false);
+    }
+  }
+
+  async function handleMicrosoftDisconnect() {
+    setDisconnecting(true);
+    try {
+      const res = await fetch("/api/microsoft/disconnect", { method: "POST" });
+      if (!res.ok) throw new Error();
+      toast.success("Microsoft 365 disconnected");
+      fetchIntegrations();
+    } catch {
+      toast.error("Failed to disconnect");
+    } finally {
+      setDisconnecting(false);
+    }
+  }
 
   const cards = [
     {
@@ -883,45 +935,141 @@ function IntegrationsTab() {
   ];
 
   return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {cards.map((card) => {
-        const Icon = card.icon;
-        const configured = integrations?.[card.key] ?? false;
-        return (
-          <Card key={card.key} className="p-5">
-            <div className="flex items-start gap-3">
-              <div className="flex size-10 items-center justify-center rounded-lg bg-gray-100">
-                <Icon className="size-5 text-gray-600" />
-              </div>
-              <div className="flex-1 space-y-1">
-                <div className="flex items-center gap-2">
-                  <h4 className="text-sm font-semibold">{card.name}</h4>
-                  {integrations === null ? (
-                    <Loader2 className="size-3 animate-spin text-muted-foreground" />
-                  ) : configured ? (
-                    <Badge
-                      variant="secondary"
-                      className="bg-green-100 text-green-700"
-                    >
-                      Connected
-                    </Badge>
-                  ) : (
-                    <Badge
-                      variant="secondary"
-                      className="bg-gray-100 text-gray-500"
-                    >
-                      Not configured
-                    </Badge>
-                  )}
-                </div>
-                <p className="text-xs text-muted-foreground leading-relaxed">
-                  {card.description}
-                </p>
-              </div>
+    <div className="space-y-6">
+      {/* Microsoft 365 Integration Card */}
+      <div>
+        <h3 className="text-sm font-semibold text-gray-900 mb-3">
+          Microsoft 365
+        </h3>
+        <Card className="p-5">
+          <div className="flex items-start gap-4">
+            <div className="flex size-12 items-center justify-center rounded-lg bg-blue-50">
+              <svg className="size-7" viewBox="0 0 23 23" fill="none">
+                <rect width="11" height="11" fill="#f25022" />
+                <rect x="12" width="11" height="11" fill="#7fba00" />
+                <rect y="12" width="11" height="11" fill="#00a4ef" />
+                <rect x="12" y="12" width="11" height="11" fill="#ffb900" />
+              </svg>
             </div>
-          </Card>
-        );
-      })}
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <h4 className="text-sm font-semibold">Microsoft 365</h4>
+                {integrations === null ? (
+                  <Loader2 className="size-3 animate-spin text-muted-foreground" />
+                ) : integrations.microsoft ? (
+                  <Badge variant="secondary" className="bg-green-100 text-green-700">
+                    <CheckCircle2 className="mr-1 size-3" />
+                    Connected
+                  </Badge>
+                ) : (
+                  <Badge variant="secondary" className="bg-gray-100 text-gray-500">
+                    Not connected
+                  </Badge>
+                )}
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed mb-3">
+                Connect your Outlook email, Teams presence, and calendar for seamless CRM integration.
+                Sync emails with candidates and clients automatically.
+              </p>
+
+              {integrations?.microsoft ? (
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2 text-xs text-gray-600">
+                    <Mail className="size-3.5" />
+                    <span>Connected as <strong>{integrations.microsoftEmail}</strong></span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={handleMicrosoftSync}
+                      disabled={syncing}
+                    >
+                      {syncing ? (
+                        <Loader2 className="size-3.5 animate-spin" />
+                      ) : (
+                        <Mail className="size-3.5" />
+                      )}
+                      Sync Emails
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={handleMicrosoftDisconnect}
+                      disabled={disconnecting}
+                      className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                    >
+                      {disconnecting ? (
+                        <Loader2 className="size-3.5 animate-spin" />
+                      ) : (
+                        <XCircle className="size-3.5" />
+                      )}
+                      Disconnect
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <Button
+                  size="sm"
+                  onClick={() => {
+                    window.location.href = "/api/microsoft/connect";
+                  }}
+                >
+                  <Plug className="size-3.5" />
+                  Connect Microsoft 365
+                </Button>
+              )}
+            </div>
+          </div>
+        </Card>
+      </div>
+
+      {/* Other Integrations */}
+      <div>
+        <h3 className="text-sm font-semibold text-gray-900 mb-3">
+          Other Integrations
+        </h3>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {cards.map((card) => {
+            const Icon = card.icon;
+            const configured = integrations?.[card.key] ?? false;
+            return (
+              <Card key={card.key} className="p-5">
+                <div className="flex items-start gap-3">
+                  <div className="flex size-10 items-center justify-center rounded-lg bg-gray-100">
+                    <Icon className="size-5 text-gray-600" />
+                  </div>
+                  <div className="flex-1 space-y-1">
+                    <div className="flex items-center gap-2">
+                      <h4 className="text-sm font-semibold">{card.name}</h4>
+                      {integrations === null ? (
+                        <Loader2 className="size-3 animate-spin text-muted-foreground" />
+                      ) : configured ? (
+                        <Badge
+                          variant="secondary"
+                          className="bg-green-100 text-green-700"
+                        >
+                          Connected
+                        </Badge>
+                      ) : (
+                        <Badge
+                          variant="secondary"
+                          className="bg-gray-100 text-gray-500"
+                        >
+                          Not configured
+                        </Badge>
+                      )}
+                    </div>
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      {card.description}
+                    </p>
+                  </div>
+                </div>
+              </Card>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 }
@@ -1013,6 +1161,16 @@ function DataTab() {
 // ─── Main Settings Page ─────────────────────────────────────────────────
 
 export default function SettingsPage() {
+  const [defaultTab, setDefaultTab] = useState("general");
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const tab = params.get("tab");
+    if (tab && ["general", "users", "skills", "email", "integrations", "data"].includes(tab)) {
+      setDefaultTab(tab);
+    }
+  }, []);
+
   return (
     <div className="space-y-6">
       <div>
@@ -1024,7 +1182,7 @@ export default function SettingsPage() {
         </p>
       </div>
 
-      <Tabs defaultValue="general">
+      <Tabs defaultValue={defaultTab} key={defaultTab}>
         <TabsList className="flex-wrap">
           <TabsTrigger value="general">
             <Settings className="size-4" />

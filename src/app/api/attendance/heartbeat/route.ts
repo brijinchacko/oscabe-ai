@@ -89,7 +89,7 @@ export async function POST(request: Request) {
                 title: "Employee Idle Alert",
                 message: `${userName} has been idle for over ${IDLE_THRESHOLD_MINUTES} minutes.`,
                 type: "WARNING",
-                link: `/attendance/${user.id}`,
+                link: `/crm/attendance`,
               })),
             });
           }

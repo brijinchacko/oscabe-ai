@@ -288,11 +288,41 @@ export default function AttendancePage() {
         if (dateFrom) params.set("from", dateFrom);
         if (dateTo) params.set("to", dateTo);
         const res = await fetch(
-          `/api/attendance/team/${memberId}?${params}`
+          `/api/attendance/${memberId}?${params}`
         );
         if (res.ok) {
           const data = await res.json();
-          setDetail(data);
+          // Map API response to MemberDetail interface
+          const mapped: MemberDetail = {
+            member: data.employee || { id: memberId, name: "Unknown", currentStatus: "OFFLINE" },
+            timeline: (data.todayTimeline || []).map((e: Record<string, string>) => ({
+              id: e.id || String(Math.random()),
+              type: e.type || "ACTIVE",
+              time: e.startedAt || e.time || "",
+              detail: e.description || e.detail || "",
+            })),
+            history: (data.daySummary || []).map((d: Record<string, unknown>) => ({
+              date: String(d.date || ""),
+              checkIn: String(d.checkIn || d.checkInAt || ""),
+              checkOut: d.checkOut || d.checkOutAt ? String(d.checkOut || d.checkOutAt) : null,
+              activeMin: Number(d.activeMin || d.activeMinutes || 0),
+              breakMin: Number(d.breakMin || d.breakMinutes || 0),
+              idleMin: Number(d.idleMin || d.idleMinutes || 0),
+              location: String(d.location || d.workLocation || ""),
+            })),
+            logs: (data.workLogs || []).map((l: Record<string, string>) => ({
+              id: l.id || String(Math.random()),
+              type: l.type || "NOTE",
+              description: l.description || "",
+              createdAt: l.startedAt || l.createdAt || "",
+            })),
+            stats: {
+              avgHoursPerDay: data.totalStats?.avgHoursPerDay || 0,
+              daysWorked: data.totalStats?.totalDaysWorked || 0,
+              onTimeRate: data.totalStats?.onTimeRate || 0,
+            },
+          };
+          setDetail(mapped);
         }
       } catch {
         toast.error("Failed to load member details");
@@ -487,7 +517,7 @@ export default function AttendancePage() {
     setLogSubmitting(true);
     try {
       const res = await fetch(
-        `/api/attendance/team/${selectedMemberId}/logs`,
+        `/api/attendance/${selectedMemberId}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
