@@ -10,6 +10,8 @@ import {
   BarChart3,
   Plus,
   Loader2,
+  Search,
+  X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -91,6 +93,18 @@ export default function PlacementsPage() {
   const [submitting, setSubmitting] = useState(false);
   const [filterSource, setFilterSource] = useState("");
   const [filterStatus, setFilterStatus] = useState("");
+  const [searchInput, setSearchInput] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
+  const [sortBy, setSortBy] = useState("newest");
+
+  const activeFilterCount =
+    (filterSource ? 1 : 0) +
+    (filterStatus ? 1 : 0) +
+    (dateFrom ? 1 : 0) +
+    (dateTo ? 1 : 0) +
+    (sortBy !== "newest" ? 1 : 0);
 
   // Stats
   const now = new Date();
@@ -119,6 +133,10 @@ export default function PlacementsPage() {
       const params = new URLSearchParams();
       if (filterSource) params.set("source", filterSource);
       if (filterStatus) params.set("status", filterStatus);
+      if (searchTerm) params.set("search", searchTerm);
+      if (dateFrom) params.set("from", dateFrom);
+      if (dateTo) params.set("to", dateTo);
+      if (sortBy) params.set("sortBy", sortBy);
       const res = await fetch(`/api/placements?${params}`);
       if (res.ok) {
         const data = await res.json();
@@ -132,9 +150,18 @@ export default function PlacementsPage() {
   }
 
   useEffect(() => {
+    setLoading(true);
     loadPlacements();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterSource, filterStatus]);
+  }, [filterSource, filterStatus, searchTerm, dateFrom, dateTo, sortBy]);
+
+  // Debounced search
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSearchTerm(searchInput);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchInput]);
 
   async function handleCreate(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -298,29 +325,93 @@ export default function PlacementsPage() {
       </div>
 
       {/* Filters */}
-      <div className="flex flex-wrap items-center gap-3">
-        <Select value={filterSource} onValueChange={(v) => setFilterSource(v ?? "")}>
-          <SelectTrigger className="w-44">
-            <SelectValue placeholder="All Sources" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="">All Sources</SelectItem>
-            {JOB_SOURCES.map((s) => (
-              <SelectItem key={s} value={s}>{s.replace(/_/g, " ")}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Select value={filterStatus} onValueChange={(v) => setFilterStatus(v ?? "")}>
-          <SelectTrigger className="w-44">
-            <SelectValue placeholder="All Statuses" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="">All Statuses</SelectItem>
-            {STATUS_OPTIONS.map((s) => (
-              <SelectItem key={s} value={s}>{s}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+      <div className="rounded-lg border border-gray-200 bg-white p-4">
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="relative flex-1 min-w-[200px] max-w-sm">
+            <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-gray-400" />
+            <Input
+              placeholder="Search candidate, role, client..."
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              className="pl-9"
+            />
+          </div>
+
+          <Select value={filterStatus} onValueChange={(v) => setFilterStatus(v === "all" ? "" : (v ?? ""))}>
+            <SelectTrigger className="w-44">
+              <SelectValue placeholder="All Statuses" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Statuses</SelectItem>
+              {STATUS_OPTIONS.map((s) => (
+                <SelectItem key={s} value={s}>{s}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <Select value={filterSource} onValueChange={(v) => setFilterSource(v === "all" ? "" : (v ?? ""))}>
+            <SelectTrigger className="w-44">
+              <SelectValue placeholder="All Sources" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Sources</SelectItem>
+              {JOB_SOURCES.map((s) => (
+                <SelectItem key={s} value={s}>{s.replace(/_/g, " ")}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <div className="flex items-center gap-2">
+            <Label className="text-xs text-gray-500 whitespace-nowrap">From</Label>
+            <Input
+              type="date"
+              value={dateFrom}
+              onChange={(e) => setDateFrom(e.target.value)}
+              className="w-[150px]"
+            />
+          </div>
+
+          <div className="flex items-center gap-2">
+            <Label className="text-xs text-gray-500 whitespace-nowrap">To</Label>
+            <Input
+              type="date"
+              value={dateTo}
+              onChange={(e) => setDateTo(e.target.value)}
+              className="w-[150px]"
+            />
+          </div>
+
+          <Select value={sortBy} onValueChange={(v) => setSortBy(v ?? "newest")}>
+            <SelectTrigger className="w-[160px]">
+              <SelectValue placeholder="Sort by" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="newest">Newest</SelectItem>
+              <SelectItem value="oldest">Oldest</SelectItem>
+              <SelectItem value="fee_high">Fee High-Low</SelectItem>
+              <SelectItem value="fee_low">Fee Low-High</SelectItem>
+            </SelectContent>
+          </Select>
+
+          {activeFilterCount > 0 && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                setFilterSource("");
+                setFilterStatus("");
+                setSearchInput("");
+                setSearchTerm("");
+                setDateFrom("");
+                setDateTo("");
+                setSortBy("newest");
+              }}
+            >
+              <X className="mr-1 size-3" />
+              Clear all ({activeFilterCount})
+            </Button>
+          )}
+        </div>
       </div>
 
       {/* Table */}

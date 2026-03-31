@@ -33,7 +33,6 @@ export async function GET(request: NextRequest) {
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    const userId = session.user.id;
 
     const { searchParams } = new URL(request.url);
     const page = Math.max(1, parseInt(searchParams.get("page") || "1", 10));
@@ -44,6 +43,10 @@ export async function GET(request: NextRequest) {
     const clientId = searchParams.get("clientId") || "";
     const assignedToId = searchParams.get("assignedToId") || "";
     const contractType = searchParams.get("contractType") || "";
+    const location = searchParams.get("location") || "";
+    const remote = searchParams.get("remote") || "";
+    const hasApplications = searchParams.get("hasApplications") || "";
+    const sortBy = searchParams.get("sortBy") || "newest";
 
     const where: Record<string, unknown> = {};
 
@@ -51,6 +54,7 @@ export async function GET(request: NextRequest) {
       where.OR = [
         { title: { contains: search } },
         { description: { contains: search } },
+        { location: { contains: search } },
         { companyName: { contains: search } },
       ];
     }
@@ -75,10 +79,37 @@ export async function GET(request: NextRequest) {
       where.contractType = contractType;
     }
 
+    if (location) {
+      where.location = { contains: location };
+    }
+
+    if (remote === "true") {
+      where.remote = true;
+    }
+
+    if (hasApplications === "true") {
+      where.applications = { some: {} };
+    }
+
+    // Determine sort order
+    let orderBy: Record<string, string>;
+    switch (sortBy) {
+      case "oldest":
+        orderBy = { createdAt: "asc" };
+        break;
+      case "title_asc":
+        orderBy = { title: "asc" };
+        break;
+      case "newest":
+      default:
+        orderBy = { createdAt: "desc" };
+        break;
+    }
+
     const [jobs, total] = await Promise.all([
       prisma.job.findMany({
         where,
-        orderBy: { updatedAt: "desc" },
+        orderBy,
         skip: (page - 1) * pageSize,
         take: pageSize,
         include: {
@@ -96,7 +127,14 @@ export async function GET(request: NextRequest) {
       prisma.job.count({ where }),
     ]);
 
-    return NextResponse.json({ jobs, total, page, pageSize });
+    // Also fetch top clients for the client filter dropdown
+    const topClients = await prisma.client.findMany({
+      select: { id: true, companyName: true },
+      orderBy: { companyName: "asc" },
+      take: 50,
+    });
+
+    return NextResponse.json({ jobs, total, page, pageSize, topClients });
   } catch (error) {
     console.error("List jobs error:", error);
     return NextResponse.json({ error: "Failed to fetch jobs" }, { status: 500 });

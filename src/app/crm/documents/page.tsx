@@ -267,6 +267,8 @@ export default function DocumentsPage() {
   const [category, setCategory] = useState("");
   const [clientFilter, setClientFilter] = useState("");
   const [candidateFilter, setCandidateFilter] = useState("");
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
   const [page, setPage] = useState(1);
   const [clients, setClients] = useState<ClientOption[]>([]);
   const [candidates, setCandidates] = useState<CandidateOption[]>([]);
@@ -278,9 +280,11 @@ export default function DocumentsPage() {
     try {
       const params = new URLSearchParams();
       if (search) params.set("search", search);
-      if (category) params.set("category", category);
-      if (clientFilter) params.set("clientId", clientFilter);
+      if (category && category !== "all") params.set("category", category);
+      if (clientFilter && clientFilter !== "all") params.set("clientId", clientFilter);
       if (candidateFilter) params.set("candidateId", candidateFilter);
+      if (dateFrom) params.set("from", dateFrom);
+      if (dateTo) params.set("to", dateTo);
       params.set("page", String(page));
       params.set("pageSize", "50");
 
@@ -295,7 +299,7 @@ export default function DocumentsPage() {
     } finally {
       setLoading(false);
     }
-  }, [search, category, clientFilter, candidateFilter, page]);
+  }, [search, category, clientFilter, candidateFilter, dateFrom, dateTo, page]);
 
   useEffect(() => {
     fetchDocuments();
@@ -383,7 +387,25 @@ export default function DocumentsPage() {
               ))}
             </SelectContent>
           </Select>
-          {(search || category || clientFilter || candidateFilter) && (
+          <div className="flex items-center gap-2">
+            <Label className="text-xs text-gray-500 whitespace-nowrap">From</Label>
+            <Input
+              type="date"
+              value={dateFrom}
+              onChange={(e) => { setDateFrom(e.target.value); setPage(1); }}
+              className="w-[150px]"
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            <Label className="text-xs text-gray-500 whitespace-nowrap">To</Label>
+            <Input
+              type="date"
+              value={dateTo}
+              onChange={(e) => { setDateTo(e.target.value); setPage(1); }}
+              className="w-[150px]"
+            />
+          </div>
+          {(search || category || clientFilter || candidateFilter || dateFrom || dateTo) && (
             <Button
               variant="ghost"
               size="sm"
@@ -392,6 +414,8 @@ export default function DocumentsPage() {
                 setCategory("");
                 setClientFilter("");
                 setCandidateFilter("");
+                setDateFrom("");
+                setDateTo("");
                 setPage(1);
               }}
             >

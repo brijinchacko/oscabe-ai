@@ -26,14 +26,17 @@ export async function GET(request: NextRequest) {
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    const userId = session.user.id;
 
     const { searchParams } = new URL(request.url);
     const page = Math.max(1, parseInt(searchParams.get("page") || "1", 10));
-    const pageSize = Math.min(100, Math.max(1, parseInt(searchParams.get("pageSize") || "20", 10)));
+    const pageSize = Math.min(200, Math.max(1, parseInt(searchParams.get("pageSize") || "20", 10)));
     const search = searchParams.get("search") || "";
     const stage = searchParams.get("stage") || "";
+    const industry = searchParams.get("industry") || "";
     const assignedToId = searchParams.get("assignedToId") || "";
+    const hasDocuments = searchParams.get("hasDocuments") || "";
+    const hasJobs = searchParams.get("hasJobs") || "";
+    const sortBy = searchParams.get("sortBy") || "newest";
 
     const where: Record<string, unknown> = {};
 
@@ -41,7 +44,7 @@ export async function GET(request: NextRequest) {
       where.OR = [
         { companyName: { contains: search } },
         { industry: { contains: search } },
-        { location: { contains: search } },
+        { notes: { contains: search } },
       ];
     }
 
@@ -49,14 +52,44 @@ export async function GET(request: NextRequest) {
       where.pipelineStage = stage;
     }
 
+    if (industry) {
+      where.industry = industry;
+    }
+
     if (assignedToId) {
       where.assignedToId = assignedToId;
+    }
+
+    if (hasDocuments === "true") {
+      where.documents = { some: {} };
+    }
+
+    if (hasJobs === "true") {
+      where.jobs = { some: {} };
+    }
+
+    // Determine sort order
+    let orderBy: Record<string, string>;
+    switch (sortBy) {
+      case "name_asc":
+        orderBy = { companyName: "asc" };
+        break;
+      case "name_desc":
+        orderBy = { companyName: "desc" };
+        break;
+      case "oldest":
+        orderBy = { createdAt: "asc" };
+        break;
+      case "newest":
+      default:
+        orderBy = { updatedAt: "desc" };
+        break;
     }
 
     const [clients, total] = await Promise.all([
       prisma.client.findMany({
         where,
-        orderBy: { updatedAt: "desc" },
+        orderBy,
         skip: (page - 1) * pageSize,
         take: pageSize,
         include: {
@@ -64,6 +97,7 @@ export async function GET(request: NextRequest) {
             select: {
               contacts: true,
               jobs: true,
+              documents: true,
             },
           },
           assignedTo: {
@@ -73,6 +107,11 @@ export async function GET(request: NextRequest) {
               lastName: true,
               email: true,
             },
+          },
+          contacts: {
+            where: { isPrimary: true },
+            take: 1,
+            select: { firstName: true, lastName: true, isPrimary: true },
           },
         },
       }),

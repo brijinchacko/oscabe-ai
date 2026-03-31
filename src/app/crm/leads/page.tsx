@@ -134,6 +134,9 @@ export default function CRMLeadsPage() {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [filterType, setFilterType] = useState("");
+  const [filterStatus, setFilterStatus] = useState("");
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [searchInput, setSearchInput] = useState("");
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
@@ -146,7 +149,10 @@ export default function CRMLeadsPage() {
       params.set("page", String(page));
       params.set("limit", "25");
       if (filterType) params.set("type", filterType);
+      if (filterStatus) params.set("status", filterStatus);
       if (searchTerm) params.set("search", searchTerm);
+      if (dateFrom) params.set("from", dateFrom);
+      if (dateTo) params.set("to", dateTo);
 
       const res = await fetch(`/api/leads?${params.toString()}`);
       if (!res.ok) throw new Error("Failed to fetch");
@@ -159,7 +165,7 @@ export default function CRMLeadsPage() {
     } finally {
       setLoading(false);
     }
-  }, [page, filterType, searchTerm]);
+  }, [page, filterType, filterStatus, searchTerm, dateFrom, dateTo]);
 
   useEffect(() => {
     fetchLeads();
@@ -208,31 +214,92 @@ export default function CRMLeadsPage() {
       </div>
 
       {/* Filters */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <div className="relative flex-1 max-w-sm">
-          <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Search by name, email, details..."
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-            className="w-full rounded-lg border border-gray-300 bg-white py-2 pl-9 pr-4 text-sm text-gray-900 placeholder:text-gray-400 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-          />
+      <div className="space-y-3 rounded-lg border border-gray-200 bg-white p-4">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+          <div className="relative flex-1 max-w-sm">
+            <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search by name, email, details..."
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              className="w-full rounded-lg border border-gray-300 bg-white py-2 pl-9 pr-4 text-sm text-gray-900 placeholder:text-gray-400 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+            />
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {FILTER_TYPES.map((ft) => (
+              <button
+                key={ft.value}
+                onClick={() => { setFilterType(ft.value); setPage(1); }}
+                className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
+                  filterType === ft.value
+                    ? "bg-indigo-600 text-white"
+                    : "bg-white text-gray-600 border border-gray-300 hover:bg-gray-50"
+                }`}
+              >
+                {ft.label}
+              </button>
+            ))}
+          </div>
         </div>
-        <div className="flex gap-2">
-          {FILTER_TYPES.map((ft) => (
+        <div className="flex flex-wrap items-center gap-3">
+          {/* Status filter */}
+          <div className="flex gap-2">
+            {[
+              { value: "", label: "All Statuses" },
+              { value: "NEW", label: "New" },
+              { value: "CONTACTED", label: "Contacted" },
+              { value: "CONVERTED", label: "Converted" },
+            ].map((s) => (
+              <button
+                key={s.value}
+                onClick={() => { setFilterStatus(s.value); setPage(1); }}
+                className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
+                  filterStatus === s.value
+                    ? "bg-emerald-600 text-white"
+                    : "bg-white text-gray-600 border border-gray-300 hover:bg-gray-50"
+                }`}
+              >
+                {s.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Date range */}
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-gray-500">From</span>
+            <input
+              type="date"
+              value={dateFrom}
+              onChange={(e) => { setDateFrom(e.target.value); setPage(1); }}
+              className="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-900 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-gray-500">To</span>
+            <input
+              type="date"
+              value={dateTo}
+              onChange={(e) => { setDateTo(e.target.value); setPage(1); }}
+              className="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-900 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+            />
+          </div>
+
+          {(filterType || filterStatus || dateFrom || dateTo) && (
             <button
-              key={ft.value}
-              onClick={() => { setFilterType(ft.value); setPage(1); }}
-              className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
-                filterType === ft.value
-                  ? "bg-indigo-600 text-white"
-                  : "bg-white text-gray-600 border border-gray-300 hover:bg-gray-50"
-              }`}
+              onClick={() => {
+                setFilterType("");
+                setFilterStatus("");
+                setDateFrom("");
+                setDateTo("");
+                setPage(1);
+              }}
+              className="inline-flex items-center gap-1 rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50"
             >
-              {ft.label}
+              <X className="size-3" />
+              Clear all
             </button>
-          ))}
+          )}
         </div>
       </div>
 

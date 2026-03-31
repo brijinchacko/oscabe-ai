@@ -21,11 +21,14 @@ import {
   GripVertical,
   Briefcase,
   Loader2,
+  Filter,
+  X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Dialog,
@@ -440,10 +443,22 @@ export default function ClientsPage() {
   const router = useRouter();
   const [view, setView] = useState<"kanban" | "table">("kanban");
   const [search, setSearch] = useState("");
+  const [stageFilter, setStageFilter] = useState("");
+  const [industryFilter, setIndustryFilter] = useState("");
+  const [hasDocsFilter, setHasDocsFilter] = useState(false);
+  const [hasJobsFilter, setHasJobsFilter] = useState(false);
+  const [sortBy, setSortBy] = useState("newest");
   const [clients, setClients] = useState<Client[]>([]);
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [activeId, setActiveId] = useState<string | null>(null);
+
+  const activeFilterCount =
+    (stageFilter ? 1 : 0) +
+    (industryFilter ? 1 : 0) +
+    (hasDocsFilter ? 1 : 0) +
+    (hasJobsFilter ? 1 : 0) +
+    (sortBy !== "newest" ? 1 : 0);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } })
@@ -454,6 +469,11 @@ export default function ClientsPage() {
     try {
       const params = new URLSearchParams({ pageSize: "200" });
       if (search) params.set("search", search);
+      if (stageFilter) params.set("stage", stageFilter);
+      if (industryFilter) params.set("industry", industryFilter);
+      if (hasDocsFilter) params.set("hasDocuments", "true");
+      if (hasJobsFilter) params.set("hasJobs", "true");
+      if (sortBy) params.set("sortBy", sortBy);
       const res = await fetch(`/api/clients?${params}`);
       if (!res.ok) throw new Error("Failed to fetch");
       const data: FetchResponse = await res.json();
@@ -463,7 +483,7 @@ export default function ClientsPage() {
     } finally {
       setLoading(false);
     }
-  }, [search]);
+  }, [search, stageFilter, industryFilter, hasDocsFilter, hasJobsFilter, sortBy]);
 
   useEffect(() => {
     setLoading(true);
@@ -586,6 +606,95 @@ export default function ClientsPage() {
             />
           </DialogContent>
         </Dialog>
+      </div>
+
+      {/* Filter bar */}
+      <div className="flex flex-wrap items-center gap-3 rounded-lg border border-gray-200 bg-white px-4 py-3">
+        <div className="flex items-center gap-1.5 text-sm font-medium text-gray-600">
+          <Filter className="size-3.5" />
+          Filters
+          {activeFilterCount > 0 && (
+            <Badge variant="secondary" className="text-xs">{activeFilterCount}</Badge>
+          )}
+        </div>
+
+        <Select
+          value={stageFilter}
+          onValueChange={(v) => setStageFilter(v === "all" ? "" : (v ?? ""))}
+        >
+          <SelectTrigger className="w-[160px]">
+            <SelectValue placeholder="All Stages" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Stages</SelectItem>
+            {CLIENT_PIPELINE_STAGES.map((s) => (
+              <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
+        <Select
+          value={industryFilter}
+          onValueChange={(v) => setIndustryFilter(v === "all" ? "" : (v ?? ""))}
+        >
+          <SelectTrigger className="w-[160px]">
+            <SelectValue placeholder="All Industries" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Industries</SelectItem>
+            {INDUSTRIES.map((ind) => (
+              <SelectItem key={ind} value={ind}>{ind}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
+        <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-700">
+          <Checkbox
+            checked={hasDocsFilter}
+            onCheckedChange={(checked) => setHasDocsFilter(!!checked)}
+          />
+          Has Documents
+        </label>
+
+        <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-700">
+          <Checkbox
+            checked={hasJobsFilter}
+            onCheckedChange={(checked) => setHasJobsFilter(!!checked)}
+          />
+          Has Jobs
+        </label>
+
+        <Select
+          value={sortBy}
+          onValueChange={(v) => setSortBy(v ?? "newest")}
+        >
+          <SelectTrigger className="w-[140px]">
+            <SelectValue placeholder="Sort by" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="newest">Newest</SelectItem>
+            <SelectItem value="oldest">Oldest</SelectItem>
+            <SelectItem value="name_asc">Name A-Z</SelectItem>
+            <SelectItem value="name_desc">Name Z-A</SelectItem>
+          </SelectContent>
+        </Select>
+
+        {activeFilterCount > 0 && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              setStageFilter("");
+              setIndustryFilter("");
+              setHasDocsFilter(false);
+              setHasJobsFilter(false);
+              setSortBy("newest");
+            }}
+          >
+            <X className="mr-1 size-3" />
+            Clear all
+          </Button>
+        )}
       </div>
 
       {/* Loading */}

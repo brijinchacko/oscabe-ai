@@ -15,6 +15,8 @@ export async function GET(request: NextRequest) {
     const jobId = searchParams.get("jobId") || "";
     const category = searchParams.get("category") || "";
     const search = searchParams.get("search") || "";
+    const from = searchParams.get("from") || "";
+    const to = searchParams.get("to") || "";
     const page = Math.max(1, parseInt(searchParams.get("page") || "1", 10));
     const pageSize = Math.min(100, Math.max(1, parseInt(searchParams.get("pageSize") || "50", 10)));
 
@@ -23,12 +25,18 @@ export async function GET(request: NextRequest) {
     if (clientId) where.clientId = clientId;
     if (candidateId) where.candidateId = candidateId;
     if (jobId) where.jobId = jobId;
-    if (category) where.category = category;
+    if (category && category !== "all") where.category = category;
     if (search) {
       where.OR = [
         { name: { contains: search } },
         { fileName: { contains: search } },
       ];
+    }
+    if (from || to) {
+      const createdAtFilter: Record<string, Date> = {};
+      if (from) createdAtFilter.gte = new Date(from);
+      if (to) createdAtFilter.lte = new Date(to);
+      where.createdAt = createdAtFilter;
     }
 
     const [documents, total] = await Promise.all([

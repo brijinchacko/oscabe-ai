@@ -25,17 +25,19 @@ export async function GET(request: NextRequest) {
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    const userId = session.user.id;
 
     const { searchParams } = new URL(request.url);
     const status = searchParams.get("status") || "";
     const source = searchParams.get("source") || "";
     const from = searchParams.get("from") || "";
     const to = searchParams.get("to") || "";
+    const search = searchParams.get("search") || "";
+    const sortBy = searchParams.get("sortBy") || "newest";
     const page = Math.max(1, parseInt(searchParams.get("page") || "1", 10));
-    const pageSize = Math.min(100, Math.max(1, parseInt(searchParams.get("pageSize") || "20", 10)));
+    const pageSize = Math.min(100, Math.max(1, parseInt(searchParams.get("pageSize") || "100", 10)));
 
-    const where: Record<string, unknown> = {};
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const where: any = {};
 
     if (status) {
       where.status = status;
@@ -56,10 +58,38 @@ export async function GET(request: NextRequest) {
       where.startDate = startDateFilter;
     }
 
+    if (search) {
+      where.OR = [
+        { role: { contains: search } },
+        { candidate: { firstName: { contains: search } } },
+        { candidate: { lastName: { contains: search } } },
+        { client: { companyName: { contains: search } } },
+      ];
+    }
+
+    // Determine sort order
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let orderBy: any;
+    switch (sortBy) {
+      case "oldest":
+        orderBy = { startDate: "asc" };
+        break;
+      case "fee_high":
+        orderBy = { feeAmount: "desc" };
+        break;
+      case "fee_low":
+        orderBy = { feeAmount: "asc" };
+        break;
+      case "newest":
+      default:
+        orderBy = { startDate: "desc" };
+        break;
+    }
+
     const [placements, total] = await Promise.all([
       prisma.placement.findMany({
         where,
-        orderBy: { startDate: "desc" },
+        orderBy,
         skip: (page - 1) * pageSize,
         take: pageSize,
         include: {
@@ -77,7 +107,7 @@ export async function GET(request: NextRequest) {
       prisma.placement.count({ where }),
     ]);
 
-    // Calculate totals
+    // Calculate totals for filtered results
     const allMatchingPlacements = await prisma.placement.findMany({
       where,
       select: { feeAmount: true },

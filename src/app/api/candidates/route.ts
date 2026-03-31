@@ -32,7 +32,6 @@ export async function GET(request: NextRequest) {
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    const userId = session.user.id;
 
     const { searchParams } = new URL(request.url);
     const page = Math.max(1, parseInt(searchParams.get("page") || "1", 10));
@@ -43,6 +42,8 @@ export async function GET(request: NextRequest) {
     const source = searchParams.get("source") || "";
     const industry = searchParams.get("industry") || "";
     const specialism = searchParams.get("specialism") || "";
+    const hasCV = searchParams.get("hasCV") || "";
+    const sortBy = searchParams.get("sortBy") || "newest";
 
     const where: Record<string, unknown> = {};
 
@@ -51,6 +52,7 @@ export async function GET(request: NextRequest) {
         { firstName: { contains: search } },
         { lastName: { contains: search } },
         { email: { contains: search } },
+        { phone: { contains: search } },
         { headline: { contains: search } },
       ];
     }
@@ -75,15 +77,45 @@ export async function GET(request: NextRequest) {
       where.specialism = specialism;
     }
 
+    if (hasCV === "true") {
+      where.cvUrl = { not: null };
+    }
+
+    // Determine sort order
+    let orderBy: Record<string, string>;
+    switch (sortBy) {
+      case "name_asc":
+        orderBy = { firstName: "asc" };
+        break;
+      case "name_desc":
+        orderBy = { firstName: "desc" };
+        break;
+      case "oldest":
+        orderBy = { createdAt: "asc" };
+        break;
+      case "last_contacted":
+        orderBy = { lastContactedAt: "desc" };
+        break;
+      case "newest":
+      default:
+        orderBy = { createdAt: "desc" };
+        break;
+    }
+
     const [candidates, total] = await Promise.all([
       prisma.candidate.findMany({
         where,
-        orderBy: { updatedAt: "desc" },
+        orderBy,
         skip: (page - 1) * pageSize,
         take: pageSize,
         include: {
           _count: {
             select: { skills: true },
+          },
+          skills: {
+            include: { skill: true },
+            take: 5,
+            orderBy: { proficiency: "desc" },
           },
         },
       }),

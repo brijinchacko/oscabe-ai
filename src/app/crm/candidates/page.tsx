@@ -75,15 +75,23 @@ const STATUS_COLORS: Record<string, string> = {
   INACTIVE: "bg-red-100 text-red-800",
 };
 
-const STATUSES = ["ACTIVE", "PASSIVE", "PLACED", "UNAVAILABLE", "INACTIVE"];
+const STATUSES = ["ACTIVE", "SOURCED", "PLACED", "INACTIVE", "BLACKLISTED"];
 const SOURCES = [
-  "LINKEDIN",
-  "REFERRAL",
-  "JOB_BOARD",
-  "WEBSITE",
-  "COLD_OUTREACH",
-  "AGENCY",
-  "OTHER",
+  "OSCABE_DATA_IMPORT",
+  "LinkedIn",
+  "Screening",
+  "CV_Received",
+  "Website",
+  "Zoho",
+  "Manual",
+];
+
+const SORT_OPTIONS = [
+  { value: "newest", label: "Newest" },
+  { value: "oldest", label: "Oldest" },
+  { value: "name_asc", label: "Name A-Z" },
+  { value: "name_desc", label: "Name Z-A" },
+  { value: "last_contacted", label: "Last Contacted" },
 ];
 
 const INDUSTRIES = [
@@ -519,6 +527,8 @@ export default function CandidatesPage() {
   const [sourceFilter, setSourceFilter] = useState("");
   const [industryFilter, setIndustryFilter] = useState("");
   const [specialismFilter, setSpecialismFilter] = useState("");
+  const [hasCVFilter, setHasCVFilter] = useState(false);
+  const [sortBy, setSortBy] = useState("newest");
 
   // Pagination
   const [pagination, setPagination] = useState<PaginationState>({
@@ -539,6 +549,8 @@ export default function CandidatesPage() {
       if (sourceFilter) params.set("source", sourceFilter);
       if (industryFilter) params.set("industry", industryFilter);
       if (specialismFilter) params.set("specialism", specialismFilter);
+      if (hasCVFilter) params.set("hasCV", "true");
+      if (sortBy) params.set("sortBy", sortBy);
 
       const res = await fetch(`/api/candidates?${params.toString()}`);
       if (!res.ok) throw new Error("Failed to fetch");
@@ -550,7 +562,7 @@ export default function CandidatesPage() {
     } finally {
       setIsLoading(false);
     }
-  }, [pagination.page, pagination.pageSize, search, statusFilters, locationFilter, sourceFilter, industryFilter, specialismFilter]);
+  }, [pagination.page, pagination.pageSize, search, statusFilters, locationFilter, sourceFilter, industryFilter, specialismFilter, hasCVFilter, sortBy]);
 
   useEffect(() => {
     fetchCandidates();
@@ -579,7 +591,9 @@ export default function CandidatesPage() {
     (locationFilter ? 1 : 0) +
     (sourceFilter ? 1 : 0) +
     (industryFilter ? 1 : 0) +
-    (specialismFilter ? 1 : 0);
+    (specialismFilter ? 1 : 0) +
+    (hasCVFilter ? 1 : 0) +
+    (sortBy !== "newest" ? 1 : 0);
 
   return (
     <div className="space-y-6">
@@ -764,6 +778,48 @@ export default function CandidatesPage() {
                 </Select>
               </div>
 
+              {/* Has CV */}
+              <div className="space-y-2">
+                <Label className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Has CV
+                </Label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <Checkbox
+                    checked={hasCVFilter}
+                    onCheckedChange={(checked) => {
+                      setHasCVFilter(!!checked);
+                      setPagination((prev) => ({ ...prev, page: 1 }));
+                    }}
+                  />
+                  <span className="text-sm text-gray-700">CV uploaded</span>
+                </label>
+              </div>
+
+              {/* Sort By */}
+              <div className="space-y-2">
+                <Label className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Sort By
+                </Label>
+                <Select
+                  value={sortBy}
+                  onValueChange={(v) => {
+                    setSortBy(v ?? "newest");
+                    setPagination((prev) => ({ ...prev, page: 1 }));
+                  }}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {SORT_OPTIONS.map((opt) => (
+                      <SelectItem key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
               {/* Clear filters */}
               <div className="flex items-end">
                 {activeFilterCount > 0 && (
@@ -776,6 +832,8 @@ export default function CandidatesPage() {
                       setSourceFilter("");
                       setIndustryFilter("");
                       setSpecialismFilter("");
+                      setHasCVFilter(false);
+                      setSortBy("newest");
                       setPagination((prev) => ({ ...prev, page: 1 }));
                     }}
                   >

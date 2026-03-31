@@ -8,10 +8,12 @@ import {
   Loader2,
   AlertCircle,
   Briefcase,
+  X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
   SelectContent,
@@ -147,8 +149,24 @@ export default function JobsListPage() {
   const [statusFilter, setStatusFilter] = useState("");
   const [sourceFilter, setSourceFilter] = useState("");
   const [contractFilter, setContractFilter] = useState("");
+  const [clientFilter, setClientFilter] = useState("");
+  const [locationFilter, setLocationFilter] = useState("");
+  const [remoteFilter, setRemoteFilter] = useState(false);
+  const [hasAppsFilter, setHasAppsFilter] = useState(false);
+  const [sortByFilter, setSortByFilter] = useState("newest");
+  const [topClients, setTopClients] = useState<{ id: string; companyName: string }[]>([]);
 
   const pageSize = 20;
+
+  const activeFilterCount =
+    (statusFilter ? 1 : 0) +
+    (sourceFilter ? 1 : 0) +
+    (contractFilter ? 1 : 0) +
+    (clientFilter ? 1 : 0) +
+    (locationFilter ? 1 : 0) +
+    (remoteFilter ? 1 : 0) +
+    (hasAppsFilter ? 1 : 0) +
+    (sortByFilter !== "newest" ? 1 : 0);
 
   const fetchJobs = useCallback(async () => {
     setLoading(true);
@@ -161,18 +179,24 @@ export default function JobsListPage() {
       if (statusFilter) params.set("status", statusFilter);
       if (sourceFilter) params.set("source", sourceFilter);
       if (contractFilter) params.set("contractType", contractFilter);
+      if (clientFilter) params.set("clientId", clientFilter);
+      if (locationFilter) params.set("location", locationFilter);
+      if (remoteFilter) params.set("remote", "true");
+      if (hasAppsFilter) params.set("hasApplications", "true");
+      if (sortByFilter) params.set("sortBy", sortByFilter);
 
       const res = await fetch(`/api/jobs?${params.toString()}`);
       if (!res.ok) throw new Error("Failed to fetch jobs");
       const data = await res.json();
       setJobs(data.jobs ?? []);
       setTotal(data.total ?? 0);
+      if (data.topClients) setTopClients(data.topClients);
     } catch {
       setError("Failed to load jobs. Please try again.");
     } finally {
       setLoading(false);
     }
-  }, [page, search, statusFilter, sourceFilter, contractFilter]);
+  }, [page, search, statusFilter, sourceFilter, contractFilter, clientFilter, locationFilter, remoteFilter, hasAppsFilter, sortByFilter]);
 
   useEffect(() => {
     fetchJobs();
@@ -209,88 +233,170 @@ export default function JobsListPage() {
       </div>
 
       {/* Filters */}
-      <div className="flex flex-wrap items-center gap-3">
-        <div className="relative flex-1 min-w-[200px] max-w-sm">
-          <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-gray-400" />
-          <Input
-            placeholder="Search jobs..."
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-            className="pl-9"
-          />
-        </div>
+      <div className="rounded-lg border border-gray-200 bg-white p-4 space-y-3">
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="relative flex-1 min-w-[200px] max-w-sm">
+            <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-gray-400" />
+            <Input
+              placeholder="Search jobs..."
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              className="pl-9"
+            />
+          </div>
 
-        <Select
-          value={statusFilter}
-          onValueChange={(v) => {
-            setStatusFilter(v ?? "");
-            setPage(1);
-          }}
-        >
-          <SelectTrigger className="w-[140px]">
-            <SelectValue placeholder="All Statuses" />
-          </SelectTrigger>
-          <SelectContent>
-            {JOB_STATUSES.map((s) => (
-              <SelectItem key={s} value={s}>
-                {s.replace(/_/g, " ")}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
-        <Select
-          value={sourceFilter}
-          onValueChange={(v) => {
-            setSourceFilter(v ?? "");
-            setPage(1);
-          }}
-        >
-          <SelectTrigger className="w-[160px]">
-            <SelectValue placeholder="All Sources" />
-          </SelectTrigger>
-          <SelectContent>
-            {JOB_SOURCES.map((s) => (
-              <SelectItem key={s} value={s}>
-                {formatSource(s)}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
-        <Select
-          value={contractFilter}
-          onValueChange={(v) => {
-            setContractFilter(v ?? "");
-            setPage(1);
-          }}
-        >
-          <SelectTrigger className="w-[160px]">
-            <SelectValue placeholder="All Types" />
-          </SelectTrigger>
-          <SelectContent>
-            {CONTRACT_TYPES.map((t) => (
-              <SelectItem key={t} value={t}>
-                {t.replace(/_/g, " ")}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
-        {(statusFilter || sourceFilter || contractFilter) && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => {
-              setStatusFilter("");
-              setSourceFilter("");
-              setContractFilter("");
+          <Select
+            value={statusFilter}
+            onValueChange={(v) => {
+              setStatusFilter(v === "all" ? "" : (v ?? ""));
               setPage(1);
             }}
           >
-            Clear filters
-          </Button>
-        )}
+            <SelectTrigger className="w-[140px]">
+              <SelectValue placeholder="All Statuses" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Statuses</SelectItem>
+              {JOB_STATUSES.map((s) => (
+                <SelectItem key={s} value={s}>
+                  {s.replace(/_/g, " ")}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <Select
+            value={contractFilter}
+            onValueChange={(v) => {
+              setContractFilter(v === "all" ? "" : (v ?? ""));
+              setPage(1);
+            }}
+          >
+            <SelectTrigger className="w-[160px]">
+              <SelectValue placeholder="All Types" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Types</SelectItem>
+              {CONTRACT_TYPES.map((t) => (
+                <SelectItem key={t} value={t}>
+                  {t.replace(/_/g, " ")}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <Select
+            value={clientFilter}
+            onValueChange={(v) => {
+              setClientFilter(v === "all" ? "" : (v ?? ""));
+              setPage(1);
+            }}
+          >
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="All Clients" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Clients</SelectItem>
+              {topClients.map((c) => (
+                <SelectItem key={c.id} value={c.id}>
+                  {c.companyName}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <Select
+            value={sourceFilter}
+            onValueChange={(v) => {
+              setSourceFilter(v === "all" ? "" : (v ?? ""));
+              setPage(1);
+            }}
+          >
+            <SelectTrigger className="w-[160px]">
+              <SelectValue placeholder="All Sources" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Sources</SelectItem>
+              {JOB_SOURCES.map((s) => (
+                <SelectItem key={s} value={s}>
+                  {formatSource(s)}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-3">
+          <Input
+            placeholder="Filter by location..."
+            value={locationFilter}
+            onChange={(e) => {
+              setLocationFilter(e.target.value);
+              setPage(1);
+            }}
+            className="w-[200px]"
+          />
+
+          <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-700">
+            <Checkbox
+              checked={remoteFilter}
+              onCheckedChange={(checked) => {
+                setRemoteFilter(!!checked);
+                setPage(1);
+              }}
+            />
+            Remote Only
+          </label>
+
+          <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-700">
+            <Checkbox
+              checked={hasAppsFilter}
+              onCheckedChange={(checked) => {
+                setHasAppsFilter(!!checked);
+                setPage(1);
+              }}
+            />
+            Has Applications
+          </label>
+
+          <Select
+            value={sortByFilter}
+            onValueChange={(v) => {
+              setSortByFilter(v ?? "newest");
+              setPage(1);
+            }}
+          >
+            <SelectTrigger className="w-[140px]">
+              <SelectValue placeholder="Sort by" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="newest">Newest</SelectItem>
+              <SelectItem value="oldest">Oldest</SelectItem>
+              <SelectItem value="title_asc">Title A-Z</SelectItem>
+            </SelectContent>
+          </Select>
+
+          {activeFilterCount > 0 && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                setStatusFilter("");
+                setSourceFilter("");
+                setContractFilter("");
+                setClientFilter("");
+                setLocationFilter("");
+                setRemoteFilter(false);
+                setHasAppsFilter(false);
+                setSortByFilter("newest");
+                setPage(1);
+              }}
+            >
+              <X className="mr-1 size-3" />
+              Clear all ({activeFilterCount})
+            </Button>
+          )}
+        </div>
       </div>
 
       {/* Error */}
