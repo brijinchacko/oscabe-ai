@@ -55,6 +55,7 @@ import {
 } from "@/components/ui/tooltip";
 import { toast } from "sonner";
 import { AICVParser } from "@/components/crm/ai-cv-parser";
+import { EmailHistory } from "@/components/crm/email-history";
 
 // ── Types ──────────────────────────────────────────────────────────────
 
@@ -1088,6 +1089,20 @@ export default function CandidateDetailPage() {
                 })}
               </div>
             )}
+          </div>
+
+          {/* Email History section */}
+          <div className="rounded-lg border bg-white p-5">
+            <EmailHistory
+              candidateId={candidateId}
+              contactEmail={candidate.email}
+              onComposeReply={(to, subject) => {
+                window.open(
+                  `/crm/emails/new?to=${encodeURIComponent(to)}&subject=${encodeURIComponent(subject)}&name=${encodeURIComponent(candidate.firstName + " " + candidate.lastName)}`,
+                  "_self"
+                );
+              }}
+            />
           </div>
         </div>
 

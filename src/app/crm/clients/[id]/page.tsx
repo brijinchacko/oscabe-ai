@@ -52,6 +52,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { CLIENT_PIPELINE_STAGES } from "@/lib/constants";
+import { EmailHistory } from "@/components/crm/email-history";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -572,6 +573,7 @@ export default function ClientDetailPage() {
           </TabsTrigger>
           <TabsTrigger value="jobs">Jobs ({client.jobs.length})</TabsTrigger>
           <TabsTrigger value="followups">Follow-ups</TabsTrigger>
+          <TabsTrigger value="emails">Emails</TabsTrigger>
           <TabsTrigger value="activity">Activity</TabsTrigger>
         </TabsList>
 
@@ -932,6 +934,22 @@ export default function ClientDetailPage() {
         <TabsContent value="followups">
           <div className="mt-4">
             <FollowUpManager clientId={client.id} />
+          </div>
+        </TabsContent>
+
+        {/* ================ EMAILS TAB ================ */}
+        <TabsContent value="emails">
+          <div className="mt-4 rounded-lg border border-gray-200 bg-white p-4">
+            <EmailHistory
+              clientId={clientId}
+              contactEmail={primaryContact?.email || undefined}
+              onComposeReply={(to, subject) => {
+                window.open(
+                  `/crm/emails/new?to=${encodeURIComponent(to)}&subject=${encodeURIComponent(subject)}&name=${encodeURIComponent(primaryContact ? primaryContact.firstName + " " + primaryContact.lastName : client.companyName)}`,
+                  "_self"
+                );
+              }}
+            />
           </div>
         </TabsContent>
 

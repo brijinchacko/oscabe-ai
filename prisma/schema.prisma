@@ -91,6 +91,7 @@ model Client {
   convertedProspects Prospect[] @relation("ProspectToClient")
   followUps       FollowUp[]
   documents       Document[]
+  emailLogs       EmailLog[]
 }
 
 model Contact {
@@ -150,6 +151,7 @@ model Candidate {
   activities      Activity[]
   interviews      Interview[]
   documents       Document[]
+  emailLogs       EmailLog[]
 }
 
 // ======== SKILLS ONTOLOGY ========
@@ -372,19 +374,29 @@ model EmailCampaign {
 }
 
 model EmailLog {
-  id          String    @id @default(cuid())
-  campaignId  String?
-  campaign    EmailCampaign? @relation(fields: [campaignId], references: [id])
-  sentById    String?
-  sentBy      User?    @relation(fields: [sentById], references: [id])
-  toEmail     String
-  toName      String?
-  subject     String
-  status      String   @default("sent")
-  openedAt    DateTime?
-  clickedAt   DateTime?
-  resendId    String?
-  createdAt   DateTime @default(now())
+  id                 String    @id @default(cuid())
+  campaignId         String?
+  campaign           EmailCampaign? @relation(fields: [campaignId], references: [id])
+  sentById           String?
+  sentBy             User?    @relation(fields: [sentById], references: [id])
+  toEmail            String
+  toName             String?
+  fromEmail          String?
+  fromName           String?
+  subject            String
+  bodyPreview        String?
+  direction          String   @default("received")
+  status             String   @default("sent")
+  openedAt           DateTime?
+  clickedAt          DateTime?
+  resendId           String?
+  microsoftMessageId String?  @unique
+  emailDate          DateTime?
+  candidateId        String?
+  candidate          Candidate? @relation(fields: [candidateId], references: [id])
+  clientId           String?
+  client             Client?  @relation(fields: [clientId], references: [id])
+  createdAt          DateTime @default(now())
 }
 
 // ======== GDPR ========
