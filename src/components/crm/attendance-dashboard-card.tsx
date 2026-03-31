@@ -20,6 +20,7 @@ import {
   Globe,
   Clock,
   Pause,
+  Play,
   AlertTriangle,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -29,33 +30,18 @@ interface AttendanceSession {
   status: "CHECKED_IN" | "ON_BREAK" | "IDLE" | "CHECKED_OUT";
   location: "HOME" | "OFFICE" | "REMOTE";
   checkInAt: string;
-  breakStartedAt?: string;
 }
 
-interface TodayStats {
-  activeMinutes: number;
-  breakMinutes: number;
-  idleMinutes: number;
-}
-
-const STATUS_COLORS: Record<string, string> = {
-  CHECKED_IN: "bg-[#22C55E]",
-  ON_BREAK: "bg-[#F59E0B]",
-  IDLE: "bg-[#EF4444]",
-  CHECKED_OUT: "bg-gray-400",
+const STATUS_CONFIG: Record<string, { color: string; bg: string; label: string }> = {
+  CHECKED_IN: { color: "text-green-600", bg: "bg-green-100", label: "Active" },
+  ON_BREAK: { color: "text-yellow-600", bg: "bg-yellow-100", label: "On Break" },
+  IDLE: { color: "text-red-600", bg: "bg-red-100", label: "Idle" },
 };
 
-const STATUS_LABELS: Record<string, string> = {
-  CHECKED_IN: "Active",
-  ON_BREAK: "On Break",
-  IDLE: "Idle",
-  CHECKED_OUT: "Offline",
-};
-
-const LOCATION_EMOJI: Record<string, string> = {
-  HOME: "\uD83C\uDFE0",
-  OFFICE: "\uD83C\uDFE2",
-  REMOTE: "\uD83C\uDF10",
+const LOCATION_CONFIG: Record<string, { icon: typeof Home; label: string }> = {
+  HOME: { icon: Home, label: "Home" },
+  OFFICE: { icon: Building2, label: "Office" },
+  REMOTE: { icon: Globe, label: "Remote" },
 };
 
 function formatElapsed(checkInAt: string): string {
@@ -66,16 +52,8 @@ function formatElapsed(checkInAt: string): string {
   return `${h}:${m}:${s}`;
 }
 
-function formatMinutes(minutes: number): string {
-  const h = Math.floor(minutes / 60);
-  const m = minutes % 60;
-  if (h > 0) return `${h}h ${m}m`;
-  return `${m}m`;
-}
-
 export function AttendanceDashboardCard() {
   const [attendance, setAttendance] = useState<AttendanceSession | null>(null);
-  const [stats, setStats] = useState<TodayStats>({ activeMinutes: 0, breakMinutes: 0, idleMinutes: 0 });
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
   const [elapsed, setElapsed] = useState("00:00:00");
@@ -90,7 +68,6 @@ export function AttendanceDashboardCard() {
       if (res.ok) {
         const data = await res.json();
         setAttendance(data.session || null);
-        if (data.todayStats) setStats(data.todayStats);
       }
     } catch {
       // silently fail
@@ -103,13 +80,10 @@ export function AttendanceDashboardCard() {
     fetchAttendance();
   }, [fetchAttendance]);
 
-  // Timer
   useEffect(() => {
     if (!attendance?.checkInAt || attendance.status === "CHECKED_OUT") return;
     setElapsed(formatElapsed(attendance.checkInAt));
-    const interval = setInterval(() => {
-      setElapsed(formatElapsed(attendance.checkInAt));
-    }, 1000);
+    const interval = setInterval(() => setElapsed(formatElapsed(attendance.checkInAt)), 1000);
     return () => clearInterval(interval);
   }, [attendance?.checkInAt, attendance?.status]);
 
@@ -119,16 +93,16 @@ export function AttendanceDashboardCard() {
       const res = await fetch("/api/attendance", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "check-in", location, note: checkInNote }),
+        body: JSON.stringify({ workLocation: location, note: checkInNote }),
       });
       if (res.ok) {
-        toast.success("Checked in successfully");
+        toast.success("Checked in successfully!");
         setCheckInOpen(false);
         setCheckInNote("");
         await fetchAttendance();
       } else {
         const err = await res.json();
-        toast.error(err.message || "Failed to check in");
+        toast.error(err.error || "Failed to check in");
       }
     } catch {
       toast.error("Failed to check in");
@@ -139,19 +113,19 @@ export function AttendanceDashboardCard() {
 
   async function handleBreakToggle() {
     setActionLoading(true);
-    const action = attendance?.status === "ON_BREAK" ? "end-break" : "start-break";
+    const isOnBreak = attendance?.status === "ON_BREAK";
     try {
-      const res = await fetch("/api/attendance", {
+      const res = await fetch("/api/attendance/break", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action }),
+        body: JSON.stringify({ action: isOnBreak ? "end" : "start" }),
       });
       if (res.ok) {
-        toast.success(action === "start-break" ? "Break started" : "Break ended");
+        toast.success(isOnBreak ? "Break ended" : "Break started");
         await fetchAttendance();
       } else {
         const err = await res.json();
-        toast.error(err.message || "Failed to toggle break");
+        toast.error(err.error || "Failed to toggle break");
       }
     } catch {
       toast.error("Failed to toggle break");
@@ -163,19 +137,19 @@ export function AttendanceDashboardCard() {
   async function handleCheckOut() {
     setActionLoading(true);
     try {
-      const res = await fetch("/api/attendance", {
+      const res = await fetch("/api/attendance/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "check-out", summary: checkOutSummary }),
+        body: JSON.stringify({ summary: checkOutSummary }),
       });
       if (res.ok) {
-        toast.success("Checked out successfully");
+        toast.success("Checked out successfully!");
         setCheckOutOpen(false);
         setCheckOutSummary("");
         await fetchAttendance();
       } else {
         const err = await res.json();
-        toast.error(err.message || "Failed to check out");
+        toast.error(err.error || "Failed to check out");
       }
     } catch {
       toast.error("Failed to check out");
@@ -186,10 +160,12 @@ export function AttendanceDashboardCard() {
 
   const isCheckedIn = attendance && attendance.status !== "CHECKED_OUT";
   const isOnBreak = attendance?.status === "ON_BREAK";
+  const statusConf = attendance ? STATUS_CONFIG[attendance.status] : null;
+  const locConf = attendance ? LOCATION_CONFIG[attendance.location] : null;
 
   return (
     <>
-      <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-6 backdrop-blur-sm">
+      <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
         <div className="mb-4 flex items-center gap-2 text-sm font-medium text-gray-500">
           <Clock className="size-4" />
           Work Session
@@ -201,183 +177,129 @@ export function AttendanceDashboardCard() {
           </div>
         ) : isCheckedIn ? (
           <div>
-            {/* Status row */}
-            <div className="mb-2 flex items-center gap-2">
-              <span
-                className={`size-3 rounded-full ${STATUS_COLORS[attendance.status]} ${
-                  isOnBreak ? "animate-pulse" : ""
-                }`}
-              />
-              <span className="text-sm font-medium text-gray-600">
-                {STATUS_LABELS[attendance.status]}
-              </span>
-              <span className="text-sm text-gray-400">
-                {LOCATION_EMOJI[attendance.location]} {attendance.location}
-              </span>
-            </div>
+            {/* Timer + Status */}
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="font-mono text-4xl font-bold text-gray-900">{elapsed}</p>
+                <div className="mt-2 flex items-center gap-3">
+                  {statusConf && (
+                    <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium ${statusConf.bg} ${statusConf.color}`}>
+                      <span className={`h-1.5 w-1.5 rounded-full ${isOnBreak ? "bg-yellow-500 animate-pulse" : attendance?.status === "IDLE" ? "bg-red-500" : "bg-green-500"}`} />
+                      {statusConf.label}
+                    </span>
+                  )}
+                  {locConf && (
+                    <span className="inline-flex items-center gap-1 text-xs text-gray-500">
+                      <locConf.icon className="size-3.5" />
+                      {locConf.label}
+                    </span>
+                  )}
+                </div>
+              </div>
 
-            {/* Large timer */}
-            <p className="mb-4 font-mono text-3xl font-bold text-gray-900">
-              {elapsed}
-            </p>
-
-            {/* Action buttons */}
-            <div className="flex gap-2">
-              <Button
-                variant={isOnBreak ? "destructive" : "outline"}
-                size="sm"
-                onClick={handleBreakToggle}
-                disabled={actionLoading}
-                className={isOnBreak ? "animate-pulse" : ""}
-              >
-                {actionLoading ? (
-                  <Loader2 className="size-3.5 animate-spin" />
-                ) : (
-                  <Coffee className="size-3.5" />
-                )}
-                {isOnBreak ? "End Break" : "Start Break"}
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setCheckOutOpen(true)}
-                disabled={actionLoading}
-              >
-                <LogOut className="size-3.5" />
-                Check Out
-              </Button>
+              {/* Action buttons */}
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleBreakToggle}
+                  disabled={actionLoading}
+                  className={isOnBreak ? "border-yellow-300 bg-yellow-50 text-yellow-700 hover:bg-yellow-100" : ""}
+                >
+                  {actionLoading ? <Loader2 className="size-4 animate-spin" /> : isOnBreak ? <Play className="size-4" /> : <Pause className="size-4" />}
+                  <span className="ml-1.5">{isOnBreak ? "Resume" : "Break"}</span>
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setCheckOutOpen(true)}
+                  disabled={actionLoading}
+                  className="border-red-200 text-red-600 hover:bg-red-50"
+                >
+                  <LogOut className="size-4" />
+                  <span className="ml-1.5">Check Out</span>
+                </Button>
+              </div>
             </div>
           </div>
         ) : (
+          /* Not checked in */
           <div className="flex flex-col items-center py-4">
-            <p className="mb-3 text-sm text-gray-500">
-              You haven&apos;t checked in today
-            </p>
+            <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-indigo-50">
+              <LogIn className="size-7 text-indigo-500" />
+            </div>
+            <p className="text-sm text-gray-500">You haven&apos;t checked in today</p>
             <Button
-              variant="default"
-              size="lg"
+              className="mt-4 bg-[#4540DB] text-white hover:bg-[#4540DB]/90"
               onClick={() => setCheckInOpen(true)}
             >
-              <LogIn className="size-4" />
+              <Clock className="mr-2 size-4" />
               Check In Now
             </Button>
           </div>
         )}
-
-        {/* Today's stats */}
-        <div className="mt-4 grid grid-cols-3 gap-3 border-t border-gray-100 pt-4">
-          <div className="text-center">
-            <div className="flex items-center justify-center gap-1 text-xs text-gray-500">
-              <Clock className="size-3 text-[#22C55E]" />
-              Active
-            </div>
-            <p className="mt-0.5 text-sm font-semibold text-gray-800">
-              {formatMinutes(stats.activeMinutes)}
-            </p>
-          </div>
-          <div className="text-center">
-            <div className="flex items-center justify-center gap-1 text-xs text-gray-500">
-              <Pause className="size-3 text-[#F59E0B]" />
-              Break
-            </div>
-            <p className="mt-0.5 text-sm font-semibold text-gray-800">
-              {formatMinutes(stats.breakMinutes)}
-            </p>
-          </div>
-          <div className="text-center">
-            <div className="flex items-center justify-center gap-1 text-xs text-gray-500">
-              <AlertTriangle className="size-3 text-[#EF4444]" />
-              Idle
-            </div>
-            <p className="mt-0.5 text-sm font-semibold text-gray-800">
-              {formatMinutes(stats.idleMinutes)}
-            </p>
-          </div>
-        </div>
       </div>
 
-      {/* Check In Dialog */}
+      {/* Check-In Dialog */}
       <Dialog open={checkInOpen} onOpenChange={setCheckInOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Check In</DialogTitle>
-            <DialogDescription>
-              Select your work location and start your session.
-            </DialogDescription>
+            <DialogTitle>Start Your Work Session</DialogTitle>
+            <DialogDescription>Where are you working from today?</DialogDescription>
           </DialogHeader>
-          <div className="grid grid-cols-3 gap-3">
-            <button
-              onClick={() => handleCheckIn("HOME")}
-              disabled={actionLoading}
-              className="flex flex-col items-center gap-2 rounded-lg border border-gray-200 p-4 transition-colors hover:border-indigo-300 hover:bg-indigo-50"
-            >
-              <Home className="size-6 text-indigo-600" />
-              <span className="text-sm font-medium">Home</span>
-            </button>
-            <button
-              onClick={() => handleCheckIn("OFFICE")}
-              disabled={actionLoading}
-              className="flex flex-col items-center gap-2 rounded-lg border border-gray-200 p-4 transition-colors hover:border-indigo-300 hover:bg-indigo-50"
-            >
-              <Building2 className="size-6 text-indigo-600" />
-              <span className="text-sm font-medium">Office</span>
-            </button>
-            <button
-              onClick={() => handleCheckIn("REMOTE")}
-              disabled={actionLoading}
-              className="flex flex-col items-center gap-2 rounded-lg border border-gray-200 p-4 transition-colors hover:border-indigo-300 hover:bg-indigo-50"
-            >
-              <Globe className="size-6 text-indigo-600" />
-              <span className="text-sm font-medium">Remote</span>
-            </button>
+          <div className="grid grid-cols-3 gap-3 py-4">
+            {([
+              { loc: "HOME" as const, icon: Home, label: "Home", emoji: "\uD83C\uDFE0" },
+              { loc: "OFFICE" as const, icon: Building2, label: "Office", emoji: "\uD83C\uDFE2" },
+              { loc: "REMOTE" as const, icon: Globe, label: "Remote", emoji: "\uD83C\uDF10" },
+            ]).map((item) => (
+              <button
+                key={item.loc}
+                onClick={() => handleCheckIn(item.loc)}
+                disabled={actionLoading}
+                className="flex flex-col items-center gap-2 rounded-xl border border-gray-200 bg-gray-50 p-4 transition-all hover:border-[#4540DB] hover:bg-indigo-50 disabled:opacity-50"
+              >
+                {actionLoading ? (
+                  <Loader2 className="size-8 animate-spin text-gray-400" />
+                ) : (
+                  <span className="text-2xl">{item.emoji}</span>
+                )}
+                <span className="text-sm font-medium text-gray-700">{item.label}</span>
+              </button>
+            ))}
           </div>
           <Textarea
-            placeholder="Optional note (e.g., working on project X)..."
+            placeholder="Optional note (e.g., working on candidate outreach)"
             value={checkInNote}
             onChange={(e) => setCheckInNote(e.target.value)}
             className="mt-2"
+            rows={2}
           />
-          {actionLoading && (
-            <div className="flex items-center justify-center py-2">
-              <Loader2 className="size-5 animate-spin text-indigo-500" />
-            </div>
-          )}
         </DialogContent>
       </Dialog>
 
-      {/* Check Out Dialog */}
+      {/* Check-Out Dialog */}
       <Dialog open={checkOutOpen} onOpenChange={setCheckOutOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Check Out</DialogTitle>
-            <DialogDescription>
-              End your work session. Optionally add a summary.
-            </DialogDescription>
+            <DialogDescription>What did you accomplish today?</DialogDescription>
           </DialogHeader>
           <Textarea
-            placeholder="What did you work on today?"
+            placeholder="Summary of today's work..."
             value={checkOutSummary}
             onChange={(e) => setCheckOutSummary(e.target.value)}
+            className="mt-4"
+            rows={4}
           />
-          <div className="flex justify-end gap-2">
+          <div className="mt-4 flex justify-end gap-2">
+            <Button variant="outline" onClick={() => setCheckOutOpen(false)}>Cancel</Button>
             <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setCheckOutOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button
-              variant="destructive"
-              size="sm"
+              className="bg-red-600 text-white hover:bg-red-700"
               onClick={handleCheckOut}
               disabled={actionLoading}
             >
-              {actionLoading ? (
-                <Loader2 className="size-3.5 animate-spin" />
-              ) : (
-                <LogOut className="size-3.5" />
-              )}
+              {actionLoading ? <Loader2 className="mr-2 size-4 animate-spin" /> : <LogOut className="mr-2 size-4" />}
               Check Out
             </Button>
           </div>

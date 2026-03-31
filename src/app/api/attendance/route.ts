@@ -1,17 +1,11 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
+import { requireAuth } from "@/lib/auth-helpers";
 
 export async function GET() {
-  const session = await auth();
-  if (!session?.user?.id)
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
-  const user = await prisma.user.findUnique({
-    where: { id: session.user.id },
-  });
-  if (!user)
-    return NextResponse.json({ error: "User not found" }, { status: 404 });
+  const { user, error } = await requireAuth();
+  if (error) return error;
 
   try {
     const now = new Date();
@@ -49,7 +43,17 @@ export async function GET() {
       orderBy: { checkInAt: "desc" },
     });
 
-    return NextResponse.json({ activeSession, todaySessions });
+    // Map to frontend-expected format
+    const session = activeSession ? {
+      id: activeSession.id,
+      status: activeSession.status,
+      location: activeSession.workLocation,
+      checkInAt: activeSession.checkInAt.toISOString(),
+      note: activeSession.checkInNote,
+      breakStartedAt: activeSession.breaks?.find((b: { endedAt: Date | null }) => !b.endedAt)?.startedAt?.toISOString(),
+    } : null;
+
+    return NextResponse.json({ session, activeSession, todaySessions });
   } catch (error) {
     console.error("Attendance GET error:", error);
     return NextResponse.json(
@@ -60,18 +64,13 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const session = await auth();
-  if (!session?.user?.id)
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
-  const user = await prisma.user.findUnique({
-    where: { id: session.user.id },
-  });
-  if (!user)
-    return NextResponse.json({ error: "User not found" }, { status: 404 });
+  const { user, error } = await requireAuth();
+  if (error) return error;
 
   try {
-    const { workLocation, note } = await request.json();
+    const body = await request.json();
+    const workLocation = body.workLocation || body.location || "HOME";
+    const note = body.note || body.checkInNote || null;
 
     // Validate no active session exists
     const existingSession = await prisma.employeeWorkSession.findFirst({
@@ -113,8 +112,15 @@ export async function POST(request: Request) {
       return workSession;
     });
 
+    const mappedSession = {
+      id: result.id,
+      status: result.status,
+      location: result.workLocation,
+      checkInAt: result.checkInAt.toISOString(),
+      note: result.checkInNote,
+    };
     return NextResponse.json(
-      { message: "Checked in successfully", session: result },
+      { message: "Checked in successfully", session: mappedSession },
       { status: 201 }
     );
   } catch (error) {

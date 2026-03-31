@@ -30,7 +30,13 @@ export async function GET(request: NextRequest) {
     const page = Math.max(1, parseInt(searchParams.get("page") || "1", 10));
     const pageSize = Math.min(100, Math.max(1, parseInt(searchParams.get("pageSize") || "20", 10)));
 
+    const type = searchParams.get("type") || "";
+
     const where: Record<string, unknown> = {};
+
+    if (type) {
+      where.type = type;
+    }
 
     if (candidateId) {
       where.candidateId = candidateId;
@@ -57,6 +63,9 @@ export async function GET(request: NextRequest) {
         include: {
           user: {
             select: { id: true, firstName: true, lastName: true, email: true, avatarUrl: true },
+          },
+          client: {
+            select: { id: true, companyName: true },
           },
         },
       }),

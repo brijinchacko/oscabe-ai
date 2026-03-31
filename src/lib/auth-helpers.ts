@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 
 /**
  * Require authentication and return the database user.
- * Use in API routes that need user data from Prisma.
+ * Looks up by ID first, then email as fallback (handles JWT ID mismatch after DB recreation).
  */
 export async function requireAuth() {
   const session = await auth();
@@ -12,7 +12,14 @@ export async function requireAuth() {
     return { user: null, error: NextResponse.json({ error: "Unauthorized" }, { status: 401 }) };
   }
 
-  const user = await prisma.user.findUnique({ where: { id: session.user.id } });
+  // Try by ID first
+  let user = await prisma.user.findUnique({ where: { id: session.user.id } });
+
+  // Fallback: find by email if ID doesn't match (happens when DB is recreated)
+  if (!user && session.user.email) {
+    user = await prisma.user.findUnique({ where: { email: session.user.email } });
+  }
+
   if (!user) {
     return { user: null, error: NextResponse.json({ error: "User not found" }, { status: 404 }) };
   }

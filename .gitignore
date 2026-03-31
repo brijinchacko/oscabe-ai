@@ -47,3 +47,5 @@ dev.db
 Awards/
 Logo/
 .claude/
+prisma/dev.db
+dev.db

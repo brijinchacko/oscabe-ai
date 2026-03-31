@@ -8,52 +8,23 @@ export async function GET() {
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    const userId = session.user.id;
 
+    // First try to find by ID (normal case)
     let user = await prisma.user.findUnique({
-      where: { id: userId },
+      where: { id: session.user.id },
       include: { candidate: true, employer: true, agency: true },
     });
 
-    // Auto-create user record if not found (session exists but no DB record yet)
-    if (!user) {
-      const email = session.user.email || `${userId}@placeholder.local`;
+    // If not found by ID, try by email (handles ID mismatch from session vs DB)
+    if (!user && session.user.email) {
+      user = await prisma.user.findUnique({
+        where: { email: session.user.email },
+        include: { candidate: true, employer: true, agency: true },
+      });
+    }
 
-      // Try create, fall back to upsert on conflict
-      try {
-        user = await prisma.user.create({
-          data: {
-            email,
-            firstName: session.user.name?.split(" ")[0] || null,
-            lastName: session.user.name?.split(" ").slice(1).join(" ") || null,
-            avatarUrl: session.user.image || null,
-            role: "CANDIDATE",
-          },
-          include: { candidate: true, employer: true, agency: true },
-        });
-      } catch {
-        // Email uniqueness conflict - update existing by email
-        const existingByEmail = await prisma.user.findFirst({ where: { email } });
-        if (existingByEmail) {
-          user = await prisma.user.update({
-            where: { id: existingByEmail.id },
-            data: {
-              firstName: session.user.name?.split(" ")[0] || existingByEmail.firstName,
-              lastName: session.user.name?.split(" ").slice(1).join(" ") || existingByEmail.lastName,
-              avatarUrl: session.user.image || existingByEmail.avatarUrl,
-            },
-            include: { candidate: true, employer: true, agency: true },
-          });
-        } else {
-          // Last resort upsert by id
-          user = await prisma.user.upsert({
-            where: { id: userId },
-            update: { email, firstName: session.user.name?.split(" ")[0], lastName: session.user.name?.split(" ").slice(1).join(" ") },
-            create: { email, firstName: session.user.name?.split(" ")[0], lastName: session.user.name?.split(" ").slice(1).join(" "), role: "CANDIDATE" },
-            include: { candidate: true, employer: true, agency: true },
-          });
-        }
-      }
+    if (!user) {
+      return NextResponse.json({ error: "User not found. Please sign up first." }, { status: 404 });
     }
 
     const role = user.role;

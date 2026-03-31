@@ -16,6 +16,7 @@ import {
   RefreshCw,
   AlertTriangle,
 } from "lucide-react";
+import { AttendanceDashboardCard } from "@/components/crm/attendance-dashboard-card";
 import {
   BarChart,
   Bar,
@@ -228,6 +229,9 @@ export default function CRMDashboardPage() {
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+
+      {/* Attendance Check-In Card */}
+      <AttendanceDashboardCard />
 
       {/* Stat cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">

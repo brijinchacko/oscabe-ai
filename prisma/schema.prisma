@@ -84,6 +84,7 @@ model Client {
   activities      Activity[]
   convertedProspects Prospect[] @relation("ProspectToClient")
   followUps       FollowUp[]
+  documents       Document[]
 }
 
 model Contact {
@@ -140,6 +141,7 @@ model Candidate {
   placements      Placement[]
   activities      Activity[]
   interviews      Interview[]
+  documents       Document[]
 }
 
 // ======== SKILLS ONTOLOGY ========
@@ -214,6 +216,7 @@ model Job {
   placements      Placement[]
   activities      Activity[]
   interviews      Interview[]
+  documents       Document[]
 }
 
 model JobSkill {
@@ -709,4 +712,26 @@ model Notification {
   read      Boolean  @default(false)
   link      String?
   createdAt DateTime @default(now())
+}
+
+// ======== DOCUMENTS ========
+
+model Document {
+  id          String   @id @default(cuid())
+  name        String
+  fileName    String
+  filePath    String
+  fileSize    Int?
+  mimeType    String?
+  category    String   @default("GENERAL")
+  clientId    String?
+  client      Client?  @relation(fields: [clientId], references: [id])
+  candidateId String?
+  candidate   Candidate? @relation(fields: [candidateId], references: [id])
+  jobId       String?
+  job         Job?     @relation(fields: [jobId], references: [id])
+  uploadedBy  String?
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

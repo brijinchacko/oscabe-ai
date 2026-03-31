@@ -31,23 +31,73 @@ import {
   Plus,
   LogOut,
   Clock,
+  RefreshCw,
+  Upload,
+  FileText,
+  FileSignature,
 } from "lucide-react";
 
-const NAV_ITEMS = [
-  { label: "Dashboard", href: "/crm", icon: LayoutDashboard },
-  { label: "Clients", href: "/crm/clients", icon: Building2 },
-  { label: "Candidates", href: "/crm/candidates", icon: Users },
-  { label: "Jobs", href: "/crm/jobs", icon: Briefcase },
-  { label: "Interviews", href: "/crm/interviews", icon: CalendarCheck },
-  { label: "Placements", href: "/crm/placements", icon: Award },
-  { label: "Referrals", href: "/crm/referrals", icon: Gift },
-  { label: "Emails", href: "/crm/emails", icon: Mail },
-  { label: "Outreach", href: "/crm/outreach", icon: Megaphone },
-  { label: "Compliance", href: "/crm/compliance", icon: Shield },
-  { label: "Attendance", href: "/crm/attendance", icon: Clock },
-  { label: "Reports", href: "/crm/reports", icon: BarChart3 },
-  { label: "Settings", href: "/crm/settings", icon: Settings },
-  { label: "Admin", href: "/crm/admin", icon: ShieldCheck },
+type NavItem = { label: string; href: string; icon: React.ComponentType<{ className?: string }> };
+
+const NAV_GROUPS: { label: string; items: NavItem[] }[] = [
+  {
+    label: "MAIN",
+    items: [
+      { label: "Dashboard", href: "/crm", icon: LayoutDashboard },
+    ],
+  },
+  {
+    label: "RECRUITMENT",
+    items: [
+      { label: "Clients", href: "/crm/clients", icon: Building2 },
+      { label: "Candidates", href: "/crm/candidates", icon: Users },
+      { label: "Jobs", href: "/crm/jobs", icon: Briefcase },
+      { label: "Interviews", href: "/crm/interviews", icon: CalendarCheck },
+      { label: "Placements", href: "/crm/placements", icon: Award },
+    ],
+  },
+  {
+    label: "COMMUNICATION",
+    items: [
+      { label: "Emails", href: "/crm/emails", icon: Mail },
+      { label: "Outreach", href: "/crm/outreach", icon: Megaphone },
+    ],
+  },
+  {
+    label: "DOCUMENTS",
+    items: [
+      { label: "Documents", href: "/crm/documents", icon: FileText },
+      { label: "Contracts", href: "/crm/contracts", icon: FileSignature },
+    ],
+  },
+  {
+    label: "DATA",
+    items: [
+      { label: "Import", href: "/crm/import", icon: Upload },
+      { label: "Zoho Sync", href: "/crm/zoho-sync", icon: RefreshCw },
+    ],
+  },
+  {
+    label: "ANALYTICS",
+    items: [
+      { label: "Reports", href: "/crm/reports", icon: BarChart3 },
+      { label: "Compliance", href: "/crm/compliance", icon: Shield },
+    ],
+  },
+  {
+    label: "TEAM",
+    items: [
+      { label: "Attendance", href: "/crm/attendance", icon: Clock },
+      { label: "Referrals", href: "/crm/referrals", icon: Gift },
+    ],
+  },
+  {
+    label: "SYSTEM",
+    items: [
+      { label: "Settings", href: "/crm/settings", icon: Settings },
+      { label: "Admin", href: "/crm/admin", icon: ShieldCheck },
+    ],
+  },
 ];
 
 export default function CRMLayout({ children }: { children: React.ReactNode }) {
@@ -90,26 +140,38 @@ export default function CRMLayout({ children }: { children: React.ReactNode }) {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 space-y-1 px-3 py-4">
-        {NAV_ITEMS.map((item) => {
-          const active = isActive(item.href);
-          const Icon = item.icon;
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              onClick={() => setSidebarOpen(false)}
-              className={`flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-colors ${
-                active
-                  ? "border-l-2 border-indigo-400 bg-indigo-500/20 text-white"
-                  : "text-gray-400 hover:bg-white/5 hover:text-white"
-              }`}
-            >
-              <Icon className="size-5 shrink-0" />
-              {item.label}
-            </Link>
-          );
-        })}
+      <nav className="flex-1 overflow-y-auto px-3 py-4">
+        {NAV_GROUPS.map((group, groupIdx) => (
+          <div key={group.label}>
+            {groupIdx > 0 && (
+              <div className="mx-2 my-2 border-t border-white/10" />
+            )}
+            <p className="mb-1 px-3 pt-1 text-[10px] font-semibold tracking-widest text-gray-500">
+              {group.label}
+            </p>
+            <div className="space-y-0.5">
+              {group.items.map((item) => {
+                const active = isActive(item.href);
+                const Icon = item.icon;
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setSidebarOpen(false)}
+                    className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+                      active
+                        ? "border-l-2 border-indigo-400 bg-indigo-500/20 text-white"
+                        : "text-gray-400 hover:bg-white/5 hover:text-white"
+                    }`}
+                  >
+                    <Icon className="size-5 shrink-0" />
+                    {item.label}
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        ))}
       </nav>
 
       {/* User section */}
@@ -177,8 +239,6 @@ export default function CRMLayout({ children }: { children: React.ReactNode }) {
 
       {/* Main area */}
       <div className="flex flex-1 flex-col overflow-hidden">
-        {/* Attendance sticky header */}
-        <AttendanceHeader />
 
         {/* Top header bar */}
         <header className="flex h-16 shrink-0 items-center gap-4 border-b border-gray-200 bg-white px-4 sm:px-6">

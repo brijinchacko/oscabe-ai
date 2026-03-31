@@ -1,19 +1,12 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/auth";
+import { requireAuth } from "@/lib/auth-helpers";
 import prisma from "@/lib/prisma";
 
 const IDLE_THRESHOLD_MINUTES = 20;
 
 export async function POST(request: Request) {
-  const session = await auth();
-  if (!session?.user?.id)
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
-  const user = await prisma.user.findUnique({
-    where: { id: session.user.id },
-  });
-  if (!user)
-    return NextResponse.json({ error: "User not found" }, { status: 404 });
+  const { user, error } = await requireAuth();
+  if (error) return error;
 
   try {
     const { isActive } = await request.json();

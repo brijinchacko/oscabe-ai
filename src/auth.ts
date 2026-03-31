@@ -51,6 +51,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async jwt({ token, user, account }) {
       if (user) {
         token.id = user.id;
+        token.email = user.email;
       }
       // For Google OAuth, find or create user
       if (account?.provider === "google" && user?.email) {
