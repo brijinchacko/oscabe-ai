@@ -24,6 +24,7 @@ import {
   Mail,
   Megaphone,
   CalendarCheck,
+  CalendarClock,
   BarChart3,
   Shield,
   ShieldCheck,
@@ -41,6 +42,7 @@ import {
   FileSignature,
   Contact,
   Repeat,
+  TrendingUp,
 } from "lucide-react";
 
 type NavItem = { label: string; href: string; icon: React.ComponentType<{ className?: string }> };
@@ -60,6 +62,7 @@ const NAV_GROUPS: { label: string; items: NavItem[] }[] = [
       { label: "Candidates", href: "/crm/candidates", icon: Users },
       { label: "Jobs", href: "/crm/jobs", icon: Briefcase },
       { label: "Interviews", href: "/crm/interviews", icon: CalendarCheck },
+      { label: "Bookings", href: "/crm/bookings", icon: CalendarClock },
       { label: "Placements", href: "/crm/placements", icon: Award },
     ],
   },
@@ -88,6 +91,7 @@ const NAV_GROUPS: { label: string; items: NavItem[] }[] = [
   {
     label: "ANALYTICS",
     items: [
+      { label: "KPI Dashboard", href: "/crm/kpi", icon: TrendingUp },
       { label: "Reports", href: "/crm/reports", icon: BarChart3 },
       { label: "Compliance", href: "/crm/compliance", icon: Shield },
     ],

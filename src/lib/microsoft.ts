@@ -9,7 +9,7 @@ const SCOPES = [
   "email",
   "Mail.Read",
   "Mail.Send",
-  "Calendars.Read",
+  "Calendars.ReadWrite",
   "Presence.Read",
   "User.Read",
   "offline_access",
@@ -448,4 +448,92 @@ export async function getCalendarEvents(
     token,
     `/me/calendarview?startDateTime=${startDate}&endDateTime=${endDate}&$orderby=start/dateTime&$select=id,subject,start,end,location,isOnlineMeeting,organizer&$top=50`
   );
+}
+
+// ─── Create Calendar Event ────────────────────────────────────────────
+
+export async function createCalendarEvent(
+  userId: string,
+  event: {
+    subject: string;
+    body?: string;
+    start: string; // ISO datetime
+    end: string;   // ISO datetime
+    attendees: string[];
+    isOnlineMeeting?: boolean;
+    location?: string;
+  }
+): Promise<{ id?: string; webLink?: string; onlineMeetingUrl?: string; error?: string }> {
+  const token = await getGraphClient(userId);
+  if (!token) {
+    // Mock: return a fake event
+    return {
+      id: `mock-evt-${Date.now()}`,
+      webLink: "https://teams.microsoft.com/mock-meeting",
+      onlineMeetingUrl: "https://teams.microsoft.com/mock-meeting",
+    };
+  }
+
+  try {
+    const result = await graphFetch(token, "/me/events", {
+      method: "POST",
+      body: JSON.stringify({
+        subject: event.subject,
+        body: event.body
+          ? { contentType: "HTML", content: event.body }
+          : undefined,
+        start: { dateTime: event.start, timeZone: "UTC" },
+        end: { dateTime: event.end, timeZone: "UTC" },
+        attendees: event.attendees.map((email) => ({
+          emailAddress: { address: email },
+          type: "required",
+        })),
+        isOnlineMeeting: event.isOnlineMeeting ?? true,
+        onlineMeetingProvider: "teamsForBusiness",
+        location: event.location
+          ? { displayName: event.location }
+          : undefined,
+      }),
+    });
+
+    return {
+      id: result.id,
+      webLink: result.webLink,
+      onlineMeetingUrl: result.onlineMeeting?.joinUrl || result.onlineMeetingUrl,
+    };
+  } catch (err) {
+    console.error("createCalendarEvent error:", err);
+    return {
+      error: err instanceof Error ? err.message : "Failed to create calendar event",
+    };
+  }
+}
+
+// ─── Delete Calendar Event ────────────────────────────────────────────
+
+export async function deleteCalendarEvent(
+  userId: string,
+  eventId: string
+): Promise<{ success: boolean; error?: string }> {
+  const token = await getGraphClient(userId);
+  if (!token) {
+    return { success: true }; // Mock
+  }
+
+  try {
+    const res = await fetch(`${GRAPH_API}/me/events/${eventId}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!res.ok && res.status !== 204) {
+      const err = await res.text();
+      return { success: false, error: err };
+    }
+    return { success: true };
+  } catch (err) {
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : "Failed to delete event",
+    };
+  }
 }

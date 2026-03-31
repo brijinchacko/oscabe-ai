@@ -15,6 +15,9 @@ import {
   MessageSquare,
   RefreshCw,
   AlertTriangle,
+  TrendingUp,
+  TrendingDown,
+  Target,
 } from "lucide-react";
 import { AttendanceDashboardCard } from "@/components/crm/attendance-dashboard-card";
 import {
@@ -68,6 +71,18 @@ interface StaleJob {
   client: { companyName: string } | null;
   createdAt: string;
   _count: { applications: number };
+}
+
+interface QuickKPIs {
+  revenue: { total: number; trend: number; pipelineValue: number };
+  pipeline: {
+    placements: number;
+    placementsTrend: number;
+    activeJobs: number;
+    fillRate: number;
+    avgTimeToFill: number;
+    candidatesInPipeline: number;
+  };
 }
 
 /* ------------------------------------------------------------------ */
@@ -175,14 +190,16 @@ export default function CRMDashboardPage() {
   const [pipeline, setPipeline] = useState<PipelineStage[]>(PIPELINE_STAGES);
   const [activities, setActivities] = useState<ActivityItem[]>([]);
   const [staleJobs, setStaleJobs] = useState<StaleJob[]>([]);
+  const [quickKpis, setQuickKpis] = useState<QuickKPIs | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function load() {
       try {
-        const [statsRes, activitiesRes] = await Promise.all([
+        const [statsRes, activitiesRes, kpiRes] = await Promise.all([
           fetch("/api/dashboard"),
           fetch("/api/activities?pageSize=15"),
+          fetch("/api/kpi?period=month"),
         ]);
 
         if (statsRes.ok) {
@@ -196,6 +213,14 @@ export default function CRMDashboardPage() {
         if (activitiesRes.ok) {
           const data = await activitiesRes.json();
           setActivities(data.activities ?? []);
+        }
+
+        if (kpiRes.ok) {
+          const kpiData = await kpiRes.json();
+          setQuickKpis({
+            revenue: kpiData.revenue,
+            pipeline: kpiData.pipeline,
+          });
         }
       } catch {
         // silently fail - dashboard will show zeros
@@ -232,6 +257,44 @@ export default function CRMDashboardPage() {
 
       {/* Attendance Check-In Card */}
       <AttendanceDashboardCard />
+
+      {/* Quick KPIs */}
+      {quickKpis && (
+        <div className="grid gap-2 grid-cols-3 lg:grid-cols-6">
+          <MiniKPI
+            label="Revenue"
+            value={`£${quickKpis.revenue.total.toLocaleString()}`}
+            trend={quickKpis.revenue.trend}
+            icon={PoundSterling}
+          />
+          <MiniKPI
+            label="Placements"
+            value={String(quickKpis.pipeline.placements)}
+            trend={quickKpis.pipeline.placementsTrend}
+            icon={Trophy}
+          />
+          <MiniKPI
+            label="Active Jobs"
+            value={String(quickKpis.pipeline.activeJobs)}
+            icon={Briefcase}
+          />
+          <MiniKPI
+            label="Fill Rate"
+            value={`${quickKpis.pipeline.fillRate}%`}
+            icon={Target}
+          />
+          <MiniKPI
+            label="Avg TTF"
+            value={quickKpis.pipeline.avgTimeToFill > 0 ? `${quickKpis.pipeline.avgTimeToFill}d` : "N/A"}
+            icon={Clock}
+          />
+          <MiniKPI
+            label="Pipeline"
+            value={`£${quickKpis.revenue.pipelineValue.toLocaleString()}`}
+            icon={TrendingUp}
+          />
+        </div>
+      )}
 
       {/* Stat cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
@@ -406,6 +469,45 @@ export default function CRMDashboardPage() {
             </div>
           ) : (
             <p className="text-sm text-gray-400">All jobs are on track</p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Mini KPI Card for Quick KPIs section                               */
+/* ------------------------------------------------------------------ */
+
+function MiniKPI({
+  label,
+  value,
+  trend,
+  icon: Icon,
+}: {
+  label: string;
+  value: string;
+  trend?: number;
+  icon: React.ElementType;
+}) {
+  return (
+    <div className="flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2">
+      <Icon className="size-3.5 shrink-0 text-gray-400" />
+      <div className="min-w-0">
+        <p className="truncate text-[10px] text-gray-500">{label}</p>
+        <div className="flex items-center gap-1">
+          <span className="text-sm font-bold text-gray-900">{value}</span>
+          {trend !== undefined && trend !== 0 && (
+            <span
+              className={`flex items-center text-[9px] font-semibold ${
+                trend > 0 ? "text-green-600" : "text-red-500"
+              }`}
+            >
+              {trend > 0 ? <TrendingUp className="size-2.5" /> : <TrendingDown className="size-2.5" />}
+              {trend > 0 ? "+" : ""}
+              {trend}%
+            </span>
           )}
         </div>
       </div>

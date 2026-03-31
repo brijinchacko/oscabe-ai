@@ -29,6 +29,18 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { toast } from "sonner";
+import {
+  LineChart,
+  Line,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
 // --------------- Types ---------------
 
@@ -225,7 +237,7 @@ export default function AttendancePage() {
   const [logSubmitting, setLogSubmitting] = useState(false);
 
   // Reports tab state
-  const [pageTab, setPageTab] = useState<"team" | "reports" | "productivity">("team");
+  const [pageTab, setPageTab] = useState<"team" | "reports" | "productivity" | "kpi">("team");
   const [reports, setReports] = useState<ReportEntry[]>([]);
   const [reportsLoading, setReportsLoading] = useState(false);
   const [reportFrom, setReportFrom] = useState("");
@@ -259,6 +271,43 @@ export default function AttendancePage() {
   const [alerts, setAlerts] = useState<AlertEntry[]>([]);
   const [targetRows, setTargetRows] = useState<TargetRow[]>([]);
   const [productivityLoading, setProductivityLoading] = useState(false);
+
+  // KPI tab state
+  interface KPISummary {
+    teamAvgHours: number;
+    teamOnTimeRate: number;
+    teamAvgIdle: number;
+    teamProductivity: number;
+    targetHoursPerDay: number;
+  }
+  interface KPITeamMember {
+    id: string;
+    name: string;
+    avgHours: number;
+    onTimeRate: number;
+    idleRate: number;
+    productivityScore: number;
+    lateCount: number;
+    earlyCount: number;
+    status: "green" | "yellow" | "red";
+    flags: { type: string; severity: string; message: string }[];
+  }
+  interface KPIRedFlag {
+    type: string;
+    severity: "warning" | "critical";
+    message: string;
+  }
+  interface KPITrends {
+    dailyHours: Record<string, unknown>[];
+    dailyOnTime: { date: string; onTime: number; late: number }[];
+    memberNames: string[];
+  }
+  const [kpiSummary, setKpiSummary] = useState<KPISummary | null>(null);
+  const [kpiTeam, setKpiTeam] = useState<KPITeamMember[]>([]);
+  const [kpiFlags, setKpiFlags] = useState<KPIRedFlag[]>([]);
+  const [kpiTrends, setKpiTrends] = useState<KPITrends | null>(null);
+  const [kpiLoading, setKpiLoading] = useState(false);
+  const [kpiPeriod, setKpiPeriod] = useState("week");
 
   const fetchMembers = useCallback(async () => {
     try {
@@ -492,6 +541,24 @@ export default function AttendancePage() {
     }
   }, []);
 
+  const fetchKpi = useCallback(async () => {
+    setKpiLoading(true);
+    try {
+      const res = await fetch(`/api/attendance/kpi?period=${kpiPeriod}`);
+      if (res.ok) {
+        const data = await res.json();
+        setKpiSummary(data.summary || null);
+        setKpiTeam(data.teamComparison || []);
+        setKpiFlags(data.redFlags || []);
+        setKpiTrends(data.trends || null);
+      }
+    } catch {
+      // silently fail
+    } finally {
+      setKpiLoading(false);
+    }
+  }, [kpiPeriod]);
+
   useEffect(() => {
     if (pageTab === "reports") {
       fetchReports();
@@ -499,7 +566,10 @@ export default function AttendancePage() {
     if (pageTab === "productivity") {
       fetchProductivity();
     }
-  }, [pageTab, fetchReports, fetchProductivity]);
+    if (pageTab === "kpi") {
+      fetchKpi();
+    }
+  }, [pageTab, fetchReports, fetchProductivity, fetchKpi]);
 
   function openDetail(memberId: string) {
     setSelectedMemberId(memberId);
@@ -654,6 +724,19 @@ export default function AttendancePage() {
           <span className="flex items-center gap-1.5">
             <Zap className="size-3.5" />
             Productivity
+          </span>
+        </button>
+        <button
+          onClick={() => setPageTab("kpi")}
+          className={`rounded-md px-4 py-1.5 text-sm font-medium transition-colors ${
+            pageTab === "kpi"
+              ? "bg-white text-gray-900 shadow-sm"
+              : "text-gray-500 hover:text-gray-700"
+          }`}
+        >
+          <span className="flex items-center gap-1.5">
+            <TrendingUp className="size-3.5" />
+            KPI
           </span>
         </button>
       </div>
@@ -1085,6 +1168,208 @@ export default function AttendancePage() {
                       </tbody>
                     </table>
                   </div>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {pageTab === "kpi" && (
+        <div>
+          {/* Period selector */}
+          <div className="mb-4 flex gap-1">
+            {[{ label: "This Week", value: "week" }, { label: "This Month", value: "month" }].map((p) => (
+              <button
+                key={p.value}
+                onClick={() => setKpiPeriod(p.value)}
+                className={`rounded-md px-3 py-1 text-xs font-medium transition-colors ${
+                  kpiPeriod === p.value
+                    ? "bg-indigo-600 text-white"
+                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                }`}
+              >
+                {p.label}
+              </button>
+            ))}
+          </div>
+
+          {kpiLoading ? (
+            <div className="flex items-center justify-center py-20">
+              <Loader2 className="size-8 animate-spin text-gray-400" />
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {/* Row 1: Summary Cards */}
+              {kpiSummary && (
+                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                  <div className="rounded-lg border border-gray-200 bg-white p-3">
+                    <p className="text-[10px] font-medium text-gray-500">Team Avg Hours/Day</p>
+                    <div className="mt-1 flex items-end gap-2">
+                      <span className="text-lg font-bold text-gray-900">{kpiSummary.teamAvgHours}h</span>
+                      <span className="text-[10px] text-gray-400">target {kpiSummary.targetHoursPerDay}h</span>
+                    </div>
+                    <div className="mt-1 h-1.5 w-full rounded-full bg-gray-100">
+                      <div
+                        className={`h-1.5 rounded-full ${
+                          kpiSummary.teamAvgHours >= kpiSummary.targetHoursPerDay ? "bg-green-500" : "bg-amber-500"
+                        }`}
+                        style={{ width: `${Math.min(100, (kpiSummary.teamAvgHours / kpiSummary.targetHoursPerDay) * 100)}%` }}
+                      />
+                    </div>
+                  </div>
+                  <div className="rounded-lg border border-gray-200 bg-white p-3">
+                    <p className="text-[10px] font-medium text-gray-500">Team On-Time Rate</p>
+                    <span className="text-lg font-bold text-gray-900">{kpiSummary.teamOnTimeRate}%</span>
+                  </div>
+                  <div className="rounded-lg border border-gray-200 bg-white p-3">
+                    <p className="text-[10px] font-medium text-gray-500">Team Avg Idle/Day</p>
+                    <span className="text-lg font-bold text-gray-900">{kpiSummary.teamAvgIdle}m</span>
+                  </div>
+                  <div className="rounded-lg border border-gray-200 bg-white p-3">
+                    <p className="text-[10px] font-medium text-gray-500">Team Productivity</p>
+                    <span className="text-lg font-bold text-gray-900">{kpiSummary.teamProductivity}</span>
+                    <span className="text-[10px] text-gray-400">/100</span>
+                  </div>
+                </div>
+              )}
+
+              {/* Row 2: Individual Performance Table */}
+              <div className="rounded-lg border border-gray-200 bg-white p-4">
+                <h3 className="mb-3 text-xs font-semibold text-gray-700">Individual Performance</h3>
+                {kpiTeam.length > 0 ? (
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-xs">
+                      <thead>
+                        <tr className="border-b border-gray-100 text-left text-[10px] font-semibold text-gray-500">
+                          <th className="pb-2 pr-3">Name</th>
+                          <th className="pb-2 pr-3 text-right">Avg Hours</th>
+                          <th className="pb-2 pr-3 text-right">On-Time %</th>
+                          <th className="pb-2 pr-3 text-right">Idle %</th>
+                          <th className="pb-2 pr-3 text-right">Productivity</th>
+                          <th className="pb-2 pr-3 text-right">Late</th>
+                          <th className="pb-2 pr-3 text-right">Early</th>
+                          <th className="pb-2 text-right">Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {kpiTeam.map((m) => (
+                          <tr key={m.id} className="border-b border-gray-50">
+                            <td className="py-2 pr-3 font-medium text-gray-900">{m.name}</td>
+                            <td className="py-2 pr-3 text-right text-gray-700">{m.avgHours}h</td>
+                            <td className="py-2 pr-3 text-right text-gray-700">{m.onTimeRate}%</td>
+                            <td className="py-2 pr-3 text-right text-gray-700">{m.idleRate}%</td>
+                            <td className="py-2 pr-3 text-right font-semibold text-gray-900">{m.productivityScore}</td>
+                            <td className="py-2 pr-3 text-right text-gray-700">{m.lateCount}</td>
+                            <td className="py-2 pr-3 text-right text-gray-700">{m.earlyCount}</td>
+                            <td className="py-2 text-right">
+                              <span
+                                className={`inline-flex size-2.5 rounded-full ${
+                                  m.status === "green"
+                                    ? "bg-green-500"
+                                    : m.status === "yellow"
+                                    ? "bg-amber-500"
+                                    : "bg-red-500"
+                                }`}
+                              />
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : (
+                  <p className="text-xs text-gray-400">No data available</p>
+                )}
+              </div>
+
+              {/* Row 3: Trend Charts */}
+              {kpiTrends && (
+                <div className="grid gap-4 lg:grid-cols-2">
+                  {/* Daily hours per member */}
+                  <div className="rounded-lg border border-gray-200 bg-white p-4">
+                    <h3 className="mb-3 text-xs font-semibold text-gray-700">Daily Hours (Last 14 Days)</h3>
+                    {kpiTrends.dailyHours.length > 0 ? (
+                      <ResponsiveContainer width="100%" height={200}>
+                        <LineChart data={kpiTrends.dailyHours}>
+                          <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+                          <XAxis dataKey="date" fontSize={9} />
+                          <YAxis fontSize={9} />
+                          <Tooltip contentStyle={{ fontSize: 10 }} />
+                          <Legend wrapperStyle={{ fontSize: 10 }} />
+                          {kpiTrends.memberNames.map((name, i) => {
+                            const colors = ["#4540DB", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6", "#EC4899", "#06B6D4"];
+                            return (
+                              <Line
+                                key={name}
+                                type="monotone"
+                                dataKey={name}
+                                stroke={colors[i % colors.length]}
+                                strokeWidth={1.5}
+                                dot={false}
+                              />
+                            );
+                          })}
+                        </LineChart>
+                      </ResponsiveContainer>
+                    ) : (
+                      <p className="text-xs text-gray-400">No trend data</p>
+                    )}
+                  </div>
+
+                  {/* On-time vs late per day */}
+                  <div className="rounded-lg border border-gray-200 bg-white p-4">
+                    <h3 className="mb-3 text-xs font-semibold text-gray-700">On-Time vs Late (Last 14 Days)</h3>
+                    {kpiTrends.dailyOnTime.length > 0 ? (
+                      <ResponsiveContainer width="100%" height={200}>
+                        <BarChart data={kpiTrends.dailyOnTime}>
+                          <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+                          <XAxis dataKey="date" fontSize={9} />
+                          <YAxis fontSize={9} />
+                          <Tooltip contentStyle={{ fontSize: 10 }} />
+                          <Legend wrapperStyle={{ fontSize: 10 }} />
+                          <Bar dataKey="onTime" fill="#22C55E" radius={[2, 2, 0, 0]} name="On Time" />
+                          <Bar dataKey="late" fill="#EF4444" radius={[2, 2, 0, 0]} name="Late" />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    ) : (
+                      <p className="text-xs text-gray-400">No trend data</p>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Row 4: Red Flag Alerts */}
+              <div className="rounded-lg border border-gray-200 bg-white p-4">
+                <h3 className="mb-3 flex items-center gap-1.5 text-xs font-semibold text-gray-700">
+                  <AlertTriangle className="size-3.5 text-amber-500" />
+                  Red Flag Alerts
+                </h3>
+                {kpiFlags.length > 0 ? (
+                  <div className="space-y-2">
+                    {kpiFlags.map((flag, i) => (
+                      <div
+                        key={i}
+                        className={`flex items-start gap-2 rounded-md p-2.5 text-xs ${
+                          flag.severity === "critical"
+                            ? "bg-red-50 border border-red-200"
+                            : "bg-amber-50 border border-amber-200"
+                        }`}
+                      >
+                        <AlertTriangle
+                          className={`mt-0.5 size-3.5 shrink-0 ${
+                            flag.severity === "critical" ? "text-red-500" : "text-amber-500"
+                          }`}
+                        />
+                        <span className="text-gray-700">{flag.message}</span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-xs text-green-600 flex items-center gap-1.5">
+                    <CheckCircle2 className="size-3.5" />
+                    No red flags detected
+                  </p>
                 )}
               </div>
             </div>

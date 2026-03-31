@@ -23,6 +23,7 @@ export const AVAILABLE_TOKENS = {
   "{{senderName}}": "Sending recruiter's name",
   "{{senderEmail}}": "Sending recruiter's email",
   "{{unsubscribeLink}}": "GDPR unsubscribe link",
+  "{{booking_link}}": "Your meeting booking page URL",
 } as const;
 
 export type TokenKey = keyof typeof AVAILABLE_TOKENS;

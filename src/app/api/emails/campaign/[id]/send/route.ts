@@ -189,6 +189,12 @@ export async function POST(request: NextRequest, context: RouteContext) {
           const unsubscribeLink = generateUnsubscribeLink(recipient.email);
           recipient.tokenData["{{unsubscribeLink}}"] = unsubscribeLink;
 
+          // Add booking link token
+          if (user?.bookingEnabled && userId) {
+            const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://oscabe.com";
+            recipient.tokenData["{{booking_link}}"] = `${baseUrl}/book/${userId}`;
+          }
+
           // Replace tokens in subject and body
           const personalizedSubject = replaceTokens(campaign.subject, recipient.tokenData);
           const personalizedBody = replaceTokens(campaign.body, recipient.tokenData);

@@ -258,20 +258,64 @@ function GeneralTab() {
   );
 }
 
-// ─── Booking Link Section ──────────────────────────────────────────────
+// ─── Booking Configuration Section ────────────────────────────────────
+
+const DAY_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const DURATION_OPTIONS = [15, 30, 45, 60];
+const BUFFER_OPTIONS = [0, 5, 10, 15, 30];
+
+interface SlotConfig {
+  dayOfWeek: number;
+  startTime: string;
+  endTime: string;
+  slotDuration: number;
+  bufferTime: number;
+  isActive: boolean;
+}
 
 function BookingLinkSection() {
-  const [bookingLink, setBookingLink] = useState("");
   const [bookingEnabled, setBookingEnabled] = useState(false);
+  const [slots, setSlots] = useState<SlotConfig[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    fetch("/api/user/booking")
-      .then((r) => r.json())
-      .then((data) => {
-        setBookingLink(data.bookingLink || "");
-        setBookingEnabled(data.bookingEnabled);
+    Promise.all([
+      fetch("/api/booking/config").then((r) => r.json()),
+      fetch("/api/user/me").then((r) => r.json()).catch(() => null),
+    ])
+      .then(([config, me]) => {
+        setBookingEnabled(config.bookingEnabled || false);
+        if (me?.id) setUserId(me.id);
+
+        if (config.slots && config.slots.length > 0) {
+          setSlots(
+            config.slots.map((s: SlotConfig & { id?: string }) => ({
+              dayOfWeek: s.dayOfWeek,
+              startTime: s.startTime,
+              endTime: s.endTime,
+              slotDuration: s.slotDuration,
+              bufferTime: s.bufferTime,
+              isActive: s.isActive,
+            }))
+          );
+        } else {
+          // Default: Mon-Fri 9-17, 30min, 15min buffer
+          const defaults: SlotConfig[] = [];
+          for (let d = 1; d <= 5; d++) {
+            defaults.push({
+              dayOfWeek: d,
+              startTime: "09:00",
+              endTime: "17:00",
+              slotDuration: 30,
+              bufferTime: 15,
+              isActive: true,
+            });
+          }
+          setSlots(defaults);
+        }
         setLoading(false);
       })
       .catch(() => {
@@ -279,13 +323,48 @@ function BookingLinkSection() {
       });
   }, []);
 
-  async function handleSaveBooking() {
+  function updateSlot(dayOfWeek: number, field: keyof SlotConfig, value: unknown) {
+    setSlots((prev) =>
+      prev.map((s) =>
+        s.dayOfWeek === dayOfWeek ? { ...s, [field]: value } : s
+      )
+    );
+  }
+
+  function toggleDay(dayOfWeek: number) {
+    const exists = slots.find((s) => s.dayOfWeek === dayOfWeek);
+    if (exists) {
+      updateSlot(dayOfWeek, "isActive", !exists.isActive);
+    } else {
+      setSlots((prev) => [
+        ...prev,
+        {
+          dayOfWeek,
+          startTime: "09:00",
+          endTime: "17:00",
+          slotDuration: slots[0]?.slotDuration || 30,
+          bufferTime: slots[0]?.bufferTime || 15,
+          isActive: true,
+        },
+      ]);
+    }
+  }
+
+  // Batch update duration/buffer across all active slots
+  function updateAllDuration(val: number) {
+    setSlots((prev) => prev.map((s) => ({ ...s, slotDuration: val })));
+  }
+  function updateAllBuffer(val: number) {
+    setSlots((prev) => prev.map((s) => ({ ...s, bufferTime: val })));
+  }
+
+  async function handleSave() {
     setSaving(true);
     try {
-      const res = await fetch("/api/user/booking", {
+      const res = await fetch("/api/booking/config", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ bookingLink, bookingEnabled }),
+        body: JSON.stringify({ slots, bookingEnabled }),
       });
       if (!res.ok) throw new Error();
       toast.success("Booking settings saved");
@@ -296,41 +375,142 @@ function BookingLinkSection() {
     }
   }
 
+  function copyLink() {
+    if (!userId) return;
+    const url = `${window.location.origin}/book/${userId}`;
+    navigator.clipboard.writeText(url);
+    setCopied(true);
+    toast.success("Booking link copied!");
+    setTimeout(() => setCopied(false), 2000);
+  }
+
   if (loading) return null;
 
+  const currentDuration = slots[0]?.slotDuration || 30;
+  const currentBuffer = slots[0]?.bufferTime || 15;
+
   return (
-    <div className="mt-8 border-t pt-6 space-y-4">
-      <div className="flex items-center gap-2">
-        <CalendarDays className="size-5 text-indigo-600" />
-        <h3 className="text-sm font-semibold text-gray-900">
-          Meeting Booking Link
-        </h3>
-      </div>
-      <p className="text-xs text-muted-foreground">
-        Set your Calendly, Cal.com, or other booking link. When enabled, it will be available as a {"{booking_link}"} token in email templates and auto-included in positive response follow-ups.
-      </p>
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div className="space-y-2">
-          <Label htmlFor="bookingLink">Booking URL</Label>
-          <Input
-            id="bookingLink"
-            type="url"
-            value={bookingLink}
-            onChange={(e) => setBookingLink(e.target.value)}
-            placeholder="https://calendly.com/your-name"
-          />
+    <div className="mt-8 border-t pt-6 space-y-5">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <CalendarDays className="size-5 text-indigo-600" />
+          <h3 className="text-sm font-semibold text-gray-900">
+            Meeting Booking
+          </h3>
         </div>
-        <div className="flex items-center gap-3 pt-6">
+        <div className="flex items-center gap-3">
           <Switch
             checked={bookingEnabled}
             onCheckedChange={setBookingEnabled}
           />
           <Label className="text-sm">
-            {bookingEnabled ? "Booking link enabled" : "Booking link disabled"}
+            {bookingEnabled ? "Enabled" : "Disabled"}
           </Label>
         </div>
       </div>
-      <Button variant="outline" onClick={handleSaveBooking} disabled={saving}>
+
+      <p className="text-xs text-muted-foreground">
+        Configure your availability for meeting bookings. When enabled, your booking page will be accessible at the link below, and {"{booking_link}"} will work in email templates.
+      </p>
+
+      {/* Booking Link Preview */}
+      {userId && (
+        <div className="flex items-center gap-2 rounded-lg border bg-gray-50 p-3">
+          <span className="flex-1 truncate text-xs text-gray-600 font-mono">
+            {typeof window !== "undefined" ? window.location.origin : "https://oscabe.com"}/book/{userId}
+          </span>
+          <Button variant="outline" size="sm" onClick={copyLink} className="shrink-0">
+            {copied ? "Copied!" : "Copy Link"}
+          </Button>
+        </div>
+      )}
+
+      {/* Duration & Buffer */}
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="space-y-2">
+          <Label>Slot Duration</Label>
+          <Select
+            value={String(currentDuration)}
+            onValueChange={(v) => updateAllDuration(Number(v))}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {DURATION_OPTIONS.map((d) => (
+                <SelectItem key={d} value={String(d)}>
+                  {d} minutes
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="space-y-2">
+          <Label>Buffer Between Meetings</Label>
+          <Select
+            value={String(currentBuffer)}
+            onValueChange={(v) => updateAllBuffer(Number(v))}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {BUFFER_OPTIONS.map((b) => (
+                <SelectItem key={b} value={String(b)}>
+                  {b === 0 ? "No buffer" : `${b} minutes`}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
+      {/* Day-by-day availability */}
+      <div className="space-y-2">
+        <Label>Availability</Label>
+        <div className="space-y-1.5">
+          {[1, 2, 3, 4, 5, 6, 0].map((dayIdx) => {
+            const slot = slots.find((s) => s.dayOfWeek === dayIdx);
+            const isActive = slot?.isActive ?? false;
+            return (
+              <div
+                key={dayIdx}
+                className="flex items-center gap-3 rounded-lg border px-3 py-2"
+              >
+                <Switch
+                  checked={isActive}
+                  onCheckedChange={() => toggleDay(dayIdx)}
+                  size="sm"
+                />
+                <span className={`w-20 text-xs font-medium ${isActive ? "text-gray-900" : "text-gray-400"}`}>
+                  {DAY_NAMES[dayIdx]}
+                </span>
+                {isActive && slot ? (
+                  <div className="flex items-center gap-2">
+                    <Input
+                      type="time"
+                      value={slot.startTime}
+                      onChange={(e) => updateSlot(dayIdx, "startTime", e.target.value)}
+                      className="h-7 w-28 text-xs"
+                    />
+                    <span className="text-xs text-gray-400">to</span>
+                    <Input
+                      type="time"
+                      value={slot.endTime}
+                      onChange={(e) => updateSlot(dayIdx, "endTime", e.target.value)}
+                      className="h-7 w-28 text-xs"
+                    />
+                  </div>
+                ) : (
+                  <span className="text-xs text-gray-400">Unavailable</span>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <Button onClick={handleSave} disabled={saving}>
         {saving ? (
           <Loader2 className="size-4 animate-spin" />
         ) : (
