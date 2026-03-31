@@ -32,6 +32,8 @@ model User {
   assignedClients Client[]  @relation("AssignedSales")
   referrals     Referral[]  @relation("UserReferrals")
   interviewerInterviews Interview[] @relation("InterviewerInterviews")
+  workSessions  EmployeeWorkSession[]
+  notifications Notification[]
 }
 
 model Employer {
@@ -651,4 +653,60 @@ model Interview {
   completedAt     DateTime?
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
+}
+
+// ======== ATTENDANCE & WORK SESSION TRACKING ========
+
+model EmployeeWorkSession {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date            DateTime @default(now())
+  checkInAt       DateTime
+  checkOutAt      DateTime?
+  workLocation    String   @default("HOME")
+  checkInNote     String?
+  checkOutSummary String?
+  totalMinutes    Int?
+  activeMinutes   Int?
+  idleMinutes     Int?
+  breakMinutes    Int?
+  status          String   @default("CHECKED_IN")
+
+  activities      EmployeeActivity[]
+  breaks          EmployeeBreak[]
+
+  @@index([userId, date])
+}
+
+model EmployeeActivity {
+  id            String   @id @default(cuid())
+  sessionId     String
+  session       EmployeeWorkSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  type          String
+  startedAt     DateTime @default(now())
+  endedAt       DateTime?
+  durationMin   Int?
+  description   String?
+}
+
+model EmployeeBreak {
+  id          String   @id @default(cuid())
+  sessionId   String
+  session     EmployeeWorkSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  startedAt   DateTime @default(now())
+  endedAt     DateTime?
+  reason      String?
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  title     String
+  message   String
+  type      String   @default("INFO")
+  read      Boolean  @default(false)
+  link      String?
+  createdAt DateTime @default(now())
 }

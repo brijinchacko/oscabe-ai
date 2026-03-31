@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
@@ -8,6 +8,8 @@ import { Logo } from "@/components/shared/logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CRMAuthGuard } from "@/components/crm/crm-auth-guard";
+import { AttendanceHeader } from "@/components/crm/attendance-header";
+import { AttendanceHeartbeat } from "@/components/crm/attendance-heartbeat";
 import {
   LayoutDashboard,
   Building2,
@@ -28,6 +30,7 @@ import {
   Bell,
   Plus,
   LogOut,
+  Clock,
 } from "lucide-react";
 
 const NAV_ITEMS = [
@@ -41,6 +44,7 @@ const NAV_ITEMS = [
   { label: "Emails", href: "/crm/emails", icon: Mail },
   { label: "Outreach", href: "/crm/outreach", icon: Megaphone },
   { label: "Compliance", href: "/crm/compliance", icon: Shield },
+  { label: "Attendance", href: "/crm/attendance", icon: Clock },
   { label: "Reports", href: "/crm/reports", icon: BarChart3 },
   { label: "Settings", href: "/crm/settings", icon: Settings },
   { label: "Admin", href: "/crm/admin", icon: ShieldCheck },
@@ -48,9 +52,30 @@ const NAV_ITEMS = [
 
 export default function CRMLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [hasActiveSession, setHasActiveSession] = useState(false);
   const pathname = usePathname();
   const { data: session } = useSession();
   const user = session?.user;
+
+  // Check if user has an active attendance session for the heartbeat
+  useEffect(() => {
+    async function checkSession() {
+      try {
+        const res = await fetch("/api/attendance");
+        if (res.ok) {
+          const data = await res.json();
+          setHasActiveSession(
+            data.session && data.session.status !== "CHECKED_OUT"
+          );
+        }
+      } catch {
+        // silently fail
+      }
+    }
+    checkSession();
+    const interval = setInterval(checkSession, 60000);
+    return () => clearInterval(interval);
+  }, []);
 
   function isActive(href: string) {
     if (href === "/crm") return pathname === "/crm";
@@ -147,8 +172,14 @@ export default function CRMLayout({ children }: { children: React.ReactNode }) {
       {/* Desktop sidebar */}
       <aside className="hidden w-64 shrink-0 lg:block">{sidebar}</aside>
 
+      {/* Headless heartbeat tracker */}
+      <AttendanceHeartbeat hasActiveSession={hasActiveSession} />
+
       {/* Main area */}
       <div className="flex flex-1 flex-col overflow-hidden">
+        {/* Attendance sticky header */}
+        <AttendanceHeader />
+
         {/* Top header bar */}
         <header className="flex h-16 shrink-0 items-center gap-4 border-b border-gray-200 bg-white px-4 sm:px-6">
           {/* Mobile hamburger */}
