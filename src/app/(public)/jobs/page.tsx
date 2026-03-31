@@ -320,15 +320,15 @@ export default function JobsPage() {
                 </p>
               </div>
             ) : (
-              <div className="space-y-4">
+              <div className="space-y-5">
                 {jobs.map((job) => {
                   // Company hidden for confidentiality
                   const posted = job.postedAt || job.createdAt;
                   const daysAgo = posted ? Math.floor((Date.now() - new Date(posted).getTime()) / 86400000) : null;
 
                   return (
-                    <Link key={job.id} href={`/jobs/${job.id}`}>
-                      <div className="group rounded-xl border border-white/[0.08] bg-white/[0.03] p-5 backdrop-blur-sm transition-all hover:border-[#4540DB]/30 hover:bg-white/[0.06]">
+                    <Link key={job.id} href={`/jobs/${job.id}`} className="block">
+                      <div className="group rounded-xl border border-white/[0.08] bg-white/[0.03] p-6 backdrop-blur-sm transition-all hover:border-[#4540DB]/30 hover:bg-white/[0.06]">
                         <div className="flex items-start justify-between gap-4">
                           <div className="min-w-0 flex-1">
                             <h3 className="text-lg font-semibold text-white group-hover:text-[#4540DB] transition-colors">

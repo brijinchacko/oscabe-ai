@@ -115,6 +115,22 @@ export async function POST(req: NextRequest) {
       `,
     });
 
+    // Notify all ADMIN users
+    const admins = await prisma.user.findMany({ where: { role: "ADMIN" }, select: { id: true } });
+    await Promise.all(
+      admins.map((admin) =>
+        prisma.notification.create({
+          data: {
+            userId: admin.id,
+            title: "New Screening Order",
+            message: `Screening order for ${data.candidateName} - ${data.roleTitle} (${data.screeningType}).`,
+            type: "LEAD",
+            link: "/crm/leads",
+          },
+        })
+      )
+    ).catch(() => {});
+
     // Also notify OSCABE team
     await sendEmail({
       to: "info@oscabe.com",

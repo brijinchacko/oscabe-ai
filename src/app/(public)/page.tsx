@@ -58,13 +58,13 @@ export default function HomePage() {
   const [heroRef, heroVisible] = useInView(0.05);
 
   return (
-    <div className="overflow-x-hidden bg-[#010118]">
+    <div className="bg-[#010118]">
       {/* ============================================================ */}
       {/*  SECTION 1 - HERO                                            */}
       {/* ============================================================ */}
       <section
         ref={heroRef}
-        className="relative overflow-hidden"
+        className="relative overflow-x-clip"
       >
         {/* Background effects */}
         <div className="pointer-events-none absolute -top-40 -left-40 h-[600px] w-[600px] rounded-full bg-[#4540DB]/10 blur-[150px]" />

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { sendEmail } from "@/lib/resend";
 
 export async function POST(req: NextRequest) {
   try {
@@ -26,32 +27,61 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // Try to send email via Resend (gracefully fail if not configured)
-    try {
-      if (process.env.RESEND_API_KEY) {
-        const { Resend } = await import("resend");
-        const resend = new Resend(process.env.RESEND_API_KEY);
-        await resend.emails.send({
-          from: process.env.RESEND_FROM_EMAIL || "noreply@oscabe.com",
-          to: "info@oscabe.com",
-          subject: `New Contact Form: ${enquiryType || "General"} from ${name}`,
-          html: `
-            <h2>New Contact Form Submission</h2>
-            <p><strong>Name:</strong> ${name}</p>
-            <p><strong>Email:</strong> ${email}</p>
-            <p><strong>Phone:</strong> ${phone || "Not provided"}</p>
-            <p><strong>Company:</strong> ${company || "Not provided"}</p>
-            <p><strong>Type:</strong> ${enquiryType || "General"}</p>
-            <p><strong>Message:</strong></p>
-            <p>${message}</p>
-          `,
-        });
-      } else {
-        console.log("Resend not configured. Contact form submission:", { name, email, phone, company, enquiryType, message });
-      }
-    } catch (emailError) {
-      console.error("Failed to send email:", emailError);
-    }
+    // Create Activity record
+    await prisma.activity.create({
+      data: {
+        type: "CONTACT_FORM",
+        title: `New contact form: ${name}`,
+        content: JSON.stringify({
+          name,
+          email,
+          phone: phone || null,
+          company: company || null,
+          enquiryType: enquiryType || "General",
+          message,
+          status: "NEW",
+        }),
+        metadata: JSON.stringify({
+          email,
+          company: company || null,
+          enquiryType: enquiryType || "General",
+        }),
+      },
+    });
+
+    // Notify all ADMIN users
+    const admins = await prisma.user.findMany({ where: { role: "ADMIN" }, select: { id: true } });
+    await Promise.all(
+      admins.map((admin) =>
+        prisma.notification.create({
+          data: {
+            userId: admin.id,
+            title: "New Contact Form Submission",
+            message: `${name} (${email}) submitted a contact form — ${enquiryType || "General"}.`,
+            type: "LEAD",
+            link: "/crm/leads",
+          },
+        })
+      )
+    ).catch(() => {});
+
+    // Send email notification to OSCABE team
+    await sendEmail({
+      to: "info@oscabe.com",
+      subject: `New Contact Form Submission - ${name}`,
+      html: `
+        <h2>New Contact Form Submission</h2>
+        <table style="width:100%;border-collapse:collapse;margin:16px 0;">
+          <tr><td style="padding:8px;border-bottom:1px solid #eee;color:#666;">Name</td><td style="padding:8px;border-bottom:1px solid #eee;font-weight:bold;">${name}</td></tr>
+          <tr><td style="padding:8px;border-bottom:1px solid #eee;color:#666;">Email</td><td style="padding:8px;border-bottom:1px solid #eee;font-weight:bold;">${email}</td></tr>
+          <tr><td style="padding:8px;border-bottom:1px solid #eee;color:#666;">Phone</td><td style="padding:8px;border-bottom:1px solid #eee;font-weight:bold;">${phone || "Not provided"}</td></tr>
+          <tr><td style="padding:8px;border-bottom:1px solid #eee;color:#666;">Company</td><td style="padding:8px;border-bottom:1px solid #eee;font-weight:bold;">${company || "Not provided"}</td></tr>
+          <tr><td style="padding:8px;border-bottom:1px solid #eee;color:#666;">Enquiry Type</td><td style="padding:8px;border-bottom:1px solid #eee;font-weight:bold;">${enquiryType || "General"}</td></tr>
+        </table>
+        <h3>Message</h3>
+        <p>${message}</p>
+      `,
+    }).catch(() => {});
 
     return NextResponse.json({ success: true, message: "Thank you for your message. We'll be in touch shortly." });
   } catch (error) {

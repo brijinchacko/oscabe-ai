@@ -97,6 +97,39 @@ export async function POST(request: NextRequest) {
       },
     });
 
+    // Notify all ADMIN users
+    const admins = await prisma.user.findMany({ where: { role: "ADMIN" }, select: { id: true } });
+    await Promise.all(
+      admins.map((admin) =>
+        prisma.notification.create({
+          data: {
+            userId: admin.id,
+            title: "New Referral Submitted",
+            message: `${data.referrerName} referred ${data.candidateName} (${data.candidateEmail}).`,
+            type: "LEAD",
+            link: "/crm/referrals",
+          },
+        })
+      )
+    ).catch(() => {});
+
+    // Send email notification to OSCABE team
+    await sendEmail({
+      to: "info@oscabe.com",
+      subject: `New Referral Submitted - ${data.candidateName} by ${data.referrerName}`,
+      html: `
+        <h2>New Referral Submission</h2>
+        <table style="width:100%;border-collapse:collapse;margin:16px 0;">
+          <tr><td style="padding:8px;border-bottom:1px solid #eee;color:#666;">Referrer</td><td style="padding:8px;border-bottom:1px solid #eee;font-weight:bold;">${data.referrerName} (${data.referrerEmail})</td></tr>
+          <tr><td style="padding:8px;border-bottom:1px solid #eee;color:#666;">Candidate</td><td style="padding:8px;border-bottom:1px solid #eee;font-weight:bold;">${data.candidateName} (${data.candidateEmail})</td></tr>
+          <tr><td style="padding:8px;border-bottom:1px solid #eee;color:#666;">Candidate Phone</td><td style="padding:8px;border-bottom:1px solid #eee;font-weight:bold;">${data.candidatePhone || "Not provided"}</td></tr>
+          <tr><td style="padding:8px;border-bottom:1px solid #eee;color:#666;">Role</td><td style="padding:8px;border-bottom:1px solid #eee;font-weight:bold;">${data.candidateRole || "Not specified"}</td></tr>
+          <tr><td style="padding:8px;border-bottom:1px solid #eee;color:#666;">Referral Code</td><td style="padding:8px;border-bottom:1px solid #eee;font-weight:bold;">${referralCode}</td></tr>
+          <tr><td style="padding:8px;border-bottom:1px solid #eee;color:#666;">Notes</td><td style="padding:8px;border-bottom:1px solid #eee;font-weight:bold;">${data.notes || "None"}</td></tr>
+        </table>
+      `,
+    }).catch(() => {});
+
     // Send confirmation email to referrer
     await sendEmail({
       to: data.referrerEmail,

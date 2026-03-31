@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { auth } from "@/auth";
+import { sendEmail } from "@/lib/resend";
 
 export async function POST(req: NextRequest) {
   try {
@@ -104,40 +105,72 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // Send notification email via Resend (or log if not configured)
-    try {
-      if (process.env.RESEND_API_KEY) {
-        const { Resend } = await import("resend");
-        const resend = new Resend(process.env.RESEND_API_KEY);
-        await resend.emails.send({
-          from: process.env.RESEND_FROM_EMAIL || "noreply@oscabe.com",
-          to: "info@oscabe.com",
-          subject: `New Role Posted: ${roleTitle} at ${companyName}`,
-          html: `
-            <h2>New Role Submission</h2>
-            <p><strong>Company:</strong> ${companyName}</p>
-            <p><strong>Contact:</strong> ${contactName}</p>
-            <p><strong>Email:</strong> ${email}</p>
-            <p><strong>Phone:</strong> ${phone || "Not provided"}</p>
-            <p><strong>Role:</strong> ${roleTitle}</p>
-            <p><strong>Location:</strong> ${location || "Not specified"}${remote ? " (Remote)" : ""}</p>
-            <p><strong>Contract Type:</strong> ${contractType || "Permanent"}</p>
-            <p><strong>Description:</strong></p>
-            <p>${description}</p>
-          `,
-        });
-      } else {
-        console.log("Resend not configured. New role posted:", {
+    // Create Activity record
+    await prisma.activity.create({
+      data: {
+        type: "JOB_POSTED",
+        title: `New role posted: ${roleTitle} at ${companyName}`,
+        content: JSON.stringify({
           companyName,
           contactName,
           email,
+          phone: phone || null,
           roleTitle,
+          location: location || null,
+          remote: remote || false,
+          contractType: contractType || "PERMANENT",
+          salaryMin: salaryMin || null,
+          salaryMax: salaryMax || null,
+          dayRateMin: dayRateMin || null,
+          dayRateMax: dayRateMax || null,
+          industry: industry || null,
+          description,
+          status: "NEW",
+        }),
+        jobId: job.id,
+        metadata: JSON.stringify({
+          email,
+          companyName,
           jobId: job.id,
-        });
-      }
-    } catch (emailError) {
-      console.error("Failed to send notification email:", emailError);
-    }
+        }),
+      },
+    });
+
+    // Notify all ADMIN users
+    const admins = await prisma.user.findMany({ where: { role: "ADMIN" }, select: { id: true } });
+    await Promise.all(
+      admins.map((admin) =>
+        prisma.notification.create({
+          data: {
+            userId: admin.id,
+            title: "New Role Posted",
+            message: `New role posted: ${roleTitle} at ${companyName} by ${contactName}.`,
+            type: "LEAD",
+            link: `/crm/jobs/${job.id}`,
+          },
+        })
+      )
+    ).catch(() => {});
+
+    // Send email notification to OSCABE team
+    await sendEmail({
+      to: "info@oscabe.com",
+      subject: `New Role Posted: ${roleTitle} at ${companyName}`,
+      html: `
+        <h2>New Role Submission</h2>
+        <table style="width:100%;border-collapse:collapse;margin:16px 0;">
+          <tr><td style="padding:8px;border-bottom:1px solid #eee;color:#666;">Company</td><td style="padding:8px;border-bottom:1px solid #eee;font-weight:bold;">${companyName}</td></tr>
+          <tr><td style="padding:8px;border-bottom:1px solid #eee;color:#666;">Contact</td><td style="padding:8px;border-bottom:1px solid #eee;font-weight:bold;">${contactName}</td></tr>
+          <tr><td style="padding:8px;border-bottom:1px solid #eee;color:#666;">Email</td><td style="padding:8px;border-bottom:1px solid #eee;font-weight:bold;">${email}</td></tr>
+          <tr><td style="padding:8px;border-bottom:1px solid #eee;color:#666;">Phone</td><td style="padding:8px;border-bottom:1px solid #eee;font-weight:bold;">${phone || "Not provided"}</td></tr>
+          <tr><td style="padding:8px;border-bottom:1px solid #eee;color:#666;">Role</td><td style="padding:8px;border-bottom:1px solid #eee;font-weight:bold;">${roleTitle}</td></tr>
+          <tr><td style="padding:8px;border-bottom:1px solid #eee;color:#666;">Location</td><td style="padding:8px;border-bottom:1px solid #eee;font-weight:bold;">${location || "Not specified"}${remote ? " (Remote)" : ""}</td></tr>
+          <tr><td style="padding:8px;border-bottom:1px solid #eee;color:#666;">Contract Type</td><td style="padding:8px;border-bottom:1px solid #eee;font-weight:bold;">${contractType || "Permanent"}</td></tr>
+        </table>
+        <h3>Description</h3>
+        <p>${description}</p>
+      `,
+    }).catch(() => {});
 
     return NextResponse.json({
       success: true,

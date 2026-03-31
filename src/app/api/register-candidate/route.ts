@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod/v4";
 import prisma from "@/lib/prisma";
 import { auth } from "@/auth";
+import { sendEmail } from "@/lib/resend";
 
 const registerSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
@@ -26,6 +27,7 @@ const registerSchema = z.object({
   availableFrom: z.string().optional(),
   rightToWork: z.boolean().optional(),
   gdprConsent: z.literal(true, { message: "GDPR consent is required" }),
+  jobId: z.string().optional(),
 });
 
 export async function POST(req: NextRequest) {
@@ -150,13 +152,90 @@ export async function POST(req: NextRequest) {
     // Activity log
     await prisma.activity.create({
       data: {
-        type: "REGISTRATION",
-        title: "New candidate registered",
-        content: `${data.firstName} ${data.lastName} (${data.email}) registered via the website.`,
+        type: "CANDIDATE_REGISTERED",
+        title: `New candidate: ${data.firstName} ${data.lastName}`,
+        content: JSON.stringify({
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+          phone: data.phone || null,
+          location: data.location || null,
+          specialism: data.specialism || null,
+          industry: data.industry || null,
+          headline: data.headline || null,
+          contractType: data.contractType || null,
+          status: "NEW",
+        }),
         candidateId: candidate.id,
         userId: linkedUserId || null,
+        metadata: JSON.stringify({
+          email: data.email,
+          candidateId: candidate.id,
+        }),
       },
     });
+
+    // If candidate applied for a specific job, create an Application
+    if (data.jobId) {
+      try {
+        const job = await prisma.job.findUnique({ where: { id: data.jobId } });
+        if (job) {
+          await prisma.application.create({
+            data: {
+              candidateId: candidate.id,
+              jobId: job.id,
+              stage: "SOURCED",
+              notes: `Applied via website registration`,
+            },
+          });
+          await prisma.activity.create({
+            data: {
+              type: "APPLICATION",
+              title: `Applied for: ${job.title}`,
+              content: `${data.firstName} ${data.lastName} applied for ${job.title} via the website.`,
+              candidateId: candidate.id,
+              jobId: job.id,
+            },
+          });
+        }
+      } catch {}
+    }
+
+    // Notify all ADMIN users
+    const admins = await prisma.user.findMany({ where: { role: "ADMIN" }, select: { id: true } });
+    await Promise.all(
+      admins.map((admin) =>
+        prisma.notification.create({
+          data: {
+            userId: admin.id,
+            title: "New Candidate Registered",
+            message: `${data.firstName} ${data.lastName} (${data.email}) registered via the website.`,
+            type: "LEAD",
+            link: `/crm/candidates/${candidate.id}`,
+          },
+        })
+      )
+    ).catch(() => {});
+
+    // Send email notification to OSCABE team
+    await sendEmail({
+      to: "info@oscabe.com",
+      subject: `New Candidate Registration - ${data.firstName} ${data.lastName}`,
+      html: `
+        <h2>New Candidate Registration</h2>
+        <table style="width:100%;border-collapse:collapse;margin:16px 0;">
+          <tr><td style="padding:8px;border-bottom:1px solid #eee;color:#666;">Name</td><td style="padding:8px;border-bottom:1px solid #eee;font-weight:bold;">${data.firstName} ${data.lastName}</td></tr>
+          <tr><td style="padding:8px;border-bottom:1px solid #eee;color:#666;">Email</td><td style="padding:8px;border-bottom:1px solid #eee;font-weight:bold;">${data.email}</td></tr>
+          <tr><td style="padding:8px;border-bottom:1px solid #eee;color:#666;">Phone</td><td style="padding:8px;border-bottom:1px solid #eee;font-weight:bold;">${data.phone || "Not provided"}</td></tr>
+          <tr><td style="padding:8px;border-bottom:1px solid #eee;color:#666;">Location</td><td style="padding:8px;border-bottom:1px solid #eee;font-weight:bold;">${data.location || "Not specified"}</td></tr>
+          <tr><td style="padding:8px;border-bottom:1px solid #eee;color:#666;">Specialism</td><td style="padding:8px;border-bottom:1px solid #eee;font-weight:bold;">${data.specialism || "Not specified"}</td></tr>
+          <tr><td style="padding:8px;border-bottom:1px solid #eee;color:#666;">Industry</td><td style="padding:8px;border-bottom:1px solid #eee;font-weight:bold;">${data.industry || "Not specified"}</td></tr>
+          <tr><td style="padding:8px;border-bottom:1px solid #eee;color:#666;">Headline</td><td style="padding:8px;border-bottom:1px solid #eee;font-weight:bold;">${data.headline || "Not provided"}</td></tr>
+          <tr><td style="padding:8px;border-bottom:1px solid #eee;color:#666;">Contract Type</td><td style="padding:8px;border-bottom:1px solid #eee;font-weight:bold;">${data.contractType || "Not specified"}</td></tr>
+        </table>
+        <p><strong>Candidate ID:</strong> ${candidate.id}</p>
+      `,
+    }).catch(() => {});
 
     // Push to Zoho (fire-and-forget)
     try {

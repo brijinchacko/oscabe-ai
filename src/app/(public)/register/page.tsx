@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect, type FormEvent } from "react";
+import { useState, useEffect, type FormEvent, Suspense } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import {
   Loader2,
@@ -143,6 +144,18 @@ const NOTICE_PERIODS = [
 // ── Page Component ──────────────────────────────────────────────────
 
 export default function RegisterPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#010118]" />}>
+      <RegisterForm />
+    </Suspense>
+  );
+}
+
+function RegisterForm() {
+  const searchParams = useSearchParams();
+  const jobId = searchParams.get("jobId");
+  const jobTitle = searchParams.get("jobTitle");
+
   const [step, setStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -290,6 +303,7 @@ export default function RegisterPage() {
         availableFrom: form.availableFrom || undefined,
         rightToWork: form.rightToWork,
         gdprConsent: form.gdprConsent,
+        jobId: jobId || undefined,
       };
 
       const res = await fetch("/api/register-candidate", {
@@ -417,6 +431,16 @@ export default function RegisterPage() {
             })}
           </div>
         </div>
+
+        {/* Job application banner */}
+        {jobTitle && (
+          <div className="mb-4 rounded-xl border border-[#4540DB]/30 bg-[#4540DB]/10 px-5 py-3">
+            <p className="text-sm text-[#4540DB]">
+              <span className="font-semibold">Applying for:</span> {decodeURIComponent(jobTitle)}
+            </p>
+            <p className="mt-0.5 text-xs text-gray-400">Complete your profile below to submit your application.</p>
+          </div>
+        )}
 
         {/* Form Card */}
         <form onSubmit={handleSubmit}>

@@ -10,8 +10,10 @@ import { Input } from "@/components/ui/input";
 import { CRMAuthGuard } from "@/components/crm/crm-auth-guard";
 import { AttendanceHeader } from "@/components/crm/attendance-header";
 import { AttendanceHeartbeat } from "@/components/crm/attendance-heartbeat";
+import { NotificationBell } from "@/components/crm/notification-bell";
 import {
   LayoutDashboard,
+  Inbox,
   Building2,
   Users,
   Briefcase,
@@ -45,6 +47,7 @@ const NAV_GROUPS: { label: string; items: NavItem[] }[] = [
     label: "MAIN",
     items: [
       { label: "Dashboard", href: "/crm", icon: LayoutDashboard },
+      { label: "Leads", href: "/crm/leads", icon: Inbox },
     ],
   },
   {
@@ -433,10 +436,7 @@ export default function CRMLayout({ children }: { children: React.ReactNode }) {
           </div>
 
           {/* Notification bell */}
-          <button className="relative rounded-md p-1.5 text-gray-500 hover:bg-gray-100 hover:text-gray-700">
-            <Bell className="size-5" />
-            <span className="absolute right-1 top-1 size-2 rounded-full bg-indigo-500" />
-          </button>
+          <NotificationBell />
         </header>
 
         {/* Page content */}
