@@ -2,7 +2,7 @@
 
 import Script from "next/script";
 import { usePathname } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
@@ -13,17 +13,38 @@ declare global {
   }
 }
 
+function getCookieConsent(): string | null {
+  if (typeof document === "undefined") return null;
+  const match = document.cookie.match(/OSCABE_COOKIE_CONSENT=([^;]+)/);
+  return match ? match[1] : null;
+}
+
 export function GoogleAnalytics() {
   const pathname = usePathname();
+  const [hasConsent, setHasConsent] = useState(false);
 
   useEffect(() => {
-    if (!GA_MEASUREMENT_ID || typeof window.gtag !== "function") return;
-    window.gtag("config", GA_MEASUREMENT_ID, {
-      page_path: pathname,
-    });
-  }, [pathname]);
+    const consent = getCookieConsent();
+    // Only load GA if user accepted "all" or "analytics"
+    setHasConsent(consent === "all" || (consent || "").includes("analytics"));
+  }, []);
 
-  if (!GA_MEASUREMENT_ID) return null;
+  // Listen for consent changes
+  useEffect(() => {
+    function handleConsent() {
+      const consent = getCookieConsent();
+      setHasConsent(consent === "all" || (consent || "").includes("analytics"));
+    }
+    window.addEventListener("cookie-consent-updated", handleConsent);
+    return () => window.removeEventListener("cookie-consent-updated", handleConsent);
+  }, []);
+
+  useEffect(() => {
+    if (!hasConsent || !GA_MEASUREMENT_ID || typeof window.gtag !== "function") return;
+    window.gtag("config", GA_MEASUREMENT_ID, { page_path: pathname });
+  }, [pathname, hasConsent]);
+
+  if (!GA_MEASUREMENT_ID || !hasConsent) return null;
 
   return (
     <>
@@ -39,9 +60,7 @@ export function GoogleAnalytics() {
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', '${GA_MEASUREMENT_ID}', {
-              page_path: window.location.pathname,
-            });
+            gtag('config', '${GA_MEASUREMENT_ID}', { page_path: window.location.pathname });
           `,
         }}
       />

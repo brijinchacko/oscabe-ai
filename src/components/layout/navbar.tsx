@@ -36,7 +36,7 @@ const MODE_CONFIG: Record<SiteMode, {
       { label: "Home", href: "/" },
       { label: "How It Works", href: "/employers" },
       { label: "Industries", href: "/industries" },
-      { label: "Case Studies", href: "/pricing" },
+      { label: "Pricing", href: "/pricing" },
       { label: "About", href: "/about" },
       { label: "Contact", href: "/contact" },
     ],

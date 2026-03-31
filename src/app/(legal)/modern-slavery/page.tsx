@@ -19,9 +19,10 @@ export default function ModernSlaveryPage() {
         and share its values of ethical business conduct, transparency, and respect for human rights.
       </p>
       <p>
-        This statement is made pursuant to Section 54 of the Modern Slavery Act 2015 and sets out
-        the steps we have taken, and continue to take, to ensure that modern slavery and human
-        trafficking are not taking place within our business or supply chain.
+        This is a voluntary statement made in the spirit of the Modern Slavery Act 2015. Although
+        we are not required to publish a statement under Section 54, we believe it is important to
+        set out the steps we have taken, and continue to take, to ensure that modern slavery and
+        human trafficking are not taking place within our business or supply chain.
       </p>
 
       <h2 className="mt-10 text-xl font-semibold text-gray-900">Our Business</h2>

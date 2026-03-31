@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { Linkedin, Instagram, Facebook, Youtube } from "lucide-react";
 import { Logo } from "@/components/shared/logo";
@@ -134,6 +136,18 @@ export function Footer() {
                   </Link>
                 </li>
               ))}
+              <li>
+                <button
+                  onClick={() => {
+                    document.cookie = "OSCABE_COOKIE_CONSENT=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                    window.dispatchEvent(new Event("show-cookie-consent"));
+                    window.location.reload();
+                  }}
+                  className="text-sm text-gray-400 transition-colors hover:text-white cursor-pointer"
+                >
+                  Cookie Settings
+                </button>
+              </li>
             </ul>
           </div>
         </div>
@@ -142,7 +156,7 @@ export function Footer() {
         <div className="my-8 h-[1px] bg-white/[0.06]" />
         <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
           <p className="text-xs text-gray-500">
-            &copy; 2024 {COMPANY_NAME}. Company No. {COMPANY_NUMBER}. Registered
+            &copy; {new Date().getFullYear()} {COMPANY_NAME}. Company No. {COMPANY_NUMBER}. Registered
             in England &amp; Wales.
           </p>
           <p className="text-xs text-gray-500">
@@ -154,7 +168,7 @@ export function Footer() {
                   "linear-gradient(90deg, #4540DB, #00D4FF)",
               }}
             >
-              3BOX AI
+              OSCABE AI
             </span>
           </p>
         </div>
