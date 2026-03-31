@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { auth } from "@/auth";
+import { requireAuth } from "@/lib/auth-helpers";
 
 const LEAD_TYPES = [
   "CONTACT_FORM",
@@ -12,16 +12,10 @@ const LEAD_TYPES = [
 
 export async function GET(req: NextRequest) {
   try {
-    const session = await auth();
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const { user, error } = await requireAuth();
+    if (error) return error;
 
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-    });
-
-    if (!user || (user.role !== "ADMIN" && user.role !== "RECRUITER")) {
+    if (user.role !== "ADMIN" && user.role !== "RECRUITER") {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
@@ -85,16 +79,10 @@ export async function GET(req: NextRequest) {
 
 export async function PATCH(req: NextRequest) {
   try {
-    const session = await auth();
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const { user, error } = await requireAuth();
+    if (error) return error;
 
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-    });
-
-    if (!user || (user.role !== "ADMIN" && user.role !== "RECRUITER")) {
+    if (user.role !== "ADMIN" && user.role !== "RECRUITER") {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
