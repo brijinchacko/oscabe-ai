@@ -48,6 +48,8 @@ interface FormData {
   phone: string;
   location: string;
   linkedIn: string;
+  specialism: string;
+  industry: string;
   // Step 2
   headline: string;
   summary: string;
@@ -101,6 +103,35 @@ const COMMON_SKILLS = [
   "Commissioning",
 ];
 
+const SPECIALISM_OPTIONS = [
+  "PLC Programming",
+  "SCADA",
+  "Controls Engineering",
+  "Robotics",
+  "EC&I",
+  "Commissioning",
+  "Software Development",
+  "Data & AI",
+  "Business Operations",
+  "Project Management",
+  "Other",
+];
+
+const INDUSTRY_OPTIONS = [
+  "Automotive",
+  "Pharma",
+  "Water & Utilities",
+  "Oil & Gas",
+  "Food & Beverage",
+  "Power Generation",
+  "Building Automation",
+  "Manufacturing",
+  "Technology",
+  "Professional Services",
+  "Financial Services",
+  "Other",
+];
+
 const NOTICE_PERIODS = [
   { value: "immediate", label: "Immediate" },
   { value: "1_week", label: "1 Week" },
@@ -123,6 +154,8 @@ export default function RegisterPage() {
     phone: "",
     location: "",
     linkedIn: "",
+    specialism: "",
+    industry: "",
     headline: "",
     summary: "",
     cvText: "",
@@ -237,6 +270,8 @@ export default function RegisterPage() {
         phone: form.phone || undefined,
         location: form.location || undefined,
         linkedIn: form.linkedIn || undefined,
+        specialism: form.specialism || undefined,
+        industry: form.industry || undefined,
         headline: form.headline || undefined,
         summary: form.summary || undefined,
         cvText: form.cvText || undefined,
@@ -466,6 +501,45 @@ export default function RegisterPage() {
                     placeholder="https://linkedin.com/in/your-profile"
                     className="mt-1.5 border-white/10 bg-white/5 text-white placeholder:text-gray-500 focus:border-[#00D4FF] focus:ring-[#00D4FF]/20"
                   />
+                </div>
+
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <div>
+                    <Label className="text-gray-300">Specialism</Label>
+                    <Select
+                      value={form.specialism}
+                      onValueChange={(val) => updateField("specialism", val ?? "")}
+                    >
+                      <SelectTrigger className="mt-1.5 border-white/10 bg-white/5 text-white">
+                        <SelectValue placeholder="Select your specialism" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {SPECIALISM_OPTIONS.map((s) => (
+                          <SelectItem key={s} value={s}>
+                            {s}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label className="text-gray-300">Industry Experience</Label>
+                    <Select
+                      value={form.industry}
+                      onValueChange={(val) => updateField("industry", val ?? "")}
+                    >
+                      <SelectTrigger className="mt-1.5 border-white/10 bg-white/5 text-white">
+                        <SelectValue placeholder="Select your industry" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {INDUSTRY_OPTIONS.map((ind) => (
+                          <SelectItem key={ind} value={ind}>
+                            {ind}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
               </div>
             )}

@@ -322,7 +322,7 @@ export default function JobsPage() {
             ) : (
               <div className="space-y-4">
                 {jobs.map((job) => {
-                  const company = "Confidential";
+                  // Company hidden for confidentiality
                   const posted = job.postedAt || job.createdAt;
                   const daysAgo = posted ? Math.floor((Date.now() - new Date(posted).getTime()) / 86400000) : null;
 
@@ -334,24 +334,20 @@ export default function JobsPage() {
                             <h3 className="text-lg font-semibold text-white group-hover:text-[#4540DB] transition-colors">
                               {job.title}
                             </h3>
-                            <div className="mt-2 flex flex-wrap items-center gap-3 text-sm text-gray-400">
-                              <span className="flex items-center gap-1">
-                                <Building2 className="h-3.5 w-3.5" />
-                                {company}
-                              </span>
+                            <div className="mt-2 flex flex-wrap items-center gap-2.5 text-sm text-gray-400">
                               {job.location && (
                                 <span className="flex items-center gap-1">
-                                  <MapPin className="h-3.5 w-3.5" />
+                                  <MapPin className="h-3.5 w-3.5 text-gray-500" />
                                   {job.location}
                                 </span>
                               )}
                               {job.contractType && (
-                                <span className="rounded-full bg-[#4540DB]/15 px-2.5 py-0.5 text-xs font-medium text-[#4540DB]">
+                                <span className="rounded-full border border-[#4540DB]/30 bg-[#4540DB]/10 px-2.5 py-0.5 text-[11px] font-medium text-[#4540DB]">
                                   {job.contractType}
                                 </span>
                               )}
                               {job.remote && (
-                                <span className="rounded-full bg-[#00D4FF]/15 px-2.5 py-0.5 text-xs font-medium text-[#00D4FF]">
+                                <span className="rounded-full border border-[#00D4FF]/30 bg-[#00D4FF]/10 px-2.5 py-0.5 text-[11px] font-medium text-[#00D4FF]">
                                   Remote
                                 </span>
                               )}
@@ -367,7 +363,7 @@ export default function JobsPage() {
                             )}
                             {job.description && (
                               <p className="mt-2 line-clamp-2 text-sm text-gray-500">
-                                {job.description.substring(0, 200)}
+                                {job.description.replace(/^Job Title:[^]*?(?:About the Role:|About The Job|We are|The role|This is|Our client)/i, "").substring(0, 180).trim()}
                               </p>
                             )}
                           </div>

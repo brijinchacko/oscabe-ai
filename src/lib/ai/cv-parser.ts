@@ -30,6 +30,8 @@ Extract data from the CV text and return ONLY a JSON object with this exact stru
     }
   ],
   "certifications": ["string"],
+  "industry": "Primary industry experience: Automotive, Pharma, Water & Utilities, Oil & Gas, Food & Beverage, Power Generation, Building Automation, Manufacturing, Technology, Professional Services, Financial Services, or Other",
+  "specialism": "Primary technical specialism: PLC Programming, SCADA, Controls Engineering, Robotics, EC&I, Commissioning, Software Development, Data & AI, Business Operations, Project Management, or General",
   "salaryExpectation": number or null,
   "noticePeriod": "string or null",
   "rightToWork": true/false/null
@@ -40,6 +42,8 @@ RULES:
 - Differentiate: Siemens (TIA Portal, S7-300/400/1200/1500, WinCC, Step 7), Rockwell (Studio 5000, RSLogix, ControlLogix, CompactLogix, FactoryTalk), Schneider (Unity Pro, EcoStruxure, M340, M580)
 - Estimate proficiency: 80-95 if described as expert/lead/senior with deep detail, 60-79 if regular use, 40-59 if some experience, 20-39 if mentioned briefly
 - Extract ALL automation-relevant skills: PLC brands, SCADA systems, robotics (Fanuc, ABB, KUKA, UR), safety (SIL, IEC 61508, CompEx), protocols (Profinet, EtherNet/IP, Modbus, OPC UA), industry knowledge
+- For industry: Choose the BEST single match from: Automotive, Pharma, Water & Utilities, Oil & Gas, Food & Beverage, Power Generation, Building Automation, Manufacturing, Technology, Professional Services, Financial Services, Other. Base on the sectors they've worked in most.
+- For specialism: Choose the BEST single match from: PLC Programming, SCADA, Controls Engineering, Robotics, EC&I, Commissioning, Software Development, Data & AI, Business Operations, Project Management, General. Base on their primary technical focus.
 - Return ONLY the JSON object, no markdown, no explanation`;
 
 export interface ParsedCV {
@@ -65,6 +69,8 @@ export interface ParsedCV {
     description: string;
   }>;
   certifications: string[];
+  industry: string | null;
+  specialism: string | null;
   salaryExpectation: number | null;
   noticePeriod: string | null;
   rightToWork: boolean | null;

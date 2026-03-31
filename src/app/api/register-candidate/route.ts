@@ -10,6 +10,8 @@ const registerSchema = z.object({
   phone: z.string().optional(),
   location: z.string().optional(),
   linkedIn: z.string().optional(),
+  specialism: z.string().optional(),
+  industry: z.string().optional(),
   headline: z.string().optional(),
   summary: z.string().optional(),
   cvText: z.string().optional(),
@@ -78,6 +80,8 @@ export async function POST(req: NextRequest) {
         summary: data.summary || null,
         cvParsedData: data.cvText || null,
         linkedIn: data.linkedIn || null,
+        specialism: data.specialism || null,
+        industry: data.industry || null,
         salaryMin: data.salaryMin || null,
         salaryMax: data.salaryMax || null,
         dayRateMin: data.dayRateMin || null,
@@ -153,6 +157,22 @@ export async function POST(req: NextRequest) {
         userId: linkedUserId || null,
       },
     });
+
+    // Push to Zoho (fire-and-forget)
+    try {
+      const { createRecord, isZohoConfigured } = await import("@/lib/zoho");
+      if (isZohoConfigured()) {
+        createRecord("Candidates", {
+          First_Name: data.firstName,
+          Last_Name: data.lastName,
+          Email: data.email,
+          Phone: data.phone,
+          City: data.location,
+          Skill_Set: data.skillNames?.join(", ") || "",
+          Current_Job_Title: data.headline,
+        }).catch(() => {});
+      }
+    } catch {}
 
     // If user is signed in, update their role to CANDIDATE
     if (linkedUserId) {

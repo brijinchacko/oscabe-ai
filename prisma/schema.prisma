@@ -132,6 +132,8 @@ model Candidate {
   isVerified      Boolean  @default(false)
   isPremium       Boolean  @default(false)
   lastContactedAt DateTime?
+  industry        String?
+  specialism      String?
   notes           String?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt

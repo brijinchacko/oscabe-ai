@@ -86,6 +86,35 @@ const SOURCES = [
   "OTHER",
 ];
 
+const INDUSTRIES = [
+  "Automotive",
+  "Pharma",
+  "Water & Utilities",
+  "Oil & Gas",
+  "Food & Beverage",
+  "Power Generation",
+  "Building Automation",
+  "Manufacturing",
+  "Technology",
+  "Professional Services",
+  "Financial Services",
+  "Other",
+];
+
+const SPECIALISMS = [
+  "PLC Programming",
+  "SCADA",
+  "Controls Engineering",
+  "Robotics",
+  "EC&I",
+  "Commissioning",
+  "Software Development",
+  "Data & AI",
+  "Business Operations",
+  "Project Management",
+  "General",
+];
+
 function StatusBadge({ status }: { status: string }) {
   const colorClass = STATUS_COLORS[status] ?? "bg-gray-100 text-gray-800";
   return (
@@ -488,6 +517,8 @@ export default function CandidatesPage() {
   const [statusFilters, setStatusFilters] = useState<string[]>([]);
   const [locationFilter, setLocationFilter] = useState("");
   const [sourceFilter, setSourceFilter] = useState("");
+  const [industryFilter, setIndustryFilter] = useState("");
+  const [specialismFilter, setSpecialismFilter] = useState("");
 
   // Pagination
   const [pagination, setPagination] = useState<PaginationState>({
@@ -506,6 +537,8 @@ export default function CandidatesPage() {
       if (statusFilters.length === 1) params.set("status", statusFilters[0]);
       if (locationFilter) params.set("location", locationFilter);
       if (sourceFilter) params.set("source", sourceFilter);
+      if (industryFilter) params.set("industry", industryFilter);
+      if (specialismFilter) params.set("specialism", specialismFilter);
 
       const res = await fetch(`/api/candidates?${params.toString()}`);
       if (!res.ok) throw new Error("Failed to fetch");
@@ -517,7 +550,7 @@ export default function CandidatesPage() {
     } finally {
       setIsLoading(false);
     }
-  }, [pagination.page, pagination.pageSize, search, statusFilters, locationFilter, sourceFilter]);
+  }, [pagination.page, pagination.pageSize, search, statusFilters, locationFilter, sourceFilter, industryFilter, specialismFilter]);
 
   useEffect(() => {
     fetchCandidates();
@@ -544,7 +577,9 @@ export default function CandidatesPage() {
   const activeFilterCount =
     statusFilters.length +
     (locationFilter ? 1 : 0) +
-    (sourceFilter ? 1 : 0);
+    (sourceFilter ? 1 : 0) +
+    (industryFilter ? 1 : 0) +
+    (specialismFilter ? 1 : 0);
 
   return (
     <div className="space-y-6">
@@ -614,7 +649,7 @@ export default function CandidatesPage() {
         {filtersOpen && (
           <>
             <Separator className="my-3" />
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
               {/* Status checkboxes */}
               <div className="space-y-2">
                 <Label className="text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -677,6 +712,58 @@ export default function CandidatesPage() {
                 </Select>
               </div>
 
+              {/* Industry */}
+              <div className="space-y-2">
+                <Label className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Industry
+                </Label>
+                <Select
+                  value={industryFilter}
+                  onValueChange={(v) => {
+                    setIndustryFilter(v ?? "");
+                    setPagination((prev) => ({ ...prev, page: 1 }));
+                  }}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="All industries" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="">All industries</SelectItem>
+                    {INDUSTRIES.map((ind) => (
+                      <SelectItem key={ind} value={ind}>
+                        {ind}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Specialism */}
+              <div className="space-y-2">
+                <Label className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Specialism
+                </Label>
+                <Select
+                  value={specialismFilter}
+                  onValueChange={(v) => {
+                    setSpecialismFilter(v ?? "");
+                    setPagination((prev) => ({ ...prev, page: 1 }));
+                  }}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="All specialisms" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="">All specialisms</SelectItem>
+                    {SPECIALISMS.map((sp) => (
+                      <SelectItem key={sp} value={sp}>
+                        {sp}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
               {/* Clear filters */}
               <div className="flex items-end">
                 {activeFilterCount > 0 && (
@@ -687,6 +774,8 @@ export default function CandidatesPage() {
                       setStatusFilters([]);
                       setLocationFilter("");
                       setSourceFilter("");
+                      setIndustryFilter("");
+                      setSpecialismFilter("");
                       setPagination((prev) => ({ ...prev, page: 1 }));
                     }}
                   >

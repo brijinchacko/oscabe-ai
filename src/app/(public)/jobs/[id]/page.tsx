@@ -7,7 +7,6 @@ import {
   PoundSterling,
   ArrowLeft,
   Calendar,
-  Share2,
   CheckCircle,
   Send,
 } from "lucide-react";
@@ -155,7 +154,7 @@ export default async function JobDetailPage({
                 </Button>
               </Link>
               <Link href="/contact">
-                <Button variant="outline" className="mt-3 w-full border-white/[0.15] text-gray-300 hover:bg-white/[0.06]">
+                <Button className="mt-3 w-full border border-white/[0.15] bg-transparent text-gray-300 hover:bg-white/[0.08]">
                   Ask a Question
                 </Button>
               </Link>
@@ -193,11 +192,7 @@ export default async function JobDetailPage({
             {/* Similar Jobs Placeholder */}
             <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6 backdrop-blur-sm">
               <h3 className="mb-2 text-sm font-semibold text-white">Share This Job</h3>
-              <div className="flex gap-2">
-                <Button variant="outline" size="sm" className="border-white/[0.1] text-gray-400 hover:text-white" onClick={() => {}}>
-                  <Share2 className="h-4 w-4" />
-                </Button>
-              </div>
+              <p className="text-xs text-gray-500">Copy the URL to share this role with others.</p>
             </div>
           </div>
         </div>

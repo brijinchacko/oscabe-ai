@@ -49,6 +49,8 @@ export async function POST(request: Request) {
           summary: parsed.summary || candidate.summary,
           noticePeriod: parsed.noticePeriod || candidate.noticePeriod,
           rightToWork: parsed.rightToWork ?? candidate.rightToWork,
+          industry: parsed.industry || candidate.industry,
+          specialism: parsed.specialism || candidate.specialism,
           cvParsedData: JSON.stringify(parsed),
         },
       });

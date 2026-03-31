@@ -245,6 +245,36 @@ export async function getRecord(
 }
 
 /**
+ * Create a record in a Zoho Recruit module.
+ * POST /recruit/v2/{module}
+ */
+export async function createRecord(
+  module: string,
+  data: Record<string, unknown>,
+): Promise<Record<string, unknown> | null> {
+  if (!isZohoConfigured()) {
+    console.log(`[Zoho Mock] Would create ${module} record:`, data);
+    return { id: `mock-new-${Date.now()}`, ...data };
+  }
+
+  const res = await zohoFetch<{ data: Array<{ details: Record<string, unknown>; code: string; message: string }> }>(
+    module,
+    {
+      method: "POST",
+      body: JSON.stringify({ data: [data] }),
+    },
+  );
+
+  const record = res.data?.[0];
+  if (record?.code === "SUCCESS") {
+    return record.details || null;
+  }
+
+  console.error(`[Zoho] Failed to create ${module} record:`, record?.message);
+  return null;
+}
+
+/**
  * Search records by criteria string (Zoho COQL-style criteria).
  * Example criteria: "(Email:equals:john@example.com)"
  */

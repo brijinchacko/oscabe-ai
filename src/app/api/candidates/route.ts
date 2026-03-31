@@ -41,6 +41,8 @@ export async function GET(request: NextRequest) {
     const status = searchParams.get("status") || "";
     const location = searchParams.get("location") || "";
     const source = searchParams.get("source") || "";
+    const industry = searchParams.get("industry") || "";
+    const specialism = searchParams.get("specialism") || "";
 
     const where: Record<string, unknown> = {};
 
@@ -63,6 +65,14 @@ export async function GET(request: NextRequest) {
 
     if (source) {
       where.source = source;
+    }
+
+    if (industry) {
+      where.industry = industry;
+    }
+
+    if (specialism) {
+      where.specialism = specialism;
     }
 
     const [candidates, total] = await Promise.all([
