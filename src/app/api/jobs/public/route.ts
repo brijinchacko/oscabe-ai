@@ -16,11 +16,10 @@ export async function GET(req: NextRequest) {
     const limit = Math.min(100, Math.max(1, parseInt(searchParams.get("limit") || "20", 10)));
     const sort = searchParams.get("sort") || "createdAt";
 
-    // Build where clause - only published active jobs
+    // Build where clause - show all active jobs (published or not)
     // SQLite doesn't support mode: "insensitive", so we use contains only
     const where: Record<string, unknown> = {
       status: "ACTIVE",
-      publishedAt: { not: null },
     };
 
     if (search) {
@@ -28,6 +27,8 @@ export async function GET(req: NextRequest) {
         { title: { contains: search } },
         { description: { contains: search } },
         { companyName: { contains: search } },
+        { location: { contains: search } },
+        { client: { companyName: { contains: search } } },
       ];
     }
 
@@ -82,6 +83,7 @@ export async function GET(req: NextRequest) {
           industry: true,
           publishedAt: true,
           createdAt: true,
+          // Client name hidden from public API for confidentiality
           skills: {
             select: {
               skill: {

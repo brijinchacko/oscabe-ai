@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
@@ -35,6 +35,7 @@ import {
   Upload,
   FileText,
   FileSignature,
+  Contact,
 } from "lucide-react";
 
 type NavItem = { label: string; href: string; icon: React.ComponentType<{ className?: string }> };
@@ -100,12 +101,74 @@ const NAV_GROUPS: { label: string; items: NavItem[] }[] = [
   },
 ];
 
+interface SearchResults {
+  candidates: { id: string; name: string; email: string; headline: string | null }[];
+  clients: { id: string; companyName: string; industry: string | null }[];
+  jobs: { id: string; title: string; location: string | null; status: string }[];
+  contacts: { id: string; name: string; email: string | null; company: string | null }[];
+}
+
 export default function CRMLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [hasActiveSession, setHasActiveSession] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<SearchResults | null>(null);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchLoading, setSearchLoading] = useState(false);
+  const searchRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const { data: session } = useSession();
   const user = session?.user;
+
+  // Debounced search
+  useEffect(() => {
+    if (!searchQuery.trim()) {
+      setSearchResults(null);
+      setSearchOpen(false);
+      return;
+    }
+    setSearchLoading(true);
+    const timer = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/search?q=${encodeURIComponent(searchQuery.trim())}&limit=5`);
+        if (res.ok) {
+          const data: SearchResults = await res.json();
+          setSearchResults(data);
+          setSearchOpen(true);
+        }
+      } catch {
+        // silently fail
+      } finally {
+        setSearchLoading(false);
+      }
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  // Close dropdown on click outside
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
+        setSearchOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Close dropdown on Escape
+  const handleSearchKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === "Escape") {
+      setSearchOpen(false);
+    }
+  }, []);
+
+  const hasResults = searchResults && (
+    searchResults.candidates.length > 0 ||
+    searchResults.clients.length > 0 ||
+    searchResults.jobs.length > 0 ||
+    searchResults.contacts.length > 0
+  );
 
   // Check if user has an active attendance session for the heartbeat
   useEffect(() => {
@@ -251,12 +314,106 @@ export default function CRMLayout({ children }: { children: React.ReactNode }) {
           </button>
 
           {/* Search */}
-          <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-gray-400" />
+          <div className="relative flex-1 max-w-md" ref={searchRef}>
+            <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-gray-400 z-10" />
             <Input
               placeholder="Search candidates, clients, jobs..."
               className="pl-9"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onFocus={() => { if (searchResults) setSearchOpen(true); }}
+              onKeyDown={handleSearchKeyDown}
             />
+            {searchOpen && searchQuery.trim() && (
+              <div className="absolute top-full left-0 right-0 z-50 mt-1 max-h-96 overflow-y-auto rounded-lg border border-gray-200 bg-white shadow-lg">
+                {searchLoading && (
+                  <div className="px-4 py-3 text-sm text-gray-400">Searching...</div>
+                )}
+                {!searchLoading && !hasResults && (
+                  <div className="px-4 py-3 text-sm text-gray-400">No results found</div>
+                )}
+                {!searchLoading && hasResults && (
+                  <>
+                    {searchResults!.candidates.length > 0 && (
+                      <div>
+                        <div className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-gray-500 bg-gray-50">
+                          <Users className="size-3.5" />
+                          Candidates
+                        </div>
+                        {searchResults!.candidates.map((c) => (
+                          <Link
+                            key={c.id}
+                            href={`/crm/candidates/${c.id}`}
+                            onClick={() => { setSearchOpen(false); setSearchQuery(""); }}
+                            className="flex flex-col px-3 py-2 hover:bg-gray-50 transition-colors"
+                          >
+                            <span className="text-sm font-medium text-gray-900">{c.name}</span>
+                            <span className="text-xs text-gray-500">{c.headline || c.email}</span>
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                    {searchResults!.clients.length > 0 && (
+                      <div>
+                        <div className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-gray-500 bg-gray-50">
+                          <Building2 className="size-3.5" />
+                          Clients
+                        </div>
+                        {searchResults!.clients.map((c) => (
+                          <Link
+                            key={c.id}
+                            href={`/crm/clients/${c.id}`}
+                            onClick={() => { setSearchOpen(false); setSearchQuery(""); }}
+                            className="flex flex-col px-3 py-2 hover:bg-gray-50 transition-colors"
+                          >
+                            <span className="text-sm font-medium text-gray-900">{c.companyName}</span>
+                            <span className="text-xs text-gray-500">{c.industry || "No industry"}</span>
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                    {searchResults!.jobs.length > 0 && (
+                      <div>
+                        <div className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-gray-500 bg-gray-50">
+                          <Briefcase className="size-3.5" />
+                          Jobs
+                        </div>
+                        {searchResults!.jobs.map((j) => (
+                          <Link
+                            key={j.id}
+                            href={`/crm/jobs/${j.id}`}
+                            onClick={() => { setSearchOpen(false); setSearchQuery(""); }}
+                            className="flex flex-col px-3 py-2 hover:bg-gray-50 transition-colors"
+                          >
+                            <span className="text-sm font-medium text-gray-900">{j.title}</span>
+                            <span className="text-xs text-gray-500">{j.location || j.status}</span>
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                    {searchResults!.contacts.length > 0 && (
+                      <div>
+                        <div className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-gray-500 bg-gray-50">
+                          <Contact className="size-3.5" />
+                          Contacts
+                        </div>
+                        {searchResults!.contacts.map((c) => (
+                          <Link
+                            key={c.id}
+                            href={`/crm/contacts/${c.id}`}
+                            onClick={() => { setSearchOpen(false); setSearchQuery(""); }}
+                            className="flex flex-col px-3 py-2 hover:bg-gray-50 transition-colors"
+                          >
+                            <span className="text-sm font-medium text-gray-900">{c.name}</span>
+                            <span className="text-xs text-gray-500">{c.company || c.email || "Contact"}</span>
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Quick actions - hidden on mobile */}

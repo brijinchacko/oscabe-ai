@@ -85,12 +85,13 @@ export const INDUSTRIES = [
 ];
 
 export const CLIENT_PIPELINE_STAGES = [
-  { value: "LEAD", label: "Lead", color: "bg-gray-200 text-gray-800" },
+  { value: "LEAD", label: "New Lead", color: "bg-gray-200 text-gray-800" },
   { value: "CONTACTED", label: "Contacted", color: "bg-blue-100 text-blue-800" },
-  { value: "MEETING_BOOKED", label: "Meeting Booked", color: "bg-indigo-100 text-indigo-800" },
+  { value: "INTERESTED", label: "Interested", color: "bg-cyan-100 text-cyan-800" },
   { value: "PROPOSAL_SENT", label: "Proposal Sent", color: "bg-purple-100 text-purple-800" },
-  { value: "NEGOTIATION", label: "Negotiation", color: "bg-yellow-100 text-yellow-800" },
-  { value: "WON", label: "Won", color: "bg-green-100 text-green-800" },
+  { value: "CONTRACT_SIGNED", label: "Contract Signed", color: "bg-green-100 text-green-800" },
+  { value: "ACTIVE", label: "Active Client", color: "bg-emerald-100 text-emerald-800" },
+  { value: "ON_HOLD", label: "On Hold", color: "bg-yellow-100 text-yellow-800" },
   { value: "LOST", label: "Lost", color: "bg-red-100 text-red-800" },
 ] as const;
 

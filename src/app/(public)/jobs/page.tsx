@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -9,6 +9,10 @@ import {
   Briefcase,
   SlidersHorizontal,
   X,
+  Clock,
+  Building2,
+  Loader2,
+  ArrowRight,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -36,6 +40,41 @@ export default function JobsPage() {
   const [remoteOnly, setRemoteOnly] = useState(false);
   const [industry, setIndustry] = useState("");
   const [showFilters, setShowFilters] = useState(false);
+  const [jobs, setJobs] = useState<Array<{ id: string; title: string; company?: string; companyName?: string; client?: { companyName: string }; location: string; contractType: string; salaryMin?: number; salaryMax?: number; remote?: boolean; description?: string; postedAt?: string; createdAt?: string }>>([]);
+  const [totalJobs, setTotalJobs] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(true);
+
+  const fetchJobs = useCallback(async () => {
+    setLoading(true);
+    try {
+      const params = new URLSearchParams();
+      if (searchQuery) params.set("search", searchQuery);
+      if (location) params.set("location", location);
+      if (remoteOnly) params.set("remote", "true");
+      if (industry) params.set("industry", industry);
+      params.set("page", String(currentPage));
+      params.set("limit", "20");
+
+      const res = await fetch(`/api/jobs/public?${params}`);
+      if (res.ok) {
+        const data = await res.json();
+        setJobs(data.jobs || []);
+        setTotalJobs(data.total || 0);
+        setTotalPages(data.totalPages || 1);
+      }
+    } catch {
+      // silently fail
+    } finally {
+      setLoading(false);
+    }
+  }, [searchQuery, location, remoteOnly, industry, currentPage]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => fetchJobs(), 300);
+    return () => clearTimeout(timer);
+  }, [fetchJobs]);
 
   function toggleContract(contract: string) {
     setSelectedContracts((prev) =>
@@ -261,38 +300,122 @@ export default function JobsPage() {
           {/* Job Cards Area */}
           <div className="min-w-0 flex-1">
             <div className="mb-6 flex items-center justify-between">
-              <p className="text-sm text-gray-500">0 jobs found</p>
-            </div>
-
-            {/* Empty State */}
-            <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-white/[0.1] bg-white/[0.02] py-20 text-center">
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#4540DB]/15">
-                <Briefcase className="h-8 w-8 text-[#4540DB]" />
-              </div>
-              <h3 className="mt-4 text-lg font-semibold text-white">
-                No jobs posted yet
-              </h3>
-              <p className="mt-2 max-w-sm text-sm text-gray-500">
-                Check back soon! We are constantly adding new automation and
-                controls engineering roles.
+              <p className="text-sm text-gray-500">
+                {loading ? "Loading..." : `${totalJobs} job${totalJobs !== 1 ? "s" : ""} found`}
               </p>
-              <Link href="/candidates">
-                <Button className="mt-6 bg-[#4540DB] hover:bg-[#4540DB]/80 text-white shadow-lg shadow-[#4540DB]/25">
-                  Register Your Interest
-                </Button>
-              </Link>
             </div>
 
-            {/* Pagination Placeholder */}
-            <div className="mt-8 flex items-center justify-center gap-2">
-              <Button variant="outline" size="sm" disabled className="border-white/[0.1] text-gray-500">
-                Previous
-              </Button>
-              <span className="px-3 py-1 text-sm text-gray-500">Page 1 of 1</span>
-              <Button variant="outline" size="sm" disabled className="border-white/[0.1] text-gray-500">
-                Next
-              </Button>
-            </div>
+            {loading ? (
+              <div className="flex items-center justify-center py-20">
+                <Loader2 className="h-8 w-8 animate-spin text-[#4540DB]" />
+              </div>
+            ) : jobs.length === 0 ? (
+              <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-white/[0.1] bg-white/[0.02] py-20 text-center">
+                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#4540DB]/15">
+                  <Briefcase className="h-8 w-8 text-[#4540DB]" />
+                </div>
+                <h3 className="mt-4 text-lg font-semibold text-white">No matching jobs found</h3>
+                <p className="mt-2 max-w-sm text-sm text-gray-500">
+                  Try adjusting your search or filters. New roles are added regularly.
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {jobs.map((job) => {
+                  const company = "Confidential";
+                  const posted = job.postedAt || job.createdAt;
+                  const daysAgo = posted ? Math.floor((Date.now() - new Date(posted).getTime()) / 86400000) : null;
+
+                  return (
+                    <Link key={job.id} href={`/jobs/${job.id}`}>
+                      <div className="group rounded-xl border border-white/[0.08] bg-white/[0.03] p-5 backdrop-blur-sm transition-all hover:border-[#4540DB]/30 hover:bg-white/[0.06]">
+                        <div className="flex items-start justify-between gap-4">
+                          <div className="min-w-0 flex-1">
+                            <h3 className="text-lg font-semibold text-white group-hover:text-[#4540DB] transition-colors">
+                              {job.title}
+                            </h3>
+                            <div className="mt-2 flex flex-wrap items-center gap-3 text-sm text-gray-400">
+                              <span className="flex items-center gap-1">
+                                <Building2 className="h-3.5 w-3.5" />
+                                {company}
+                              </span>
+                              {job.location && (
+                                <span className="flex items-center gap-1">
+                                  <MapPin className="h-3.5 w-3.5" />
+                                  {job.location}
+                                </span>
+                              )}
+                              {job.contractType && (
+                                <span className="rounded-full bg-[#4540DB]/15 px-2.5 py-0.5 text-xs font-medium text-[#4540DB]">
+                                  {job.contractType}
+                                </span>
+                              )}
+                              {job.remote && (
+                                <span className="rounded-full bg-[#00D4FF]/15 px-2.5 py-0.5 text-xs font-medium text-[#00D4FF]">
+                                  Remote
+                                </span>
+                              )}
+                            </div>
+                            {(job.salaryMin || job.salaryMax) && (
+                              <p className="mt-2 text-sm font-medium text-[#22C55E]">
+                                {job.salaryMin && job.salaryMax
+                                  ? `£${(job.salaryMin / 1000).toFixed(0)}k - £${(job.salaryMax / 1000).toFixed(0)}k`
+                                  : job.salaryMin
+                                    ? `From £${(job.salaryMin / 1000).toFixed(0)}k`
+                                    : `Up to £${((job.salaryMax || 0) / 1000).toFixed(0)}k`}
+                              </p>
+                            )}
+                            {job.description && (
+                              <p className="mt-2 line-clamp-2 text-sm text-gray-500">
+                                {job.description.substring(0, 200)}
+                              </p>
+                            )}
+                          </div>
+                          <div className="flex shrink-0 flex-col items-end gap-2">
+                            {daysAgo !== null && (
+                              <span className="flex items-center gap-1 text-xs text-gray-500">
+                                <Clock className="h-3 w-3" />
+                                {daysAgo === 0 ? "Today" : daysAgo === 1 ? "Yesterday" : `${daysAgo}d ago`}
+                              </span>
+                            )}
+                            <span className="flex items-center gap-1 text-xs font-medium text-[#4540DB] opacity-0 transition-opacity group-hover:opacity-100">
+                              View <ArrowRight className="h-3 w-3" />
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="mt-8 flex items-center justify-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={currentPage <= 1}
+                  onClick={() => setCurrentPage((p) => p - 1)}
+                  className="border-white/[0.1] text-gray-400 hover:text-white"
+                >
+                  Previous
+                </Button>
+                <span className="px-3 py-1 text-sm text-gray-500">
+                  Page {currentPage} of {totalPages}
+                </span>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={currentPage >= totalPages}
+                  onClick={() => setCurrentPage((p) => p + 1)}
+                  className="border-white/[0.1] text-gray-400 hover:text-white"
+                >
+                  Next
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </section>
