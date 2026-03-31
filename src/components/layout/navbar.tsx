@@ -35,9 +35,9 @@ const MODE_CONFIG: Record<SiteMode, {
     nav: [
       { label: "Home", href: "/" },
       { label: "How It Works", href: "/employers" },
+      { label: "Industries", href: "/industries" },
       { label: "Post a Role", href: "/post-a-role" },
       { label: "Pricing", href: "/pricing" },
-      { label: "Jobs", href: "/jobs" },
       { label: "About", href: "/about" },
       { label: "Contact", href: "/contact" },
     ],
@@ -51,10 +51,10 @@ const MODE_CONFIG: Record<SiteMode, {
     nav: [
       { label: "Home", href: "/" },
       { label: "Why OSCABE", href: "/candidates" },
+      { label: "Industries", href: "/industries" },
       { label: "Browse Jobs", href: "/jobs" },
       { label: "Register", href: "/register" },
       { label: "Refer & Earn", href: "/refer" },
-      { label: "About", href: "/about" },
       { label: "Contact", href: "/contact" },
     ],
     cta: { label: "Register Now", href: "/register" },
@@ -67,6 +67,7 @@ const MODE_CONFIG: Record<SiteMode, {
     nav: [
       { label: "Home", href: "/" },
       { label: "Partnership", href: "/agencies" },
+      { label: "Industries", href: "/industries" },
       { label: "Jobs", href: "/jobs" },
       { label: "About", href: "/about" },
       { label: "Contact", href: "/contact" },
