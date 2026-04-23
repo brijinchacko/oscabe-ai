@@ -51,6 +51,25 @@ const nextConfig: NextConfig = {
       { source: "/terms-of-use/oscabe.com/privacy", destination: "/privacy", permanent: true },
       // Catch-all for any other old recruiter pages
       { source: "/recruiter-:path", destination: "/jobs", permanent: true },
+      // Old WordPress blog posts & author pages
+      { source: "/beyond-boundaries-the-global-impact-of-industrial-automation-on-manufacturing-and-beyond", destination: "/about", permanent: true },
+      { source: "/beyond-boundaries-the-global-impact-of-industrial-automation-on-manufacturing-and-beyond/", destination: "/about", permanent: true },
+      { source: "/sustainability-and-efficiency-the-dual-role-of-industrial-automation-in-a-greener-future", destination: "/about", permanent: true },
+      { source: "/sustainability-and-efficiency-the-dual-role-of-industrial-automation-in-a-greener-future/", destination: "/about", permanent: true },
+      { source: "/author/:path", destination: "/about", permanent: true },
+      { source: "/author/:path/feed", destination: "/about", permanent: true },
+      { source: "/author/:path/feed/", destination: "/about", permanent: true },
+      // Old WordPress category/blog pages
+      { source: "/category/:path", destination: "/about", permanent: true },
+      { source: "/category/:path/feed", destination: "/about", permanent: true },
+      { source: "/category/:path/feed/", destination: "/about", permanent: true },
+      { source: "/navigating-the-future-key-trends-shaping-industrial-automation-in-the-next-decade", destination: "/about", permanent: true },
+      { source: "/navigating-the-future-key-trends-shaping-industrial-automation-in-the-next-decade/", destination: "/about", permanent: true },
+      // Old WordPress job listing data-verification
+      { source: "/wpr_job_listing/data-verification", destination: "/jobs", permanent: true },
+      { source: "/wpr_job_listing/data-verification/", destination: "/jobs", permanent: true },
+      { source: "/wpr_job_listing/mail-convertor", destination: "/jobs", permanent: true },
+      { source: "/wpr_job_listing/mail-convertor/", destination: "/jobs", permanent: true },
     ];
   },
 };
