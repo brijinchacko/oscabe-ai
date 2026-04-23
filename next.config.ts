@@ -37,6 +37,20 @@ const nextConfig: NextConfig = {
       { source: "/modern-slavery-act", destination: "/modern-slavery", permanent: true },
       // Old jobs portal
       { source: "/jobs/Careers", destination: "/jobs", permanent: true },
+      // Old WordPress job listing pages (404 in Google Search Console)
+      { source: "/recruiter-project-engineer", destination: "/jobs", permanent: true },
+      { source: "/recruiter-project-engineer/", destination: "/jobs", permanent: true },
+      { source: "/recruiter-plc-programmer", destination: "/jobs", permanent: true },
+      { source: "/recruiter-plc-programmer/", destination: "/jobs", permanent: true },
+      { source: "/recruiter-automation-engineer", destination: "/jobs", permanent: true },
+      { source: "/recruiter-automation-engineer/", destination: "/jobs", permanent: true },
+      { source: "/wpr_job_listing/:path", destination: "/jobs", permanent: true },
+      { source: "/wpr_job_listing/:path/", destination: "/jobs", permanent: true },
+      { source: "/upskill", destination: "/candidates", permanent: true },
+      { source: "/upskill/", destination: "/candidates", permanent: true },
+      { source: "/terms-of-use/oscabe.com/privacy", destination: "/privacy", permanent: true },
+      // Catch-all for any other old recruiter pages
+      { source: "/recruiter-:path", destination: "/jobs", permanent: true },
     ];
   },
 };
