@@ -146,11 +146,11 @@ export default function AgencyDashboard() {
                   >
                     <td className="py-3 font-medium text-white">{job.title}</td>
                     <td className="py-3 text-gray-300">
-                      {job.client?.companyName ?? job.companyName ?? "—"}
+                      {job.client?.companyName ?? job.companyName ?? "-"}
                     </td>
                     <td className="py-3 text-gray-300">{job.contractType}</td>
                     <td className="py-3 text-gray-300">
-                      {job.feePercent != null ? `${job.feePercent}%` : "—"}
+                      {job.feePercent != null ? `${job.feePercent}%` : "-"}
                     </td>
                     <td className="py-3 text-gray-300">
                       {job._count.applications}

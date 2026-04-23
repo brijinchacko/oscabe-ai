@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
         }
       }
     } catch {
-      // Not authenticated — that's fine for public submissions
+      // Not authenticated - that's fine for public submissions
     }
 
     const referral = await prisma.referral.create({

@@ -32,7 +32,7 @@ export async function POST() {
       const currentStepIndex = enrollment.currentStep;
 
       if (currentStepIndex >= steps.length) {
-        // All steps done — mark completed
+        // All steps done - mark completed
         await prisma.sequenceEnrollment.update({
           where: { id: enrollment.id },
           data: { status: "COMPLETED" },

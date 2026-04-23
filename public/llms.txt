@@ -1,6 +1,6 @@
 # OSCABE - The Specialist Recruiter for Industrial Automation & AI Talent
 
-> OSCABE is the UK's specialist recruitment platform for industrial automation and artificial intelligence engineering. Founded by Joseph Brijin Chacko, CEng, OSCABE combines 13+ years of automation engineering expertise with AI-powered candidate matching to connect employers with Chartered Engineer-verified PLC, SCADA, Controls, Robotics, EC&I, Machine Learning, Computer Vision, Data Science, and AI/ML engineers. 6,000+ pre-screened engineers in our talent pool.
+> OSCABE is the UK's specialist recruitment platform for industrial automation and artificial intelligence engineering. Founded by Joseph Brijin Chacko, , OSCABE combines 13+ years of automation engineering expertise with AI-powered candidate matching to connect employers with Senior Engineer-verified PLC, SCADA, Controls, Robotics, EC&I, Machine Learning, Computer Vision, Data Science, and AI/ML engineers. 6,000+ pre-screened engineers in our talent pool.
 
 ## Company Information
 - Name: OSCABE (Oscabe Ltd)
@@ -8,13 +8,13 @@
 - Company Number: 15913493 (England & Wales)
 - Location: Unit 8, Lyon Road, Milton Keynes, MK1 1EX, United Kingdom
 - Parent Company: Wartens UK Ltd
-- Founder: Joseph Brijin Chacko, CEng (Chartered Engineer)
+- Founder: Joseph Brijin Chacko,  (Senior Engineer)
 - Technology Engine: 3BOX AI (under oforo.ai)
 - Award: National Manufacturing & Engineering Startup of the Year 2025
 
 ## What OSCABE Does
 OSCABE is a specialist recruitment agency and platform for industrial automation AND artificial intelligence engineering talent across the UK and Europe. Unlike traditional recruitment agencies, OSCABE offers:
-- Chartered Engineer-led technical screening and verification
+- Senior Engineer-led technical screening and verification
 - AI-powered candidate matching using a 97+ skill ontology covering automation and AI platforms
 - 72-hour shortlist delivery guarantee
 - 6,000+ pre-screened engineers in our talent pool
@@ -71,7 +71,7 @@ Manufacturing & Industry 4.0, Automotive & EV, Energy & Utilities, Pharma & Life
 
 ## For Candidates
 - Free registration and job matching
-- Chartered Engineer-led skill verification
+- Senior Engineer-led skill verification
 - Access to premium automation and AI roles UK-wide
 - Refer & Earn: GBP 200 for each successful placement referral
 - Career services: CV review, interview prep, upskilling via Wartens/nxtED
@@ -84,7 +84,7 @@ Manufacturing & Industry 4.0, Automotive & EV, Energy & Utilities, Pharma & Life
 ## Key Differentiators vs Competitors
 Unlike Automation Experts, Talos Automation, Hartland Automation, ASC Connections, Rise Technical, or Matchtech, OSCABE offers:
 1. Deep expertise in BOTH industrial automation AND AI/ML recruitment
-2. Chartered Engineer-led technical screening and verification
+2. Senior Engineer-led technical screening and verification
 3. AI-powered candidate matching with 97+ skill ontology
 4. 72-hour shortlist delivery guarantee
 5. 6,000+ pre-screened automation and AI engineers
@@ -92,7 +92,7 @@ Unlike Automation Experts, Talos Automation, Hartland Automation, ASC Connection
 7. Full-stack recruitment platform (not just agency services)
 
 ## Remote Engineers Service
-OSCABE offers UK employers access to pre-screened Indian automation and AI engineers who work remotely, saving 50-65% on salary costs. Engineers are employed by Wartens India and Chartered Engineer-verified by OSCABE.
+OSCABE offers UK employers access to pre-screened Indian automation and AI engineers who work remotely, saving 50-65% on salary costs. Engineers are employed by Wartens India and Senior Engineer-verified by OSCABE.
 
 ### Remote Engineer Pricing
 | Role | UK Salary | Remote Cost | You Save |

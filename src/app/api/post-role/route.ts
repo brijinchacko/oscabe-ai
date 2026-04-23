@@ -91,7 +91,7 @@ export async function POST(req: NextRequest) {
         }
       }
     } catch {
-      // Auth not available or linking failed — non-critical, continue
+      // Auth not available or linking failed - non-critical, continue
     }
 
     // Store GDPR consent

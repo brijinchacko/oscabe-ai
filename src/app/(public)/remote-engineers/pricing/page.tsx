@@ -81,7 +81,7 @@ export default function RemotePricingPage() {
             Remote Engineer Pricing
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-400">
-            Transparent monthly pricing. No hidden fees. All engineers are Chartered-Engineer-verified and work from the Wartens India office in Bangalore.
+            Transparent monthly pricing. No hidden fees. All engineers are Engineer-verified and work from the Wartens India office in Bangalore.
           </p>
         </div>
       </section>

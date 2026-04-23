@@ -15,10 +15,10 @@ const ENGINEERING_SEQUENCE = {
       dayDelay: 0,
       stepOrder: 1,
       action: "EMAIL",
-      subject: "PLC engineers in {{location}} — quick question",
+      subject: "PLC engineers in {{location}} - quick question",
       body: `Hi {{firstName}},
 
-Finding verified PLC and SCADA engineers in the UK right now is genuinely difficult — most agencies send CVs without any technical validation, wasting your team's time.
+Finding verified PLC and SCADA engineers in the UK right now is genuinely difficult - most agencies send CVs without any technical validation, wasting your team's time.
 
 We're Oscabe. Our team includes chartered engineers who technically screen every candidate before you see them. We deliver shortlists in 72 hours, with no upfront fees.
 
@@ -37,7 +37,7 @@ Oscabe | oscabe.com`,
 
 Just following up on my last note.
 
-To give you a sense of what we do: we recently helped a manufacturing firm fill two specialist PLC engineer roles in under 10 days — after their previous agency had spent 6 weeks delivering unsuitable candidates.
+To give you a sense of what we do: we recently helped a manufacturing firm fill two specialist PLC engineer roles in under 10 days - after their previous agency had spent 6 weeks delivering unsuitable candidates.
 
 No upfront fees. No retainers. You only pay when we make a successful placement.
 
@@ -54,7 +54,7 @@ Oscabe | oscabe.com`,
       subject: "How we cut engineering hiring time by 40%",
       body: `Hi {{firstName}},
 
-One more thought — we recently helped a client in {{industry}} reduce their engineering hiring time by 40% while cutting costs versus their previous agency.
+One more thought - we recently helped a client in {{industry}} reduce their engineering hiring time by 40% while cutting costs versus their previous agency.
 
 If you're dealing with similar challenges at {{company}}, I'd be happy to walk you through how we approached it. Takes 15 minutes.
 
@@ -92,14 +92,14 @@ const OPERATIONS_SEQUENCE = {
       dayDelay: 0,
       stepOrder: 1,
       action: "EMAIL",
-      subject: "Commissioning engineers for {{company}} — a thought",
+      subject: "Commissioning engineers for {{company}} - a thought",
       body: `Hi {{firstName}},
 
-Backfilling commissioning and controls engineers quickly is one of the hardest challenges in {{industry}} right now — especially when production timelines can't slip.
+Backfilling commissioning and controls engineers quickly is one of the hardest challenges in {{industry}} right now - especially when production timelines can't slip.
 
 We're Oscabe, a specialist automation recruitment agency. We've placed commissioning engineers for manufacturers and integrators across the UK, typically within 10 days.
 
-No upfront fees, no retainers — you only pay on a successful placement.
+No upfront fees, no retainers - you only pay on a successful placement.
 
 Is this the sort of challenge you're facing at {{company}}?
 
@@ -114,7 +114,7 @@ Oscabe | oscabe.com`,
       subject: "Re: Commissioning engineers for {{company}}",
       body: `Hi {{firstName}},
 
-Following up briefly — our team is made up of chartered engineers, so we technically screen every candidate before you see them. No irrelevant CVs.
+Following up briefly - our team is made up of chartered engineers, so we technically screen every candidate before you see them. No irrelevant CVs.
 
 We currently have a strong pipeline of verified PLC, SCADA, and commissioning engineers across the UK, available for both permanent and contract roles.
 
@@ -131,7 +131,7 @@ Oscabe | oscabe.com`,
       subject: "Quick question about your engineering team",
       body: `Hi {{firstName}},
 
-I'll keep this brief — do you have any plans to grow your engineering or automation team over the next 6 months?
+I'll keep this brief - do you have any plans to grow your engineering or automation team over the next 6 months?
 
 Even if it's not urgent right now, it's worth having a specialist agency on standby. We've helped operations teams across {{industry}} avoid costly delays when urgent roles come up.
 
@@ -148,7 +148,7 @@ Oscabe | oscabe.com`,
       subject: "Last note from Oscabe",
       body: `Hi {{firstName}},
 
-I'll stop here — clearly the timing isn't right, and I don't want to be a nuisance.
+I'll stop here - clearly the timing isn't right, and I don't want to be a nuisance.
 
 If you ever need to move quickly on an engineering hire, please do reach out. We're at oscabe.com.
 
@@ -170,10 +170,10 @@ const HR_SEQUENCE = {
       stepOrder: 1,
       action: "EMAIL",
       subject:
-        "Specialist automation engineers — faster than your current agency?",
+        "Specialist automation engineers - faster than your current agency?",
       body: `Hi {{firstName}},
 
-I know talent teams in {{industry}} are under pressure to fill engineering roles faster — especially for specialist skills like PLC and SCADA where generic agencies consistently underdeliver.
+I know talent teams in {{industry}} are under pressure to fill engineering roles faster - especially for specialist skills like PLC and SCADA where generic agencies consistently underdeliver.
 
 Oscabe is a specialist automation recruitment agency. We're led by chartered engineers who technically screen every candidate, and we deliver shortlists within 72 hours.
 
@@ -194,7 +194,7 @@ Oscabe | oscabe.com`,
 
 Just a quick follow-up. The main thing that sets us apart: our candidates are technically screened by engineers, not just keyword-matched by an algorithm.
 
-This means your hiring managers only interview candidates who are genuinely qualified — saving significant time and frustration.
+This means your hiring managers only interview candidates who are genuinely qualified - saving significant time and frustration.
 
 Happy to send over a sample shortlist for a live role if that would be useful?
 
@@ -209,7 +209,7 @@ Oscabe | oscabe.com`,
       subject: "Sample shortlist for your next engineering role?",
       body: `Hi {{firstName}},
 
-One last thought — if {{company}} has any open automation or engineering roles right now, I'd be happy to put together a complimentary sample shortlist to demonstrate our quality.
+One last thought - if {{company}} has any open automation or engineering roles right now, I'd be happy to put together a complimentary sample shortlist to demonstrate our quality.
 
 No commitment required. It's the best way to see whether we're a good fit.
 
@@ -226,7 +226,7 @@ Oscabe | oscabe.com`,
       subject: "Signing off, {{firstName}}",
       body: `Hi {{firstName}},
 
-I'll leave it here — clearly not the right moment.
+I'll leave it here - clearly not the right moment.
 
 If {{company}}'s engineering hiring needs change, we'd love to help. You can always find us at oscabe.com.
 

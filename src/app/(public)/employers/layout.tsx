@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Hire Automation & AI Engineers | OSCABE Recruitment",
   description:
-    "Hire pre-screened PLC, SCADA, Robotics, and AI engineers in 72 hours. Chartered Engineer-verified candidates. No upfront fees.",
+    "Hire pre-screened PLC, SCADA, Robotics, and AI engineers in 72 hours. Engineer-verified candidates. No upfront fees.",
   keywords: [
     "hire automation engineers UK",
     "hire PLC engineers",
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Hire Automation & AI Engineers | OSCABE Recruitment",
     description:
-      "Hire pre-screened PLC, SCADA, Robotics, and AI engineers in 72 hours. Chartered Engineer-verified candidates. No upfront fees.",
+      "Hire pre-screened PLC, SCADA, Robotics, and AI engineers in 72 hours. Engineer-verified candidates. No upfront fees.",
     url: "https://oscabe.com/employers",
     siteName: "OSCABE",
     locale: "en_GB",

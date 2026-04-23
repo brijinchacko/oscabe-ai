@@ -8,7 +8,7 @@ import "./globals.css";
 
 const APP_NAME = "OSCABE";
 const APP_DESCRIPTION =
-  "The UK's specialist recruitment agency for industrial automation and AI talent. We place PLC, SCADA, Robotics, ML, Computer Vision engineers. Chartered Engineer-verified. 72-hour shortlists.";
+  "The UK's specialist recruitment agency for industrial automation and AI talent. We place PLC, SCADA, Robotics, ML, Computer Vision engineers. Technically verified. 72-hour shortlists.";
 const SITE_URL = "https://oscabe.com";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
@@ -87,7 +87,7 @@ const jsonLd = {
       url: SITE_URL,
       logo: `${SITE_URL}/logo-indigo.png`,
       image: `${SITE_URL}/logo-indigo.png`,
-      description: "The UK's specialist recruitment agency for industrial automation and AI engineering talent. Chartered Engineer-led technical screening with 72-hour shortlists. We place PLC, SCADA, Controls, Robotics, Machine Learning, Computer Vision, and Data Science engineers.",
+      description: "The UK's specialist recruitment agency for industrial automation and AI engineering talent. Expert-led technical screening with 72-hour shortlists. We place PLC, SCADA, Controls, Robotics, Machine Learning, Computer Vision, and Data Science engineers.",
       slogan: "The Specialist Recruiter for Industrial Automation & AI",
       foundingDate: "2024",
       numberOfEmployees: { "@type": "QuantitativeValue", value: 60 },

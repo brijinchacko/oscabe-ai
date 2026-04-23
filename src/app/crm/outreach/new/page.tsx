@@ -171,7 +171,7 @@ function StepDetails({
                 Send from OSCABE
               </span>
               <p className="text-xs text-gray-500 mt-0.5">
-                Shared sender (noreply@oscabe.com) — good for bulk outreach
+                Shared sender (noreply@oscabe.com) - good for bulk outreach
               </p>
             </div>
           </label>
@@ -197,7 +197,7 @@ function StepDetails({
                 {microsoftEmail ? ` (${microsoftEmail})` : ""}
               </span>
               <p className="text-xs text-gray-500 mt-0.5">
-                Personal sender — better deliverability and reply tracking
+                Personal sender - better deliverability and reply tracking
               </p>
               {!microsoftConnected && (
                 <p className="text-xs text-amber-600 mt-1">
@@ -776,7 +776,7 @@ export default function NewCampaignPage() {
           setMicrosoftEmail(data.microsoftEmail ?? null);
         }
       } catch {
-        // Ignore — default to not connected
+        // Ignore - default to not connected
       }
     }
     fetchMicrosoftStatus();

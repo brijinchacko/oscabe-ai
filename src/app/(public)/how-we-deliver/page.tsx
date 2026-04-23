@@ -33,8 +33,8 @@ const OPERATIONAL_MODEL = [
     color: "#8B5CF6",
   },
   {
-    title: "Fortnightly Engineering Review by CEng Lead",
-    description: "Every two weeks, a Chartered Engineer reviews the technical output of the remote engineer. This is a code review, architecture review, or design review depending on the role. It is an independent quality gate that traditional outsourcing firms do not offer.",
+    title: "Fortnightly Engineering Review by Lead",
+    description: "Every two weeks, a Senior Engineer reviews the technical output of the remote engineer. This is a code review, architecture review, or design review depending on the role. It is an independent quality gate that traditional outsourcing firms do not offer.",
     icon: CalendarCheck,
     color: "#F59E0B",
   },
@@ -85,7 +85,7 @@ export default function HowWeDeliverPage() {
             How We Deliver
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-400">
-            A structured operational model with daily overlap, weekly management, fortnightly technical reviews, and monthly business reviews. Not just outsourcing — managed engineering delivery.
+            A structured operational model with daily overlap, weekly management, fortnightly technical reviews, and monthly business reviews. Not just outsourcing - managed engineering delivery.
           </p>
         </div>
       </section>

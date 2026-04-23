@@ -21,8 +21,8 @@ const STEPS = [
   },
   {
     step: 2,
-    title: "Technical Screen by CEng",
-    description: "A 60-minute structured technical interview conducted by one of our Chartered Engineers. This is not a generic competency chat. We test real-world problem-solving on the exact platforms the candidate claims experience in: PLC logic, SCADA configuration, controls theory, AI/ML architecture, or whatever the specialism demands.",
+    title: "Technical Screen by",
+    description: "A 60-minute structured technical interview conducted by one of our Senior Engineers. This is not a generic competency chat. We test real-world problem-solving on the exact platforms the candidate claims experience in: PLC logic, SCADA configuration, controls theory, AI/ML architecture, or whatever the specialism demands.",
     icon: Mic,
     color: "#00D4FF",
   },
@@ -43,7 +43,7 @@ const STEPS = [
   {
     step: 5,
     title: "Final Approval",
-    description: "Every candidate is signed off by a Chartered Engineer before they enter our placement pool. This final review considers the full picture: technical skill, communication ability, cultural fit for UK engineering teams, and professional conduct. Only candidates who pass all five steps are available for client placement.",
+    description: "Every candidate is signed off by a Senior Engineer before they enter our placement pool. This final review considers the full picture: technical skill, communication ability, cultural fit for UK engineering teams, and professional conduct. Only candidates who pass all five steps are available for client placement.",
     icon: ShieldCheck,
     color: "#22C55E",
   },
@@ -73,7 +73,7 @@ export default function HowWeVetPage() {
             How We Vet Engineers
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-400">
-            A 5-step process designed by Chartered Engineers. No shortcuts, no CV forwarding, no guesswork.
+            A 5-step process designed by Senior Engineers. No shortcuts, no CV forwarding, no guesswork.
           </p>
         </div>
       </section>

@@ -100,7 +100,7 @@ const STEPS = [
     step: 2,
     title: "We Source & Screen",
     description:
-      "Chartered Engineer verification on real platforms (Siemens, AB, TensorFlow etc.)",
+      "Technical verification on real platforms (Siemens, AB, TensorFlow etc.)",
     color: "#00D4FF",
   },
   {
@@ -147,7 +147,7 @@ const NOT_REMOTE = [
 const BENEFITS = [
   {
     icon: Shield,
-    title: "Chartered Engineer-Led Verification",
+    title: "Engineer-Led Verification",
     description: "Same screening as UK candidates.",
     color: "#4540DB",
   },
@@ -194,7 +194,7 @@ const FAQ_DATA = [
   },
   {
     q: "How is quality verified?",
-    a: "Every remote engineer undergoes the same Chartered Engineer-led screening process as our UK candidates. They are tested on real platforms with practical assessments, not just CV reviews.",
+    a: "Every remote engineer undergoes the same Engineer-led screening process as our UK candidates. They are tested on real platforms with practical assessments, not just CV reviews.",
   },
   {
     q: "What about IP and confidentiality?",
@@ -202,7 +202,7 @@ const FAQ_DATA = [
   },
   {
     q: "Can we interview candidates before hiring?",
-    a: "Absolutely. You receive a shortlist of pre-screened candidates and interview them via video. You select who joins your team — we never assign engineers without your approval.",
+    a: "Absolutely. You receive a shortlist of pre-screened candidates and interview them via video. You select who joins your team - we never assign engineers without your approval.",
   },
   {
     q: "What is the minimum commitment?",
@@ -328,14 +328,14 @@ export default function RemoteEngineersPage() {
             <h1 className="text-3xl font-bold leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl">
               Remote Automation & AI Engineers{" "}
               <span className="bg-gradient-to-r from-[#22C55E] to-[#00D4FF] bg-clip-text text-transparent">
-                — Save 30%
+                - Save 30%
               </span>
             </h1>
 
             <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-gray-400 sm:text-lg">
-              Access Chartered Engineer-verified automation and AI talent from
+              Access Engineer-verified automation and AI talent from
               India. Same quality standards, 30% lower cost. You interview
-              and select — we handle everything else.
+              and select - we handle everything else.
             </p>
 
             <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
@@ -357,7 +357,7 @@ export default function RemoteEngineersPage() {
             {/* Trust badges */}
             <div className="mt-12 flex flex-wrap items-center justify-center gap-4 sm:gap-6">
               {[
-                { icon: Shield, label: "Chartered Engineer Verified" },
+                { icon: Shield, label: "Engineer Verified" },
                 { icon: Building2, label: "Wartens India Delivery" },
                 { icon: FileCheck, label: "GDPR Compliant" },
                 { icon: CheckCircle, label: "ISO 9001:2015" },

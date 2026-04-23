@@ -34,7 +34,7 @@ const TEAM = [
   {
     name: "JBC",
     role: "CEO / Technical Director",
-    description: "Chartered Engineer (CEng), Engineer's Degree, 13+ years in industrial automation. Founded Wartens and OSCABE.",
+    description: "Senior Engineer, Engineer's Degree, 13+ years in industrial automation. Founded Wartens and OSCABE.",
   },
   {
     name: "Greeshma Jenson",
@@ -101,7 +101,7 @@ export default function AboutPage() {
                 Where Automation Expertise Meets AI Innovation
               </h1>
               <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-400 lg:mx-0">
-                The specialist recruiter for industrial automation and AI. Founded by a Chartered Engineer with 13+ years of hands-on automation experience. Remote engineers from India and UK recruitment, verified by Chartered Engineers.
+                The specialist recruiter for industrial automation and AI. Founded by a Senior Engineer with 13+ years of hands-on automation experience. Remote engineers from India and UK recruitment, verified by Senior Engineers.
               </p>
             </div>
             <div className="relative mx-auto w-full max-w-lg lg:mx-0">
@@ -131,13 +131,13 @@ export default function AboutPage() {
               </h2>
               <div className="mt-6 space-y-4 text-gray-400 leading-relaxed">
                 <p>
-                  OSCABE was founded by Joseph Brijin Chacko (JBC), a Chartered Engineer (CEng) with an Engineer&apos;s Degree and 13+ years of hands-on experience in industrial automation. After years of watching talented PLC, SCADA, and controls engineers struggle with recruiters who could not tell a PLC from a PID loop, he built something better.
+                  OSCABE was founded by Joseph Brijin Chacko (JBC), a Senior Engineer with an Engineer&apos;s Degree and 13+ years of hands-on experience in industrial automation. After years of watching talented PLC, SCADA, and controls engineers struggle with recruiters who could not tell a PLC from a PID loop, he built something better.
                 </p>
                 <p>
                   As part of the Wartens ecosystem, OSCABE operates with an unfair advantage. We are not just recruiters who learned automation. We are automation specialists who built a recruitment platform. Our parent company runs training, robotics, and technology operations across the UK and India.
                 </p>
                 <p>
-                  Today, OSCABE operates as a dual-track service: remote engineers from India (managed from the Wartens India office in Bangalore) and traditional UK recruitment for roles that require physical presence. Every engineer is verified by a Chartered Engineer before placement.
+                  Today, OSCABE operates as a dual-track service: remote engineers from India (managed from the Wartens India office in Bangalore) and traditional UK recruitment for roles that require physical presence. Every engineer is verified by a Senior Engineer before placement.
                 </p>
               </div>
             </div>
@@ -266,7 +266,7 @@ export default function AboutPage() {
               </div>
               <div className="flex gap-4">
                 <span className="w-40 shrink-0 font-medium text-white">Founder</span>
-                <span>Joseph Brijin Chacko, CEng</span>
+                <span>Joseph Brijin Chacko</span>
               </div>
               <div className="flex gap-4">
                 <span className="w-40 shrink-0 font-medium text-white">Global Presence</span>

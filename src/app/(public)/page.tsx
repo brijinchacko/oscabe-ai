@@ -124,9 +124,9 @@ export default function HomePage() {
               </span>
 
               <h1 className="text-3xl font-bold leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl">
-                Remote automation and AI engineers —{" "}
+                Remote automation and AI engineers -{" "}
                 <span className="bg-gradient-to-r from-[#4540DB] to-[#00D4FF] bg-clip-text text-transparent">
-                  Chartered-Engineer-verified
+                  Engineer-verified
                 </span>
                 , billed monthly
               </h1>
@@ -153,7 +153,7 @@ export default function HomePage() {
 
               {/* Trust indicators */}
               <div className="mt-10 flex flex-wrap items-center gap-6 text-sm text-gray-500">
-                <span className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-[#22C55E]" />CEng Led</span>
+                <span className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-[#22C55E]" />Expert Led</span>
                 <span className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-[#22C55E]" />ISO 9001:2015</span>
                 <span className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-[#22C55E]" />GDPR Compliant</span>
                 <span className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-[#22C55E]" />UK Startup National Winner 2025</span>
@@ -228,7 +228,7 @@ export default function HomePage() {
           </div>
 
           <div className="mt-14 grid gap-8 lg:grid-cols-5">
-            {/* Card 1 — Remote Engineers (primary, larger) */}
+            {/* Card 1 - Remote Engineers (primary, larger) */}
             <div className="lg:col-span-3 rounded-2xl border border-[#4540DB]/30 bg-[#4540DB]/[0.04] p-8 sm:p-10 backdrop-blur-sm transition-all hover:border-[#4540DB]/50 hover:bg-[#4540DB]/[0.07]">
               <div className="flex items-center gap-3">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#4540DB]/15">
@@ -241,7 +241,7 @@ export default function HomePage() {
               <h3 className="mt-6 text-2xl font-bold text-white">Remote Engineers</h3>
               <p className="mt-2 text-lg font-semibold text-[#22C55E]">Save 40-60% on UK engineering costs</p>
               <p className="mt-4 text-sm leading-relaxed text-gray-400">
-                Pre-screened Indian automation and AI engineers working remotely for your UK team. Chartered Engineer verified. Managed from our Bangalore office. Monthly billing, no lock-in.
+                Pre-screened Indian automation and AI engineers working remotely for your UK team. Senior Engineer verified. Managed from our Bangalore office. Monthly billing, no lock-in.
               </p>
               <Link
                 href="/remote-engineers"
@@ -252,7 +252,7 @@ export default function HomePage() {
               </Link>
             </div>
 
-            {/* Card 2 — UK Recruitment (secondary) */}
+            {/* Card 2 - UK Recruitment (secondary) */}
             <div className="lg:col-span-2 rounded-2xl border border-[#00D4FF]/20 bg-[#00D4FF]/[0.03] p-8 sm:p-10 backdrop-blur-sm transition-all hover:border-[#00D4FF]/40 hover:bg-[#00D4FF]/[0.06]">
               <div className="flex items-center gap-3">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#00D4FF]/15">
@@ -292,7 +292,7 @@ export default function HomePage() {
 
           <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
             {[
-              { icon: Shield, text: "Chartered Engineer-led technical screening", color: "#4540DB" },
+              { icon: Shield, text: "Engineer-led technical screening", color: "#4540DB" },
               { icon: Clock, text: "72-hour shortlists, guaranteed", color: "#00D4FF" },
               { icon: Users, text: "6,000+ pre-screened automation & AI engineers", color: "#22C55E" },
               { icon: Zap, text: "No upfront recruitment fees", color: "#8B5CF6" },
@@ -416,7 +416,7 @@ export default function HomePage() {
               Start with a 20-minute conversation
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-lg text-gray-400">
-              Tell us your engineering challenge. We will tell you whether remote, UK, or a blend is the right fit — no obligation.
+              Tell us your engineering challenge. We will tell you whether remote, UK, or a blend is the right fit - no obligation.
             </p>
             <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
               <Link

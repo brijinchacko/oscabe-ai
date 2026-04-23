@@ -26,8 +26,8 @@ import { AwardsBanner } from "@/components/shared/awards-banner";
 const WHY_POINTS = [
   "Access exclusive automation and AI roles not advertised elsewhere",
   "Get matched to positions that genuinely fit your technical skills and platform expertise",
-  "Chartered Engineer-led skill verification that sets you apart from other candidates",
-  "Free registration and job matching — no fees, ever",
+  "Engineer-led skill verification that sets you apart from other candidates",
+  "Free registration and job matching - no fees, ever",
   "Career guidance from professionals who understand your industry",
 ];
 
@@ -56,7 +56,7 @@ const STEPS = [
     step: "02",
     title: "Get Matched",
     description:
-      "Our Chartered Engineers review your profile and match you with roles that fit your technical expertise.",
+      "Our Senior Engineers review your profile and match you with roles that fit your technical expertise.",
   },
   {
     icon: MessageSquare,

@@ -61,7 +61,7 @@ export function Footer() {
           <div className="sm:col-span-2 lg:col-span-1">
             <Logo variant="light" size="md" linkTo="/" />
             <p className="mt-4 max-w-xs text-sm text-gray-400">
-              The specialist recruiter for industrial automation and AI. Remote engineers from India and UK recruitment, verified by Chartered Engineers.
+              The specialist recruiter for industrial automation and AI. Remote engineers from India and UK recruitment, verified by Senior Engineers.
             </p>
             <div className="mt-6 flex items-center gap-4">
               {SOCIAL_ICONS.map((social) => (

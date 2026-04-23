@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
     await prisma.activity.create({
       data: {
         type: "REMOTE_ENGINEER_ENQUIRY",
-        title: `Remote Engineer Enquiry: ${data.roleType} — ${data.companyName}`,
+        title: `Remote Engineer Enquiry: ${data.roleType} - ${data.companyName}`,
         content: JSON.stringify({
           companyName: data.companyName,
           contactName: data.contactName,
@@ -82,7 +82,7 @@ export async function POST(req: NextRequest) {
     // Send notification email to info@oscabe.com
     await sendEmail({
       to: ["info@oscabe.com", "info@wartens.com"],
-      subject: `Remote Engineer Enquiry: ${data.roleType} — ${data.companyName}`,
+      subject: `Remote Engineer Enquiry: ${data.roleType} - ${data.companyName}`,
       html: `
         <div style="font-family: Inter, sans-serif; max-width: 600px; margin: 0 auto;">
           <div style="background: #02012B; padding: 20px; text-align: center;">
@@ -110,7 +110,7 @@ export async function POST(req: NextRequest) {
     // Send confirmation email to enquirer
     await sendEmail({
       to: data.email,
-      subject: "Your Remote Engineer Enquiry — OSCABE",
+      subject: "Your Remote Engineer Enquiry - OSCABE",
       html: `
         <div style="font-family: Inter, sans-serif; max-width: 600px; margin: 0 auto;">
           <div style="background: #02012B; padding: 20px; text-align: center;">

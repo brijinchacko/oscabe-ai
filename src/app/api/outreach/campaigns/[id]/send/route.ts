@@ -33,7 +33,7 @@ export async function POST(
         sendVia = "outlook";
       }
     } catch {
-      // No body or invalid JSON — use default (resend)
+      // No body or invalid JSON - use default (resend)
     }
 
     // If sending via Outlook, verify the user has Microsoft connected

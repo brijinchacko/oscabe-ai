@@ -36,9 +36,9 @@ import { AwardsBanner } from "@/components/shared/awards-banner";
 const BENEFITS = [
   {
     icon: ShieldCheck,
-    title: "Chartered Engineer-Led Screening",
+    title: "Engineer-Led Screening",
     description:
-      "Every candidate is technically assessed by a Chartered Engineer who understands PLC, SCADA, controls, robotics, and AI tech stacks. Not just CV forwarding.",
+      "Every candidate is technically assessed by a Senior Engineer who understands PLC, SCADA, controls, robotics, and AI tech stacks. Not just CV forwarding.",
   },
   {
     icon: Clock,
@@ -102,14 +102,14 @@ const STEPS = [
     icon: MessageSquare,
     title: "Understand Your Requirement",
     description:
-      "We learn about the role, your tech stack, must-have skills, and timeline — whether it is Siemens TIA Portal or PyTorch.",
+      "We learn about the role, your tech stack, must-have skills, and timeline - whether it is Siemens TIA Portal or PyTorch.",
   },
   {
     step: 2,
     icon: FileSearch,
     title: "Source & Pre-Screen",
     description:
-      "We search our 6,000+ automation and AI talent pool, then technically screen every candidate with Chartered Engineer verification.",
+      "We search our 6,000+ automation and AI talent pool, then technically screen every candidate with Technical verification.",
   },
   {
     step: 3,
@@ -138,7 +138,7 @@ const PRICING_MODELS = [
     features: [
       "Pay only when you hire",
       "90-day replacement guarantee",
-      "Chartered Engineer screening included",
+      "Technical screening included",
     ],
   },
   {
@@ -211,7 +211,7 @@ export default function EmployersPage() {
                 Hire Verified Automation & AI Engineers
               </h1>
               <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-400 lg:mx-0">
-                Chartered Engineer-screened candidates across PLC, SCADA, Controls, Robotics, Machine Learning, and Computer Vision — delivered in 72 hours, with no upfront fees.
+                Senior Engineer-screened candidates across PLC, SCADA, Controls, Robotics, Machine Learning, and Computer Vision - delivered in 72 hours, with no upfront fees.
               </p>
               <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row lg:justify-start">
                 <Link
@@ -398,7 +398,7 @@ export default function EmployersPage() {
                       From brief to hire in four simple steps
                     </p>
                     <p className="mt-1 text-xs text-gray-400">
-                      Chartered Engineer verification at every stage
+                      Technical verification at every stage
                     </p>
                   </div>
                 </div>
@@ -537,7 +537,7 @@ export default function EmployersPage() {
                 <p className="mt-2 max-w-lg text-sm text-gray-400">
                   Access pre-screened Indian automation and AI engineers from{" "}
                   <span className="font-semibold text-[#22C55E]">{"\u00A3"}22,000/year</span>.
-                  Chartered Engineer verified, GDPR compliant, monthly billing.
+                  Senior Engineer verified, GDPR compliant, monthly billing.
                 </p>
               </div>
               <Link
@@ -593,7 +593,7 @@ export default function EmployersPage() {
                 <ul className="mt-3 space-y-2 text-sm text-gray-400">
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-[#00D4FF]" />
-                    Chartered Engineer screening
+                    Technical screening
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-[#00D4FF]" />
@@ -642,7 +642,7 @@ export default function EmployersPage() {
             Ready to Hire Automation & AI Engineers?
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-lg text-gray-400">
-            Submit your requirement and receive a Chartered Engineer-verified shortlist of automation and AI candidates within 72 hours.
+            Submit your requirement and receive a Engineer-verified shortlist of automation and AI candidates within 72 hours.
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link

@@ -1,7 +1,7 @@
 /* OSCABE - The Specialist Recruiter for Industrial Automation & AI */
 
 /* TEAM */
-Founder & CEO: Joseph Brijin Chacko, CEng
+Founder & CEO: Joseph Brijin Chacko
 Company: Oscabe Ltd (Company No. 15913493)
 Parent: Wartens UK Ltd
 Location: Milton Keynes, UK

@@ -7,7 +7,7 @@ import { classifyReply } from "@/lib/outreach-ai";
 import { wrapEmailHtml } from "@/lib/email-html";
 
 // ---------------------------------------------------------------------------
-// Schedule (UK time — Europe/London)
+// Schedule (UK time - Europe/London)
 // ---------------------------------------------------------------------------
 // Monday 08:00        → discover
 // Mon-Fri 08:30       → verify
@@ -476,7 +476,7 @@ const CRON_TASKS: Record<TaskName, () => Promise<Record<string, unknown>>> = {
 };
 
 // ---------------------------------------------------------------------------
-// GET handler — called by VPS cron
+// GET handler - called by VPS cron
 // ---------------------------------------------------------------------------
 
 export async function GET(req: NextRequest) {

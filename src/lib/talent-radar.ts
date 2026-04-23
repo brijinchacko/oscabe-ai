@@ -157,10 +157,10 @@ export function formatDigestEmailHtml(digest: TalentRadarDigest): string {
           ${c.firstName} ${c.lastName}
         </td>
         <td style="padding:8px 12px;border-bottom:1px solid #eee;font-size:14px;color:#666;">
-          ${c.headline || "—"}
+          ${c.headline || "-"}
         </td>
         <td style="padding:8px 12px;border-bottom:1px solid #eee;font-size:14px;color:#666;">
-          ${c.location || "—"}
+          ${c.location || "-"}
         </td>
         <td style="padding:8px 12px;border-bottom:1px solid #eee;font-size:14px;color:#666;">
           ${c.skills.slice(0, 3).join(", ")}

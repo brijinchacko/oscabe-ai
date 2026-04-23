@@ -32,7 +32,7 @@ export const BLOG_POSTS: BlogPost[] = [
     image:
       "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=450&fit=crop",
     imageAlt: "Industrial automation control panel with PLC systems",
-    author: "Joseph Brijin Chacko, CEng",
+    author: "Joseph Brijin Chacko",
     authorTitle: "Founder & Director, OSCABE",
     keywords: [
       "PLC programming skills",
@@ -56,7 +56,7 @@ export const BLOG_POSTS: BlogPost[] = [
 
 ## 1. Siemens TIA Portal (S7-1200 / S7-1500)
 
-Siemens remains the dominant platform across UK manufacturing, pharmaceuticals, and water treatment. Proficiency in TIA Portal — including hardware configuration, HMI development, and online diagnostics — is consistently the most requested skill in PLC job adverts. Employers expect familiarity with both S7-1200 and S7-1500 series processors.
+Siemens remains the dominant platform across UK manufacturing, pharmaceuticals, and water treatment. Proficiency in TIA Portal - including hardware configuration, HMI development, and online diagnostics - is consistently the most requested skill in PLC job adverts. Employers expect familiarity with both S7-1200 and S7-1500 series processors.
 
 ## 2. Allen-Bradley / Rockwell Studio 5000
 
@@ -68,7 +68,7 @@ The industry is moving beyond ladder logic. Structured text is increasingly pref
 
 ## 4. Safety PLC Programming (SIL-Rated Systems)
 
-Functional safety is non-negotiable in sectors such as oil and gas, chemicals, and pharmaceuticals. Skills in safety PLC programming — including TIA Portal Safety, GuardLogix, and compliance with IEC 61508/62061 — are in high demand and attract salary premiums of 10-15%.
+Functional safety is non-negotiable in sectors such as oil and gas, chemicals, and pharmaceuticals. Skills in safety PLC programming - including TIA Portal Safety, GuardLogix, and compliance with IEC 61508/62061 - are in high demand and attract salary premiums of 10-15%.
 
 ## 5. Schneider Electric EcoStruxure / Unity Pro
 
@@ -98,7 +98,7 @@ Technical ability alone is not enough. Employers prize engineers who can commiss
 
 The UK PLC job market is evolving rapidly. Salaries for experienced PLC programmers now range from £42,000 to £65,000 for permanent roles, with contract day rates reaching £350-£500 depending on platform specialism and security clearance. Engineers who combine traditional PLC skills with knowledge of IIoT, cloud connectivity, and data analytics will be best positioned for career growth.
 
-At [OSCABE](/about), we specialise in placing PLC programmers and automation engineers across all major platforms. Our Chartered Engineer-led screening ensures that candidates are technically verified before they reach your desk.`,
+At [OSCABE](/about), we specialise in placing PLC programmers and automation engineers across all major platforms. Our Engineer-led screening ensures that candidates are technically verified before they reach your desk.`,
   },
   {
     slug: "how-ai-is-transforming-industrial-automation-recruitment",
@@ -111,7 +111,7 @@ At [OSCABE](/about), we specialise in placing PLC programmers and automation eng
     image:
       "https://images.unsplash.com/photo-1555255707-c07966088b7b?w=800&h=450&fit=crop",
     imageAlt: "AI technology and data analysis for recruitment",
-    author: "Joseph Brijin Chacko, CEng",
+    author: "Joseph Brijin Chacko",
     authorTitle: "Founder & Director, OSCABE",
     keywords: [
       "AI recruitment",
@@ -159,13 +159,13 @@ When properly designed, AI recruitment tools can reduce unconscious bias by focu
 
 Despite these advances, AI does not replace the need for human expertise in specialist recruitment. Technology excels at processing data and identifying patterns, but understanding a candidate's career motivations, cultural fit, and growth potential still requires experienced human judgement. The most effective approach combines AI efficiency with expert human assessment.
 
-At [OSCABE](/about), we combine AI-powered matching with Chartered Engineer-led technical screening. Our engineers understand the difference between a safety PLC programmer and a general controls engineer because they have worked in those roles themselves. The result is shortlists that are both technically precise and contextually relevant.
+At [OSCABE](/about), we combine AI-powered matching with Engineer-led technical screening. Our engineers understand the difference between a safety PLC programmer and a general controls engineer because they have worked in those roles themselves. The result is shortlists that are both technically precise and contextually relevant.
 
 ## What This Means for Employers
 
 Companies that embrace AI-driven recruitment gain a measurable competitive advantage. Faster time-to-hire, better candidate quality, and lower recruitment costs are the tangible benefits. In a market where skilled automation engineers are in short supply, the ability to identify and engage top talent quickly is a genuine differentiator.
 
-If you are struggling to find the right automation or AI talent, [post a role with OSCABE](/post-a-role) and experience the difference that AI-enhanced, engineer-led recruitment delivers. We provide shortlists within 72 hours — with no upfront fees.`,
+If you are struggling to find the right automation or AI talent, [post a role with OSCABE](/post-a-role) and experience the difference that AI-enhanced, engineer-led recruitment delivers. We provide shortlists within 72 hours - with no upfront fees.`,
   },
   {
     slug: "scada-engineer-career-guide-uk",
@@ -178,7 +178,7 @@ If you are struggling to find the right automation or AI talent, [post a role wi
     image:
       "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&h=450&fit=crop",
     imageAlt: "SCADA control room with monitoring screens",
-    author: "Joseph Brijin Chacko, CEng",
+    author: "Joseph Brijin Chacko",
     authorTitle: "Founder & Director, OSCABE",
     keywords: [
       "SCADA engineer salary UK",
@@ -209,12 +209,12 @@ A SCADA engineer designs and implements supervisory control systems that monitor
 
 The most in-demand SCADA platforms in the UK market include:
 
-- **Ignition by Inductive Automation** — rapidly growing, particularly in manufacturing and utilities
-- **AVEVA (formerly Wonderware)** — dominant in process industries
-- **Siemens WinCC / WinCC OA** — strong in manufacturing and infrastructure
-- **GE Digital iFIX / Proficy** — prevalent in pharmaceuticals and chemicals
-- **Rockwell FactoryTalk View SE** — standard in discrete manufacturing
-- **Citect** — common in mining and heavy industry
+- **Ignition by Inductive Automation** - rapidly growing, particularly in manufacturing and utilities
+- **AVEVA (formerly Wonderware)** - dominant in process industries
+- **Siemens WinCC / WinCC OA** - strong in manufacturing and infrastructure
+- **GE Digital iFIX / Proficy** - prevalent in pharmaceuticals and chemicals
+- **Rockwell FactoryTalk View SE** - standard in discrete manufacturing
+- **Citect** - common in mining and heavy industry
 
 ### Communication Protocols
 
@@ -245,17 +245,17 @@ Engineers with Ignition or AVEVA experience, combined with cybersecurity credent
 
 SCADA engineering offers several clear progression routes:
 
-- **Technical Lead / Principal SCADA Engineer** — leading project delivery and system architecture
-- **OT Cybersecurity Specialist** — a rapidly growing niche with significant salary potential
-- **Solutions Architect** — designing enterprise-level SCADA and MES architectures
-- **Project / Programme Manager** — transitioning into delivery management
-- **IIoT / Digital Transformation** — bridging SCADA with cloud platforms and analytics
+- **Technical Lead / Principal SCADA Engineer** - leading project delivery and system architecture
+- **OT Cybersecurity Specialist** - a rapidly growing niche with significant salary potential
+- **Solutions Architect** - designing enterprise-level SCADA and MES architectures
+- **Project / Programme Manager** - transitioning into delivery management
+- **IIoT / Digital Transformation** - bridging SCADA with cloud platforms and analytics
 
 ## How to Stand Out in the Market
 
 The most successful SCADA engineers combine deep platform expertise with strong communication skills and an understanding of the industries they serve. Investing in vendor certifications (such as Ignition Certified Developer or AVEVA Accredited Developer), contributing to professional communities, and staying current with cybersecurity standards will differentiate you from the competition.
 
-Ready to take the next step in your SCADA career? [Register with OSCABE](/register) to access exclusive roles and receive Chartered Engineer-led career guidance. You can also [browse current opportunities](/jobs) across the UK.`,
+Ready to take the next step in your SCADA career? [Register with OSCABE](/register) to access exclusive roles and receive Engineer-led career guidance. You can also [browse current opportunities](/jobs) across the UK.`,
   },
   {
     slug: "machine-learning-manufacturing-roles-career-paths",
@@ -268,7 +268,7 @@ Ready to take the next step in your SCADA career? [Register with OSCABE](/regist
     image:
       "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=800&h=450&fit=crop",
     imageAlt: "Machine learning and AI in manufacturing environment",
-    author: "Joseph Brijin Chacko, CEng",
+    author: "Joseph Brijin Chacko",
     authorTitle: "Founder & Director, OSCABE",
     keywords: [
       "ML engineer manufacturing",
@@ -280,7 +280,7 @@ Ready to take the next step in your SCADA career? [Register with OSCABE](/regist
     metaTitle:
       "Machine Learning in Manufacturing: Roles & Career Paths 2026",
     metaDescription:
-      "Discover ML engineering roles in UK manufacturing — predictive maintenance, quality control, demand forecasting. Career paths, skills, and salaries for ML engineers.",
+      "Discover ML engineering roles in UK manufacturing - predictive maintenance, quality control, demand forecasting. Career paths, skills, and salaries for ML engineers.",
     ctaText: "Browse AI Jobs",
     ctaHref: "/jobs",
     relatedSlugs: [
@@ -288,7 +288,7 @@ Ready to take the next step in your SCADA career? [Register with OSCABE](/regist
       "digital-twin-engineers-most-in-demand-industry-4",
       "plc-programmer-to-ai-engineer-career-transition",
     ],
-    content: `Machine learning is no longer a research curiosity in manufacturing — it is a production-critical capability. From predicting equipment failures before they happen to automating quality inspection at line speed, ML engineers are becoming essential members of manufacturing teams. For engineers and data scientists considering this career path, the opportunities are substantial and growing rapidly.
+    content: `Machine learning is no longer a research curiosity in manufacturing - it is a production-critical capability. From predicting equipment failures before they happen to automating quality inspection at line speed, ML engineers are becoming essential members of manufacturing teams. For engineers and data scientists considering this career path, the opportunities are substantial and growing rapidly.
 
 ## Key ML Applications in Manufacturing
 
@@ -316,11 +316,11 @@ Machine learning models increasingly feed into digital twin systems that simulat
 
 The ML landscape in manufacturing includes several distinct roles:
 
-- **ML Engineer** — builds, trains, and deploys production ML models (£55,000-£85,000)
-- **Data Scientist (Manufacturing)** — analyses production data and develops predictive models (£45,000-£75,000)
-- **Computer Vision Engineer** — specialises in image-based inspection and recognition (£55,000-£80,000)
-- **MLOps Engineer** — manages ML model deployment, monitoring, and lifecycle (£60,000-£90,000)
-- **AI/ML Solutions Architect** — designs end-to-end ML systems for manufacturing use cases (£75,000-£100,000+)
+- **ML Engineer** - builds, trains, and deploys production ML models (£55,000-£85,000)
+- **Data Scientist (Manufacturing)** - analyses production data and develops predictive models (£45,000-£75,000)
+- **Computer Vision Engineer** - specialises in image-based inspection and recognition (£55,000-£80,000)
+- **MLOps Engineer** - manages ML model deployment, monitoring, and lifecycle (£60,000-£90,000)
+- **AI/ML Solutions Architect** - designs end-to-end ML systems for manufacturing use cases (£75,000-£100,000+)
 
 ## Essential Skills
 
@@ -352,7 +352,7 @@ If you are an ML engineer or data scientist looking to apply your skills in manu
     image:
       "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=800&h=450&fit=crop",
     imageAlt: "Industrial robotics arm in manufacturing facility",
-    author: "Joseph Brijin Chacko, CEng",
+    author: "Joseph Brijin Chacko",
     authorTitle: "Founder & Director, OSCABE",
     keywords: [
       "robotics engineer jobs UK",
@@ -390,7 +390,7 @@ ABB's robots are widely deployed in food and beverage, pharmaceuticals, and elec
 
 ### KUKA
 
-KUKA has a strong presence in automotive (particularly with its Volkswagen Group heritage) and heavy manufacturing. KRL (KUKA Robot Language) programmers are in shorter supply than FANUC or ABB specialists, which means those with KUKA experience often command higher rates — contract day rates of £400-£550 are common.
+KUKA has a strong presence in automotive (particularly with its Volkswagen Group heritage) and heavy manufacturing. KRL (KUKA Robot Language) programmers are in shorter supply than FANUC or ABB specialists, which means those with KUKA experience often command higher rates - contract day rates of £400-£550 are common.
 
 ### Universal Robots
 
@@ -412,27 +412,27 @@ Engineers with multi-platform experience, vision system integration skills, or s
 
 The most employable robotics engineers combine programming ability with broader competencies:
 
-- **Offline programming and simulation** — RobotStudio, ROBOGUIDE, KUKA.Sim
-- **Vision systems integration** — Cognex, Keyence, FANUC iRVision
-- **Safety systems** — risk assessments, safeguarding, ISO 10218 compliance
-- **PLC integration** — communicating between robots and cell controllers
-- **Mechanical aptitude** — gripper design, tooling, and work cell layout
+- **Offline programming and simulation** - RobotStudio, ROBOGUIDE, KUKA.Sim
+- **Vision systems integration** - Cognex, Keyence, FANUC iRVision
+- **Safety systems** - risk assessments, safeguarding, ISO 10218 compliance
+- **PLC integration** - communicating between robots and cell controllers
+- **Mechanical aptitude** - gripper design, tooling, and work cell layout
 
 ## Career Progression
 
 Robotics engineers have clear career paths available:
 
-- **Senior Robot Programmer** — complex multi-robot cell programming
-- **Robotics Project Engineer** — managing full cell design and delivery
-- **Simulation and Virtual Commissioning Lead** — digital twin and offline programming
-- **Robotics Solutions Architect** — designing automated production systems
-- **Robotics AI Engineer** — integrating machine learning with robotic systems
+- **Senior Robot Programmer** - complex multi-robot cell programming
+- **Robotics Project Engineer** - managing full cell design and delivery
+- **Simulation and Virtual Commissioning Lead** - digital twin and offline programming
+- **Robotics Solutions Architect** - designing automated production systems
+- **Robotics AI Engineer** - integrating machine learning with robotic systems
 
 ## How to Position Yourself
 
 The robotics market rewards specialists. Gaining deep expertise in one platform, then broadening to a second, is the most effective strategy. Vendor certifications (FANUC Certified Robot Engineer, ABB Certified Robot Programmer) add credibility and often unlock higher-paying roles.
 
-Ready to advance your robotics career? [Register with OSCABE](/register) to access exclusive robotics roles from leading UK manufacturers and integrators. Our Chartered Engineer-led team understands the nuances of every platform.`,
+Ready to advance your robotics career? [Register with OSCABE](/register) to access exclusive robotics roles from leading UK manufacturers and integrators. Our Engineer-led team understands the nuances of every platform.`,
   },
   {
     slug: "computer-vision-industry-quality-control-autonomous",
@@ -446,7 +446,7 @@ Ready to advance your robotics career? [Register with OSCABE](/register) to acce
     image:
       "https://images.unsplash.com/photo-1555255707-c07966088b7b?w=800&h=450&fit=crop",
     imageAlt: "Computer vision and AI analysis in industrial setting",
-    author: "Joseph Brijin Chacko, CEng",
+    author: "Joseph Brijin Chacko",
     authorTitle: "Founder & Director, OSCABE",
     keywords: [
       "computer vision engineer jobs",
@@ -476,7 +476,7 @@ The largest application area by far. Deep learning models trained on production 
 
 ### Robotic Guidance and Bin Picking
 
-Computer vision enables robots to identify, locate, and pick objects in unstructured environments — a task known as bin picking. This requires 3D vision systems, point cloud processing, and real-time object recognition. As manufacturers automate more complex assembly and handling tasks, demand for engineers who can deliver these solutions is surging.
+Computer vision enables robots to identify, locate, and pick objects in unstructured environments - a task known as bin picking. This requires 3D vision systems, point cloud processing, and real-time object recognition. As manufacturers automate more complex assembly and handling tasks, demand for engineers who can deliver these solutions is surging.
 
 ### Optical Character Recognition (OCR) and Traceability
 
@@ -494,28 +494,28 @@ Non-contact measurement using structured light, laser scanning, and stereo visio
 
 The ideal computer vision engineer for industrial applications combines several skill areas:
 
-- **Deep Learning Frameworks** — PyTorch, TensorFlow, ONNX Runtime
-- **Classical CV** — OpenCV, image filtering, morphological operations, feature extraction
-- **3D Vision** — point cloud processing, stereo vision, structured light
-- **Camera Hardware** — industrial cameras (Basler, FLIR, Cognex), lighting design, lens selection
-- **Edge Deployment** — NVIDIA Jetson, Intel OpenVINO, model optimisation for real-time inference
-- **Programming** — Python for development, C++ for production deployment
-- **Integration** — interfacing with PLCs, robots, and SCADA systems via industrial protocols
+- **Deep Learning Frameworks** - PyTorch, TensorFlow, ONNX Runtime
+- **Classical CV** - OpenCV, image filtering, morphological operations, feature extraction
+- **3D Vision** - point cloud processing, stereo vision, structured light
+- **Camera Hardware** - industrial cameras (Basler, FLIR, Cognex), lighting design, lens selection
+- **Edge Deployment** - NVIDIA Jetson, Intel OpenVINO, model optimisation for real-time inference
+- **Programming** - Python for development, C++ for production deployment
+- **Integration** - interfacing with PLCs, robots, and SCADA systems via industrial protocols
 
 ## Career Paths and Salary Expectations
 
 Computer vision roles in industry span a broad range:
 
-- **Machine Vision Engineer** — integrating hardware and software for inspection systems (£40,000-£55,000)
-- **Computer Vision Engineer** — developing deep learning models for industrial applications (£50,000-£75,000)
-- **Senior CV / Perception Engineer** — leading complex vision projects, 3D perception, and sensor fusion (£65,000-£90,000)
-- **CV Solutions Architect** — designing enterprise-scale vision inspection platforms (£80,000-£100,000+)
+- **Machine Vision Engineer** - integrating hardware and software for inspection systems (£40,000-£55,000)
+- **Computer Vision Engineer** - developing deep learning models for industrial applications (£50,000-£75,000)
+- **Senior CV / Perception Engineer** - leading complex vision projects, 3D perception, and sensor fusion (£65,000-£90,000)
+- **CV Solutions Architect** - designing enterprise-scale vision inspection platforms (£80,000-£100,000+)
 
 Contract rates for experienced CV engineers range from £400-£600 per day, with specialists in 3D perception or autonomous systems commanding even higher rates.
 
 ## Bridging the OT-IT Divide
 
-The most valuable computer vision engineers in manufacturing are those who understand both the AI and the industrial context. Knowing how a production line operates, understanding why a PLC needs to trigger an inspection at a specific point, and being able to design lighting that works in a real factory environment — these practical skills are what separate effective industrial CV engineers from those who only know algorithms.
+The most valuable computer vision engineers in manufacturing are those who understand both the AI and the industrial context. Knowing how a production line operates, understanding why a PLC needs to trigger an inspection at a specific point, and being able to design lighting that works in a real factory environment - these practical skills are what separate effective industrial CV engineers from those who only know algorithms.
 
 If you are a computer vision engineer looking for your next challenge in manufacturing or industrial automation, [browse current roles](/jobs) or [contact our team](/contact) for expert career advice. OSCABE connects specialist CV talent with the UK's most innovative manufacturers.`,
   },
@@ -530,7 +530,7 @@ If you are a computer vision engineer looking for your next challenge in manufac
     image:
       "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=450&fit=crop",
     imageAlt: "Engineer working on industrial control systems",
-    author: "Joseph Brijin Chacko, CEng",
+    author: "Joseph Brijin Chacko",
     authorTitle: "Founder & Director, OSCABE",
     keywords: [
       "controls engineer vs automation engineer",
@@ -542,7 +542,7 @@ If you are a computer vision engineer looking for your next challenge in manufac
     metaTitle:
       "Controls Engineer vs Automation Engineer: Key Differences Explained",
     metaDescription:
-      "Controls engineer vs automation engineer — what is the difference? Compare roles, skills, salaries, and career paths. Expert guide for UK engineering professionals.",
+      "Controls engineer vs automation engineer - what is the difference? Compare roles, skills, salaries, and career paths. Expert guide for UK engineering professionals.",
     ctaText: "Browse Jobs",
     ctaHref: "/jobs",
     relatedSlugs: [
@@ -550,17 +550,17 @@ If you are a computer vision engineer looking for your next challenge in manufac
       "scada-engineer-career-guide-uk",
       "plc-programmer-to-ai-engineer-career-transition",
     ],
-    content: `"Controls engineer" and "automation engineer" are two of the most commonly used job titles in industrial automation, yet they are frequently confused — by candidates, employers, and recruiters alike. While there is significant overlap between the roles, understanding the distinctions is important for career planning, job searching, and hiring. This guide clarifies the differences and helps you position yourself in the market.
+    content: `"Controls engineer" and "automation engineer" are two of the most commonly used job titles in industrial automation, yet they are frequently confused - by candidates, employers, and recruiters alike. While there is significant overlap between the roles, understanding the distinctions is important for career planning, job searching, and hiring. This guide clarifies the differences and helps you position yourself in the market.
 
 ## Controls Engineer: The Specialist
 
 A controls engineer focuses on the design, programming, and commissioning of control systems. This is fundamentally an electrical and software engineering role, with deep expertise in:
 
-- **PLC programming** — writing and debugging control logic for Siemens, Allen-Bradley, Schneider, Beckhoff, and other platforms
-- **Electrical design** — control panel layout, circuit design, and compliance with BS 7671
-- **Instrumentation** — selecting, calibrating, and integrating sensors, transmitters, and actuators
-- **Safety systems** — functional safety design including SIL-rated systems and safety PLCs
-- **Commissioning** — testing, fault-finding, and bringing systems to operational readiness
+- **PLC programming** - writing and debugging control logic for Siemens, Allen-Bradley, Schneider, Beckhoff, and other platforms
+- **Electrical design** - control panel layout, circuit design, and compliance with BS 7671
+- **Instrumentation** - selecting, calibrating, and integrating sensors, transmitters, and actuators
+- **Safety systems** - functional safety design including SIL-rated systems and safety PLCs
+- **Commissioning** - testing, fault-finding, and bringing systems to operational readiness
 
 Controls engineers typically work at the component and system level. They are concerned with how individual machines and processes are controlled, how signals flow between sensors, PLCs, and actuators, and how safety requirements are met.
 
@@ -570,11 +570,11 @@ Controls engineers typically work at the component and system level. They are co
 
 An automation engineer takes a broader view. While they may possess many of the same technical skills as a controls engineer, their role extends to system integration, process optimisation, and project delivery. Key responsibilities include:
 
-- **System architecture** — designing how PLCs, SCADA, MES, and enterprise systems connect and communicate
-- **Process optimisation** — using automation to improve efficiency, reduce waste, and increase throughput
-- **Project management** — planning, delivering, and commissioning automation projects
-- **Vendor coordination** — managing relationships with equipment suppliers, integrators, and OEMs
-- **Continuous improvement** — identifying opportunities to automate manual processes
+- **System architecture** - designing how PLCs, SCADA, MES, and enterprise systems connect and communicate
+- **Process optimisation** - using automation to improve efficiency, reduce waste, and increase throughput
+- **Project management** - planning, delivering, and commissioning automation projects
+- **Vendor coordination** - managing relationships with equipment suppliers, integrators, and OEMs
+- **Continuous improvement** - identifying opportunities to automate manual processes
 
 Automation engineers think about the production line or plant as a whole. They consider how automation serves business objectives, not just technical requirements.
 
@@ -602,13 +602,13 @@ In practice, there is considerable overlap between these roles. Many engineers h
 
 ## Which Career Path Is Right for You?
 
-If you enjoy deep technical work — writing elegant PLC code, designing safety circuits, and commissioning systems hands-on — a controls engineering career may suit you best. If you prefer a broader perspective — designing how entire systems work together, optimising processes, and managing projects — automation engineering offers a wider scope.
+If you enjoy deep technical work - writing elegant PLC code, designing safety circuits, and commissioning systems hands-on - a controls engineering career may suit you best. If you prefer a broader perspective - designing how entire systems work together, optimising processes, and managing projects - automation engineering offers a wider scope.
 
 Many of the most successful professionals in our network have built careers that combine both perspectives. Starting in controls engineering provides a strong technical foundation, while moving into automation engineering broadens your impact and opens doors to leadership roles.
 
 ## Finding the Right Role
 
-Whether you identify as a controls engineer, automation engineer, or both, [OSCABE](/about) can help you find roles that match your skills and ambitions. [Browse current openings](/jobs) or [register with us](/register) for personalised job matching and career advice from our Chartered Engineer-led team.`,
+Whether you identify as a controls engineer, automation engineer, or both, [OSCABE](/about) can help you find roles that match your skills and ambitions. [Browse current openings](/jobs) or [register with us](/register) for personalised job matching and career advice from our Engineer-led team.`,
   },
   {
     slug: "uk-manufacturers-struggling-hire-automation-engineers",
@@ -622,7 +622,7 @@ Whether you identify as a controls engineer, automation engineer, or both, [OSCA
     image:
       "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=450&fit=crop",
     imageAlt: "Manufacturing facility with automation equipment",
-    author: "Joseph Brijin Chacko, CEng",
+    author: "Joseph Brijin Chacko",
     authorTitle: "Founder & Director, OSCABE",
     keywords: [
       "automation engineer shortage UK",
@@ -642,7 +642,7 @@ Whether you identify as a controls engineer, automation engineer, or both, [OSCA
       "controls-engineer-vs-automation-engineer",
       "top-10-plc-programming-skills-employers-want-2026",
     ],
-    content: `The United Kingdom is facing a significant and worsening shortage of automation engineers. According to Make UK's 2025 skills survey, 78% of manufacturers report difficulty recruiting for automation and controls roles — up from 64% just two years earlier. For companies trying to modernise their production facilities, adopt Industry 4.0 technologies, or simply maintain existing automated systems, finding qualified engineers has become one of their most pressing business challenges.
+    content: `The United Kingdom is facing a significant and worsening shortage of automation engineers. According to Make UK's 2025 skills survey, 78% of manufacturers report difficulty recruiting for automation and controls roles - up from 64% just two years earlier. For companies trying to modernise their production facilities, adopt Industry 4.0 technologies, or simply maintain existing automated systems, finding qualified engineers has become one of their most pressing business challenges.
 
 ## The Scale of the Problem
 
@@ -660,7 +660,7 @@ UK universities produce relatively few graduates with the specific combination o
 
 ### Competition from Other Sectors
 
-Talented engineers with programming skills are increasingly attracted to software development, fintech, and AI — sectors that often offer higher salaries, remote working options, and perceived career prestige. Manufacturing struggles to compete for the same talent pool.
+Talented engineers with programming skills are increasingly attracted to software development, fintech, and AI - sectors that often offer higher salaries, remote working options, and perceived career prestige. Manufacturing struggles to compete for the same talent pool.
 
 ### Post-Brexit Mobility Challenges
 
@@ -668,22 +668,22 @@ Freedom of movement restrictions have reduced the flow of experienced automation
 
 ### Rapid Technology Evolution
 
-The convergence of traditional automation with IIoT, cloud computing, cybersecurity, and AI means that the skill requirements for automation engineers are expanding faster than the workforce can adapt. Employers increasingly want engineers who can programme PLCs and understand data analytics — a combination that is genuinely rare.
+The convergence of traditional automation with IIoT, cloud computing, cybersecurity, and AI means that the skill requirements for automation engineers are expanding faster than the workforce can adapt. Employers increasingly want engineers who can programme PLCs and understand data analytics - a combination that is genuinely rare.
 
 ## The Impact on Manufacturers
 
 The automation talent shortage has tangible business consequences:
 
-- **Project delays** — new production lines and facility upgrades stall when engineers cannot be found
-- **Rising costs** — salary inflation of 8-12% annually for experienced automation engineers
-- **Quality risks** — relying on under-qualified engineers or stretched teams increases error rates
-- **Competitive disadvantage** — companies that cannot automate fall behind those that can
+- **Project delays** - new production lines and facility upgrades stall when engineers cannot be found
+- **Rising costs** - salary inflation of 8-12% annually for experienced automation engineers
+- **Quality risks** - relying on under-qualified engineers or stretched teams increases error rates
+- **Competitive disadvantage** - companies that cannot automate fall behind those that can
 
 ## Practical Solutions
 
 ### Partner with Specialist Recruiters
 
-Generic recruitment agencies lack the technical knowledge to source and screen automation engineers effectively. Working with a specialist recruiter like [OSCABE](/about) — where candidates are assessed by Chartered Engineers who understand the difference between a Siemens TIA Portal specialist and a Rockwell controls engineer — dramatically improves candidate quality and reduces time-to-hire.
+Generic recruitment agencies lack the technical knowledge to source and screen automation engineers effectively. Working with a specialist recruiter like [OSCABE](/about) - where candidates are assessed by Senior Engineers who understand the difference between a Siemens TIA Portal specialist and a Rockwell controls engineer - dramatically improves candidate quality and reduces time-to-hire.
 
 ### Invest in Training and Development
 
@@ -697,7 +697,7 @@ The market has shifted. Employers who insist on below-market salaries or inflexi
 
 For project-based work, contract engineers can fill gaps while permanent recruitment continues. OSCABE can supply both permanent and contract automation engineers within 72 hours.
 
-If you are struggling to hire automation engineers, [submit your requirement to OSCABE](/post-a-role). We deliver Chartered Engineer-verified shortlists within 72 hours, with no upfront fees. Let us help you solve your talent challenge.`,
+If you are struggling to hire automation engineers, [submit your requirement to OSCABE](/post-a-role). We deliver Engineer-verified shortlists within 72 hours, with no upfront fees. Let us help you solve your talent challenge.`,
   },
   {
     slug: "digital-twin-engineers-most-in-demand-industry-4",
@@ -711,7 +711,7 @@ If you are struggling to hire automation engineers, [submit your requirement to 
     image:
       "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&h=450&fit=crop",
     imageAlt: "Digital twin simulation and Industry 4.0 technology",
-    author: "Joseph Brijin Chacko, CEng",
+    author: "Joseph Brijin Chacko",
     authorTitle: "Founder & Director, OSCABE",
     keywords: [
       "digital twin engineer jobs",
@@ -731,7 +731,7 @@ If you are struggling to hire automation engineers, [submit your requirement to 
       "computer-vision-industry-quality-control-autonomous",
       "plc-programmer-to-ai-engineer-career-transition",
     ],
-    content: `If there is one role that encapsulates the promise of Industry 4.0, it is the digital twin engineer. These professionals build virtual replicas of physical assets, processes, and entire factories — models that simulate, predict, and optimise real-world operations in real time. The demand for digital twin expertise has exploded, and engineers who can deliver in this space are commanding some of the highest salaries in industrial technology.
+    content: `If there is one role that encapsulates the promise of Industry 4.0, it is the digital twin engineer. These professionals build virtual replicas of physical assets, processes, and entire factories - models that simulate, predict, and optimise real-world operations in real time. The demand for digital twin expertise has exploded, and engineers who can deliver in this space are commanding some of the highest salaries in industrial technology.
 
 ## What Is a Digital Twin?
 
@@ -739,20 +739,20 @@ A digital twin is a dynamic virtual model of a physical system that is continuou
 
 Digital twins operate at multiple levels:
 
-- **Component twins** — individual machines, motors, or instruments
-- **Asset twins** — complete production lines or systems
-- **Process twins** — end-to-end manufacturing workflows
-- **Factory twins** — entire facility operations including logistics, energy, and maintenance
+- **Component twins** - individual machines, motors, or instruments
+- **Asset twins** - complete production lines or systems
+- **Process twins** - end-to-end manufacturing workflows
+- **Factory twins** - entire facility operations including logistics, energy, and maintenance
 
 ## Why Demand Is Surging
 
 Several factors are driving the explosive growth in digital twin adoption:
 
-- **Manufacturing digitalisation** — UK government initiatives and industry investment in smart factories
-- **Predictive maintenance** — digital twins reduce unplanned downtime by enabling condition-based maintenance
-- **Virtual commissioning** — testing and validating automation systems before physical installation saves weeks of project time
-- **Sustainability** — simulating energy consumption and waste generation to meet net-zero targets
-- **Supply chain resilience** — modelling production scenarios to respond to disruptions
+- **Manufacturing digitalisation** - UK government initiatives and industry investment in smart factories
+- **Predictive maintenance** - digital twins reduce unplanned downtime by enabling condition-based maintenance
+- **Virtual commissioning** - testing and validating automation systems before physical installation saves weeks of project time
+- **Sustainability** - simulating energy consumption and waste generation to meet net-zero targets
+- **Supply chain resilience** - modelling production scenarios to respond to disruptions
 
 Market analysts estimate that the global digital twin market will exceed $110 billion by 2028, with manufacturing representing the largest single sector.
 
@@ -814,7 +814,7 @@ There is no single path into digital twin engineering. Successful professionals 
 
 The most effective approach is to build on your existing strengths. If you are an automation engineer, learn Python and explore Siemens Plant Simulation. If you are a software developer, gain exposure to manufacturing processes and industrial protocols. Vendor certifications in platforms like Azure Digital Twins or Siemens MindSphere add immediate credibility.
 
-[Register with OSCABE](/register) to access exclusive digital twin and Industry 4.0 roles. Our team includes Chartered Engineers who understand both the technology and the career landscape — we can guide your transition into this rapidly growing field.`,
+[Register with OSCABE](/register) to access exclusive digital twin and Industry 4.0 roles. Our team includes Senior Engineers who understand both the technology and the career landscape - we can guide your transition into this rapidly growing field.`,
   },
   {
     slug: "plc-programmer-to-ai-engineer-career-transition",
@@ -827,7 +827,7 @@ The most effective approach is to build on your existing strengths. If you are a
     image:
       "https://images.unsplash.com/photo-1555255707-c07966088b7b?w=800&h=450&fit=crop",
     imageAlt: "Engineer transitioning from automation to AI technology",
-    author: "Joseph Brijin Chacko, CEng",
+    author: "Joseph Brijin Chacko",
     authorTitle: "Founder & Director, OSCABE",
     keywords: [
       "PLC to AI career change",
@@ -847,7 +847,7 @@ The most effective approach is to build on your existing strengths. If you are a
       "machine-learning-manufacturing-roles-career-paths",
       "digital-twin-engineers-most-in-demand-industry-4",
     ],
-    content: `The convergence of industrial automation and artificial intelligence is creating a new breed of engineering role — and PLC programmers are uniquely positioned to fill it. If you have spent years writing ladder logic, debugging Siemens or Allen-Bradley code, and commissioning control systems, you already possess many of the skills that AI-focused manufacturers desperately need. The transition is not as daunting as it appears, and the career rewards are substantial.
+    content: `The convergence of industrial automation and artificial intelligence is creating a new breed of engineering role - and PLC programmers are uniquely positioned to fill it. If you have spent years writing ladder logic, debugging Siemens or Allen-Bradley code, and commissioning control systems, you already possess many of the skills that AI-focused manufacturers desperately need. The transition is not as daunting as it appears, and the career rewards are substantial.
 
 ## Why PLC Programmers Make Excellent AI Engineers
 
@@ -855,7 +855,7 @@ The automation-to-AI career transition works because the foundational skills ove
 
 ### You Already Think in Systems
 
-PLC programmers understand feedback loops, state machines, sequential logic, and process control. These concepts map directly onto machine learning workflows — training loops, model states, and inference pipelines follow similar patterns.
+PLC programmers understand feedback loops, state machines, sequential logic, and process control. These concepts map directly onto machine learning workflows - training loops, model states, and inference pipelines follow similar patterns.
 
 ### You Understand Industrial Data
 
@@ -867,13 +867,13 @@ Fault-finding in a PLC programme with thousands of rungs teaches systematic debu
 
 ### You Know the Application Domain
 
-Understanding what a manufacturing process actually does — how a filling line works, why temperature control matters, what "cycle time" means in practice — gives you an enormous advantage when designing AI solutions for industry.
+Understanding what a manufacturing process actually does - how a filling line works, why temperature control matters, what "cycle time" means in practice - gives you an enormous advantage when designing AI solutions for industry.
 
 ## The Learning Path
 
 ### Stage 1: Python Foundations (2-3 Months)
 
-Python is the lingua franca of AI and machine learning. As a programmer, you already understand variables, loops, functions, and data structures — you just need to learn the Python syntax. Focus on:
+Python is the lingua franca of AI and machine learning. As a programmer, you already understand variables, loops, functions, and data structures - you just need to learn the Python syntax. Focus on:
 
 - Python fundamentals (data types, functions, classes)
 - NumPy and Pandas for data manipulation
@@ -897,9 +897,9 @@ Before diving into deep learning, build a solid understanding of statistics and 
 
 Choose a specialisation that leverages your industrial experience:
 
-- **Predictive maintenance** — time-series analysis, anomaly detection, LSTM networks
-- **Computer vision** — CNN architectures, object detection, defect classification
-- **Process optimisation** — reinforcement learning, optimisation algorithms
+- **Predictive maintenance** - time-series analysis, anomaly detection, LSTM networks
+- **Computer vision** - CNN architectures, object detection, defect classification
+- **Process optimisation** - reinforcement learning, optimisation algorithms
 
 **Recommended resource:** Fast.ai (free) for practical deep learning, or DeepLearning.AI specialisations
 
@@ -923,13 +923,13 @@ Employers want to see practical evidence of your skills. Create projects that co
 
 ## Salary Expectations
 
-The financial case for transitioning is compelling. While experienced PLC programmers earn £42,000-£65,000, AI/ML engineers in manufacturing command £55,000-£90,000+ for permanent roles. Engineers who bridge both domains — understanding automation systems and applying AI to them — are in a class of their own and can expect salaries at the top of these ranges.
+The financial case for transitioning is compelling. While experienced PLC programmers earn £42,000-£65,000, AI/ML engineers in manufacturing command £55,000-£90,000+ for permanent roles. Engineers who bridge both domains - understanding automation systems and applying AI to them - are in a class of their own and can expect salaries at the top of these ranges.
 
 ## Making the Move
 
 You do not need to quit your current role to begin the transition. Many successful career changers study in evenings and weekends, build portfolio projects alongside their day job, and make the switch once they have demonstrable skills. Some employers will even support the transition internally, particularly if you can apply your new skills to company challenges.
 
-At [OSCABE](/about), we recruit across both industrial automation and AI. We understand the career transition because our team has lived it. [Register with us](/register) and let our Chartered Engineer-led team help you navigate the move from PLC to AI — whether you are just starting to explore or ready to make the leap.`,
+At [OSCABE](/about), we recruit across both industrial automation and AI. We understand the career transition because our team has lived it. [Register with us](/register) and let our Engineer-led team help you navigate the move from PLC to AI - whether you are just starting to explore or ready to make the leap.`,
   },
   {
     slug: "remote-automation-engineers-uk-companies-save-50-percent",
@@ -942,7 +942,7 @@ At [OSCABE](/about), we recruit across both industrial automation and AI. We und
     image:
       "https://images.unsplash.com/photo-1555255707-c07966088b7b?w=800&h=450&fit=crop",
     imageAlt: "Remote engineer working on automation systems from India",
-    author: "Joseph Brijin Chacko, CEng",
+    author: "Joseph Brijin Chacko",
     authorTitle: "Founder & Director, OSCABE",
     keywords: [
       "remote automation engineers",
@@ -954,7 +954,7 @@ At [OSCABE](/about), we recruit across both industrial automation and AI. We und
     ],
     metaTitle: "Remote Automation Engineers: How UK Companies Save 50%+ on PLC and SCADA Talent",
     metaDescription:
-      "UK employers can save 50-65% on automation engineering costs by hiring pre-screened remote engineers from India. Chartered Engineer verified, GDPR compliant. Learn how.",
+      "UK employers can save 50-65% on automation engineering costs by hiring pre-screened remote engineers from India. Senior Engineer verified, GDPR compliant. Learn how.",
     ctaText: "Explore Remote Engineers",
     ctaHref: "/remote-engineers",
     relatedSlugs: [
@@ -962,24 +962,24 @@ At [OSCABE](/about), we recruit across both industrial automation and AI. We und
       "uk-manufacturers-struggling-hire-automation-engineers",
       "top-10-plc-programming-skills-employers-want-2026",
     ],
-    content: `The UK's automation engineering talent shortage is well documented. With 78% of manufacturers reporting difficulty recruiting for automation and controls roles, companies are looking for creative solutions. One approach that is gaining significant traction is hiring pre-screened remote automation engineers from India — and the savings are substantial.
+    content: `The UK's automation engineering talent shortage is well documented. With 78% of manufacturers reporting difficulty recruiting for automation and controls roles, companies are looking for creative solutions. One approach that is gaining significant traction is hiring pre-screened remote automation engineers from India - and the savings are substantial.
 
 ## The Cost Reality
 
-A senior PLC engineer in the UK commands a salary of £45,000 to £65,000. A SCADA engineer with Ignition or AVEVA experience earns £50,000 to £70,000. These figures do not include employer National Insurance, pension contributions, equipment, office space, and recruitment fees — which can add 25-35% to the total cost of employment.
+A senior PLC engineer in the UK commands a salary of £45,000 to £65,000. A SCADA engineer with Ignition or AVEVA experience earns £50,000 to £70,000. These figures do not include employer National Insurance, pension contributions, equipment, office space, and recruitment fees - which can add 25-35% to the total cost of employment.
 
-By contrast, an equivalently skilled automation engineer in India — pre-screened and Chartered Engineer-verified — costs £20,000 to £30,000 per year on a fully managed basis. That includes their salary, equipment, management overhead, compliance, and OSCABE's service fee. The saving is genuine and significant: 50-65% on like-for-like roles.
+By contrast, an equivalently skilled automation engineer in India - pre-screened and Engineer-verified - costs £20,000 to £30,000 per year on a fully managed basis. That includes their salary, equipment, management overhead, compliance, and OSCABE's service fee. The saving is genuine and significant: 50-65% on like-for-like roles.
 
 ## Why India for Automation Engineering?
 
 India has a mature and deep engineering talent pool. The country produces over 1.5 million engineering graduates annually, and its industrial automation sector has been growing rapidly alongside manufacturing investment from global OEMs. Indian engineers work with the same platforms that UK manufacturers use:
 
-- **Siemens TIA Portal** — widely taught and used across Indian automotive and pharmaceutical plants
-- **Allen-Bradley / Rockwell Studio 5000** — prevalent in FMCG and food processing
-- **Schneider EcoStruxure** — common in energy and utilities
-- **AVEVA and Ignition** — increasingly adopted for SCADA projects
+- **Siemens TIA Portal** - widely taught and used across Indian automotive and pharmaceutical plants
+- **Allen-Bradley / Rockwell Studio 5000** - prevalent in FMCG and food processing
+- **Schneider EcoStruxure** - common in energy and utilities
+- **AVEVA and Ignition** - increasingly adopted for SCADA projects
 
-The key differentiator is not just availability — it is that these engineers have real project experience on real platforms, not just theoretical knowledge.
+The key differentiator is not just availability - it is that these engineers have real project experience on real platforms, not just theoretical knowledge.
 
 ## How Remote Automation Work Actually Functions
 
@@ -988,11 +988,11 @@ The most common concern employers raise is: "How can a PLC engineer work remotel
 ### What Works Remotely
 
 - **PLC programming** using simulation environments (PLCSIM Advanced, emulation)
-- **SCADA and HMI development** — entirely software-based
-- **Control system design** — P&ID review, functional design specifications, control narratives
-- **DCS programming** — virtual environments for ABB, Honeywell, Emerson
-- **EPLAN and AutoCAD electrical design** — fully remote-capable
-- **Digital twin development** — inherently a remote-first discipline
+- **SCADA and HMI development** - entirely software-based
+- **Control system design** - P&ID review, functional design specifications, control narratives
+- **DCS programming** - virtual environments for ABB, Honeywell, Emerson
+- **EPLAN and AutoCAD electrical design** - fully remote-capable
+- **Digital twin development** - inherently a remote-first discipline
 
 ### What Does Not Work Remotely
 
@@ -1005,18 +1005,18 @@ The practical approach is to use remote engineers for the 60-70% of project work
 
 ## The Time Zone Advantage
 
-India is 4.5 to 5.5 hours ahead of the UK (depending on BST/GMT). This creates a natural overlap window of 4+ hours each morning — typically 6:00 AM to 10:30 AM India time overlaps with 10:30 AM to 3:00 PM UK time. This is sufficient for daily stand-ups, design reviews, and collaborative work.
+India is 4.5 to 5.5 hours ahead of the UK (depending on BST/GMT). This creates a natural overlap window of 4+ hours each morning - typically 6:00 AM to 10:30 AM India time overlaps with 10:30 AM to 3:00 PM UK time. This is sufficient for daily stand-ups, design reviews, and collaborative work.
 
-The remaining hours operate asynchronously. Engineers commit code, update documentation, and progress tasks during their afternoon — which means UK teams often arrive to find completed work waiting for them each morning.
+The remaining hours operate asynchronously. Engineers commit code, update documentation, and progress tasks during their afternoon - which means UK teams often arrive to find completed work waiting for them each morning.
 
 ## Quality Assurance: The OSCABE Difference
 
-The critical factor in remote hiring is quality verification. OSCABE applies the same Chartered Engineer-led screening process to remote candidates as it does to UK placements:
+The critical factor in remote hiring is quality verification. OSCABE applies the same Engineer-led screening process to remote candidates as it does to UK placements:
 
-1. **Platform verification** — practical assessments on the actual software platforms (not just CV claims)
-2. **Technical interviews** — conducted by engineers who understand the difference between ladder logic and structured text
-3. **Project portfolio review** — examining real project work, not academic exercises
-4. **Communication assessment** — English proficiency and ability to work with UK teams
+1. **Platform verification** - practical assessments on the actual software platforms (not just CV claims)
+2. **Technical interviews** - conducted by engineers who understand the difference between ladder logic and structured text
+3. **Project portfolio review** - examining real project work, not academic exercises
+4. **Communication assessment** - English proficiency and ability to work with UK teams
 
 This screening eliminates the quality risk that plagues generic offshore staffing arrangements.
 
@@ -1024,10 +1024,10 @@ This screening eliminates the quality risk that plagues generic offshore staffin
 
 OSCABE's remote engineer service operates on a simple monthly fee basis:
 
-- **No upfront costs** — you pay monthly from the engineer's start date
-- **No long-term contracts** — cancel with 30 days notice
-- **All-inclusive pricing** — salary, equipment, management, compliance, and OSCABE's fee
-- **Free replacement** — if the engineer does not work out within the first 30 days
+- **No upfront costs** - you pay monthly from the engineer's start date
+- **No long-term contracts** - cancel with 30 days notice
+- **All-inclusive pricing** - salary, equipment, management, compliance, and OSCABE's fee
+- **Free replacement** - if the engineer does not work out within the first 30 days
 
 The engineer is legally employed by Wartens India (OSCABE's parent company's India subsidiary), which handles all local employment law, tax, and benefits. Your company signs a simple service agreement with OSCABE UK.
 
@@ -1046,7 +1046,7 @@ If you are interested in exploring remote automation engineers for your team, [v
     image:
       "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=450&fit=crop",
     imageAlt: "Industrial automation control systems and remote engineering setup",
-    author: "Joseph Brijin Chacko, CEng",
+    author: "Joseph Brijin Chacko",
     authorTitle: "Founder & Director, OSCABE",
     keywords: [
       "remote automation jobs",
@@ -1066,7 +1066,7 @@ If you are interested in exploring remote automation engineers for your team, [v
       "controls-engineer-vs-automation-engineer",
       "top-10-plc-programming-skills-employers-want-2026",
     ],
-    content: `The question of whether automation engineers can work remotely is nuanced. The answer is not a simple yes or no — it depends entirely on the specific role, the phase of the project, and the tools available. This guide provides a practical, experience-based assessment of which automation and AI roles are genuinely suited to remote work.
+    content: `The question of whether automation engineers can work remotely is nuanced. The answer is not a simple yes or no - it depends entirely on the specific role, the phase of the project, and the tools available. This guide provides a practical, experience-based assessment of which automation and AI roles are genuinely suited to remote work.
 
 ## Roles That Work Well Remotely
 
@@ -1082,7 +1082,7 @@ Modern PLC programming is increasingly remote-capable thanks to simulation tools
 
 ### SCADA and HMI Development (Very High Suitability)
 
-SCADA development is almost entirely a software discipline. Engineers develop screens, configure alarms, set up historian tags, and build reports — all on a computer. Platforms like Ignition, WinCC, AVEVA, and FactoryTalk View are standard desktop applications that work perfectly over remote access.
+SCADA development is almost entirely a software discipline. Engineers develop screens, configure alarms, set up historian tags, and build reports - all on a computer. Platforms like Ignition, WinCC, AVEVA, and FactoryTalk View are standard desktop applications that work perfectly over remote access.
 
 **What works remotely:** Screen design, alarm configuration, historian setup, report building, database integration, scripting, testing.
 
@@ -1092,7 +1092,7 @@ SCADA development is almost entirely a software discipline. Engineers develop sc
 
 ### Control System Design (High Suitability)
 
-Design work — functional design specifications, control narratives, P&ID reviews, and control philosophy documents — is inherently desk-based. An experienced controls design engineer can produce complete design packages remotely, provided they have access to project documentation and can participate in design review meetings.
+Design work - functional design specifications, control narratives, P&ID reviews, and control philosophy documents - is inherently desk-based. An experienced controls design engineer can produce complete design packages remotely, provided they have access to project documentation and can participate in design review meetings.
 
 **What works remotely:** Functional specifications, control narratives, electrical schematics (EPLAN, AutoCAD Electrical), panel layout design, safety documentation.
 
@@ -1120,12 +1120,12 @@ Digital twin work is inherently remote-first. Engineers use simulation platforms
 
 AI and machine learning engineering is overwhelmingly remote-compatible. The tools, platforms, and workflows are designed for distributed work:
 
-- **ML Engineering** — model development, training, and deployment using cloud platforms. **95-100% remote.**
-- **Data Science** — analysis, modelling, and visualisation. **95-100% remote.**
-- **Computer Vision** — model training and testing (though camera setup and lighting design may need on-site visits). **85-95% remote.**
-- **NLP** — entirely software-based. **100% remote.**
-- **IoT Development** — firmware and cloud platform development. Hardware prototyping may need physical access. **80-90% remote.**
-- **MLOps** — infrastructure, CI/CD, monitoring. **95-100% remote.**
+- **ML Engineering** - model development, training, and deployment using cloud platforms. **95-100% remote.**
+- **Data Science** - analysis, modelling, and visualisation. **95-100% remote.**
+- **Computer Vision** - model training and testing (though camera setup and lighting design may need on-site visits). **85-95% remote.**
+- **NLP** - entirely software-based. **100% remote.**
+- **IoT Development** - firmware and cloud platform development. Hardware prototyping may need physical access. **80-90% remote.**
+- **MLOps** - infrastructure, CI/CD, monitoring. **95-100% remote.**
 
 ## Roles That Do Not Work Remotely
 
@@ -1138,7 +1138,7 @@ Commissioning involves physically testing, tuning, and validating systems on sit
 Break-fix maintenance, routine servicing, and emergency call-outs require the engineer to be at the equipment. No amount of remote access can replace turning a spanner or swapping a sensor.
 
 ### Panel Wiring and Assembly
-Physical assembly of control panels — wiring, termination, testing — must be done in a workshop or on site.
+Physical assembly of control panels - wiring, termination, testing - must be done in a workshop or on site.
 
 ### On-Site Installation
 Running cables, installing sensors, mounting equipment, and connecting field devices are hands-on tasks.
@@ -1156,17 +1156,17 @@ This model delivers significant cost savings on the majority of project work whi
 
 For remote automation engineering to succeed, employers need:
 
-- **Remote access infrastructure** — VPN, remote desktop, or platform-specific remote connections
-- **Simulation environments** — PLCSIM Advanced, Rockwell emulation, or equivalent
-- **Communication tools** — Teams/Slack for daily collaboration, video for design reviews
-- **Clear specifications** — well-documented requirements reduce the need for constant clarification
-- **Version control** — proper management of PLC programmes, SCADA projects, and design files
+- **Remote access infrastructure** - VPN, remote desktop, or platform-specific remote connections
+- **Simulation environments** - PLCSIM Advanced, Rockwell emulation, or equivalent
+- **Communication tools** - Teams/Slack for daily collaboration, video for design reviews
+- **Clear specifications** - well-documented requirements reduce the need for constant clarification
+- **Version control** - proper management of PLC programmes, SCADA projects, and design files
 
 Companies that invest in these foundations find that remote engineers integrate quickly and deliver high-quality work.
 
 ## Explore OSCABE Remote Engineers
 
-OSCABE offers UK employers access to pre-screened, Chartered Engineer-verified remote automation and AI engineers from India at 50-65% lower cost than UK market rates. [Learn more about our Remote Engineers service](/remote-engineers) or [submit an enquiry](/remote-engineers#enquiry) for a free consultation.`,
+OSCABE offers UK employers access to pre-screened, Engineer-verified remote automation and AI engineers from India at 50-65% lower cost than UK market rates. [Learn more about our Remote Engineers service](/remote-engineers) or [submit an enquiry](/remote-engineers#enquiry) for a free consultation.`,
   },
   {
     slug: "automation-engineer-salary-guide-uk-2026",
@@ -1177,7 +1177,7 @@ OSCABE offers UK employers access to pre-screened, Chartered Engineer-verified r
     readTime: "7 min read",
     image: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=800&h=400&fit=crop",
     imageAlt: "Salary benchmarking for automation engineers",
-    author: "Joseph Brijin Chacko, CEng",
+    author: "Joseph Brijin Chacko",
     authorTitle: "Founder & CEO, OSCABE",
     keywords: ["automation engineer salary UK", "PLC engineer salary 2026", "SCADA engineer pay", "controls engineer salary UK", "robotics engineer salary"],
     metaTitle: "Automation Engineer Salary Guide UK 2026 | OSCABE",
@@ -1244,7 +1244,7 @@ These roles typically require Python, TensorFlow or PyTorch, plus domain knowled
 
 **Location:** London and the South East pay 10-20% more than the North. However, remote work is narrowing this gap.
 
-**Certifications:** Chartered Engineer (CEng) status, TUV Functional Safety, and vendor certifications (Siemens Certified Professional) all boost earning potential.
+**Certifications:** Professional certifications, TUV Functional Safety, and vendor certifications (Siemens Certified Professional) all boost earning potential.
 
 **Industry Sector:** Oil and gas, pharma, and nuclear pay the highest premiums. Food and beverage and general manufacturing tend to pay at the lower end.
 
@@ -1257,13 +1257,13 @@ OSCABE can provide detailed salary benchmarking for any automation or AI role. [
   {
     slug: "industry-4-jobs-uk-complete-guide",
     title: "Industry 4.0 Jobs in the UK: The Complete Guide for 2026",
-    excerpt: "Everything you need to know about Industry 4.0 careers in the UK — roles, skills, salaries, and how to break into the sector.",
+    excerpt: "Everything you need to know about Industry 4.0 careers in the UK - roles, skills, salaries, and how to break into the sector.",
     category: "Industry",
     date: "2026-04-18",
     readTime: "8 min read",
     image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=400&fit=crop",
     imageAlt: "Industry 4.0 smart factory with robotics",
-    author: "Joseph Brijin Chacko, CEng",
+    author: "Joseph Brijin Chacko",
     authorTitle: "Founder & CEO, OSCABE",
     keywords: ["Industry 4.0 jobs UK", "smart factory careers", "automation jobs 2026", "IIoT jobs", "digital manufacturing careers"],
     metaTitle: "Industry 4.0 Jobs UK 2026: Complete Career Guide | OSCABE",
@@ -1271,7 +1271,7 @@ OSCABE can provide detailed salary benchmarking for any automation or AI role. [
     ctaText: "Browse Industry 4.0 Jobs",
     ctaHref: "/jobs",
     relatedSlugs: ["digital-twin-engineers-most-in-demand-industry-4", "machine-learning-manufacturing-roles-career-paths", "automation-engineer-salary-guide-uk-2026"],
-    content: `Industry 4.0 — the fourth industrial revolution — is transforming UK manufacturing. Smart factories, connected systems, AI-driven quality control, and digital twins are creating entirely new job categories while evolving traditional engineering roles. This guide covers everything you need to know about Industry 4.0 careers in 2026.
+    content: `Industry 4.0 - the fourth industrial revolution - is transforming UK manufacturing. Smart factories, connected systems, AI-driven quality control, and digital twins are creating entirely new job categories while evolving traditional engineering roles. This guide covers everything you need to know about Industry 4.0 careers in 2026.
 
 ## What Is Industry 4.0?
 
@@ -1320,7 +1320,7 @@ Manufacturing Execution System specialists who bridge the gap between shop floor
 - SQL and data management
 
 **Valuable certifications:**
-- Chartered Engineer (CEng)
+- Professional Engineering certifications
 - Siemens Certified Professional
 - Rockwell Automation Certifications
 - AWS/Azure IoT Certifications
@@ -1340,7 +1340,7 @@ The UK government's Made Smarter initiative is driving Industry 4.0 adoption acr
 
 Demand consistently outstrips supply, meaning salaries are rising and employers are increasingly open to remote work and flexible arrangements.
 
-[Browse Industry 4.0 jobs on OSCABE](/jobs) or [contact us](/contact) for career advice from our Chartered Engineer team.`,
+[Browse Industry 4.0 jobs on OSCABE](/jobs) or [contact us](/contact) for career advice from our Senior Engineer team.`,
   },
   {
     slug: "how-to-hire-plc-engineers-uk-fast",
@@ -1351,7 +1351,7 @@ Demand consistently outstrips supply, meaning salaries are rising and employers 
     readTime: "6 min read",
     image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=800&h=400&fit=crop",
     imageAlt: "PLC engineer programming Siemens controller",
-    author: "Joseph Brijin Chacko, CEng",
+    author: "Joseph Brijin Chacko",
     authorTitle: "Founder & CEO, OSCABE",
     keywords: ["hire PLC engineers UK", "PLC recruitment", "find PLC programmers", "Siemens engineer recruitment", "Allen-Bradley programmer hiring"],
     metaTitle: "How to Hire PLC Engineers UK Fast | Recruitment Guide | OSCABE",
@@ -1375,7 +1375,7 @@ The result? You waste time interviewing candidates who:
 
 ### 1. Technical Pre-Screening by Engineers
 
-The single most effective filter is having an actual engineer assess candidates before they reach you. At OSCABE, every candidate is screened by a Chartered Engineer who asks platform-specific questions:
+The single most effective filter is having an actual engineer assess candidates before they reach you. At OSCABE, every candidate is screened by a Senior Engineer who asks platform-specific questions:
 
 - "Walk me through a project where you used TIA Portal V18 with Safety Integrated"
 - "How do you handle PID loop tuning in Studio 5000?"
@@ -1418,14 +1418,14 @@ On-site presence is only essential for commissioning and hardware integration. O
 
 Top PLC engineers are off the market within 2-3 weeks. If your recruitment process takes 6-8 weeks from job posting to offer, you will consistently lose the best candidates to faster-moving employers.
 
-OSCABE delivers shortlists within 72 hours because we maintain a pre-screened talent pool of 6,000+ engineers. When you post a role, we are not starting from scratch — we are matching against candidates we have already verified.
+OSCABE delivers shortlists within 72 hours because we maintain a pre-screened talent pool of 6,000+ engineers. When you post a role, we are not starting from scratch - we are matching against candidates we have already verified.
 
 ## The OSCABE Approach
 
-1. **You tell us what you need** — platform, experience level, industry, location
-2. **We deliver a shortlist in 72 hours** — 3-5 Chartered Engineer-verified candidates
-3. **You interview the best** — every candidate genuinely matches your requirements
-4. **You hire with confidence** — average time to placement: 10 days
+1. **You tell us what you need** - platform, experience level, industry, location
+2. **We deliver a shortlist in 72 hours** - 3-5 Engineer-verified candidates
+3. **You interview the best** - every candidate genuinely matches your requirements
+4. **You hire with confidence** - average time to placement: 10 days
 
 No upfront fees. No retainers. You only pay when you successfully hire.
 

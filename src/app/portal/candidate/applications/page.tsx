@@ -80,7 +80,7 @@ export default function CandidateApplicationsPage() {
                       {app.job.title}
                     </td>
                     <td className="py-3 text-gray-300">
-                      {app.job.companyName ?? "—"}
+                      {app.job.companyName ?? "-"}
                     </td>
                     <td className="py-3">
                       <span

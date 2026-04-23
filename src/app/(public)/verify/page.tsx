@@ -34,11 +34,11 @@ const PRICING = [
     price: "75",
     popular: true,
     description:
-      "In-depth multi-platform assessment with scenario-based questions reviewed by a Chartered Engineer.",
+      "In-depth multi-platform assessment with scenario-based questions reviewed by a Senior Engineer.",
     features: [
       "Multi-platform assessment (up to 3)",
       "Scenario-based practical questions",
-      "Chartered Engineer review & sign-off",
+      "Senior Engineer review & sign-off",
       "Detailed skills breakdown report",
       "White-label branded PDF",
       "Priority 24-hour turnaround",
@@ -59,7 +59,7 @@ const HOW_IT_WORKS = [
     step: "2",
     title: "OSCABE Assesses",
     description:
-      "Our Chartered Engineers evaluate the candidate against platform-specific criteria using our proprietary framework.",
+      "Our Senior Engineers evaluate the candidate against platform-specific criteria using our proprietary framework.",
   },
   {
     icon: FileText,
@@ -79,9 +79,9 @@ const FEATURES = [
   },
   {
     icon: Award,
-    title: "Chartered Engineer Review",
+    title: "Senior Engineer Review",
     description:
-      "Every Advanced assessment is reviewed and signed off by a registered Chartered Engineer.",
+      "Every Advanced assessment is reviewed and signed off by a registered Senior Engineer.",
   },
   {
     icon: ShieldCheck,

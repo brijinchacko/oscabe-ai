@@ -57,7 +57,7 @@ export async function POST(req: NextRequest) {
           data: {
             userId: admin.id,
             title: "New Contact Form Submission",
-            message: `${name} (${email}) submitted a contact form — ${enquiryType || "General"}.`,
+            message: `${name} (${email}) submitted a contact form - ${enquiryType || "General"}.`,
             type: "LEAD",
             link: "/crm/leads",
           },

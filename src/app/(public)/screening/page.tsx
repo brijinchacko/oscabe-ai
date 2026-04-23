@@ -68,7 +68,7 @@ const STEPS = [
 ];
 
 const TRUST_ITEMS = [
-  { icon: Award, label: "Assessed by Chartered Engineers" },
+  { icon: Award, label: "Assessed by Senior Engineers" },
   { icon: Monitor, label: "20+ Platforms Covered" },
   { icon: Clock, label: "48hr Turnaround" },
 ];

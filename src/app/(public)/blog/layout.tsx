@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Blog | Industrial Automation & AI Recruitment Insights | OSCABE",
   description:
-    "Expert perspectives on industrial automation and AI recruitment. Career guides, salary data, skills advice, and industry trends from OSCABE's Chartered Engineer-led team.",
+    "Expert perspectives on industrial automation and AI recruitment. Career guides, salary data, skills advice, and industry trends from OSCABE's Engineer-led team.",
   keywords: [
     "automation recruitment blog",
     "PLC engineer career advice",

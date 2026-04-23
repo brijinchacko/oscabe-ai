@@ -28,8 +28,8 @@ const AGENTS = [
     tagline: "Technical Screening",
     icon: Brain,
     color: "#00D4FF",
-    description: "PROBE runs the initial technical screen for every candidate. It generates platform-specific questions based on the candidate's claimed experience, scores responses against our Chartered Engineer-defined rubrics, and flags candidates who need deeper investigation. PROBE adapts its difficulty based on the seniority level of the role.",
-    whyItMatters: "Human screeners cannot scale. With thousands of candidates flowing through our pipeline, PROBE ensures every single one gets a consistent, rigorous initial assessment. It frees our Chartered Engineers to focus on the final, high-value stages of vetting.",
+    description: "PROBE runs the initial technical screen for every candidate. It generates platform-specific questions based on the candidate's claimed experience, scores responses against our Senior Engineer-defined rubrics, and flags candidates who need deeper investigation. PROBE adapts its difficulty based on the seniority level of the role.",
+    whyItMatters: "Human screeners cannot scale. With thousands of candidates flowing through our pipeline, PROBE ensures every single one gets a consistent, rigorous initial assessment. It frees our Senior Engineers to focus on the final, high-value stages of vetting.",
   },
   {
     name: "BRIDGE",

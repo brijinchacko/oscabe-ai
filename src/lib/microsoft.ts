@@ -128,7 +128,7 @@ export async function getGraphClient(userId: string): Promise<string | null> {
       });
       return tokens.access_token;
     } catch {
-      // Token refresh failed — mark as disconnected
+      // Token refresh failed - mark as disconnected
       await prisma.user.update({
         where: { id: userId },
         data: { microsoftConnected: false },

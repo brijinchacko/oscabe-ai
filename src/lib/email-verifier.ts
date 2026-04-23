@@ -1,6 +1,6 @@
 /**
  * Free built-in email verifier using DNS MX record lookups.
- * No external API needed — checks if the email domain has valid mail servers.
+ * No external API needed - checks if the email domain has valid mail servers.
  * Catches ~80% of invalid emails (dead domains, typos, non-existent domains).
  */
 
@@ -90,7 +90,7 @@ export async function verifyEmail(email: string): Promise<EmailVerification> {
       result.reason = "No MX records found for domain";
     }
   } catch (err: unknown) {
-    // MX lookup failed — try A record as fallback
+    // MX lookup failed - try A record as fallback
     try {
       const aRecords = await resolve4(domain);
       if (aRecords && aRecords.length > 0) {
@@ -131,7 +131,7 @@ export async function verifyBatch(
 }
 
 /**
- * Quick check — just returns true/false.
+ * Quick check - just returns true/false.
  */
 export async function isEmailValid(email: string): Promise<boolean> {
   const result = await verifyEmail(email);

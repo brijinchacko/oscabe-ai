@@ -63,7 +63,7 @@ export async function GET() {
         isDefault: false,
       });
     } catch {
-      // Corrupt JSON — fall through to defaults
+      // Corrupt JSON - fall through to defaults
     }
   }
 

@@ -31,7 +31,7 @@ const STEPS = [
     icon: Banknote,
     title: "You Earn £200",
     description:
-      "Once the candidate is successfully placed, you receive £200 — no cap on referrals.",
+      "Once the candidate is successfully placed, you receive £200 - no cap on referrals.",
   },
 ];
 
@@ -43,7 +43,7 @@ const KEY_DETAILS = [
 ];
 
 const TRUST_BADGES = [
-  { icon: ShieldCheck, label: "Chartered Engineer Led" },
+  { icon: ShieldCheck, label: "Senior Engineer Led" },
   { icon: Users, label: "500+ Engineers" },
   { icon: Award, label: "Startup of Year 2025" },
 ];

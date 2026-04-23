@@ -163,28 +163,28 @@ export async function GET(req: NextRequest) {
         flags.push({
           type: "consecutive_late",
           severity: maxConsecutiveLate >= 5 ? "critical" : "warning",
-          message: `${name}: ${maxConsecutiveLate} consecutive late check-ins — Schedule 1:1`,
+          message: `${name}: ${maxConsecutiveLate} consecutive late check-ins - Schedule 1:1`,
         });
       }
       if (excessiveIdleDays.length > 0) {
         flags.push({
           type: "excessive_idle",
           severity: excessiveIdleDays.length >= 3 ? "critical" : "warning",
-          message: `${name}: Excessive idle time on ${excessiveIdleDays.length} days — Review workload`,
+          message: `${name}: Excessive idle time on ${excessiveIdleDays.length} days - Review workload`,
         });
       }
       if (missingDays.length > 2) {
         flags.push({
           type: "missing_checkins",
           severity: missingDays.length >= 5 ? "critical" : "warning",
-          message: `${name}: ${missingDays.length} missing check-ins — Verify attendance`,
+          message: `${name}: ${missingDays.length} missing check-ins - Verify attendance`,
         });
       }
       if (ghostPresenceDays.length > 0) {
         flags.push({
           type: "ghost_presence",
           severity: "critical",
-          message: `${name}: Ghost presence detected on ${ghostPresenceDays[ghostPresenceDays.length - 1]} — Review activity`,
+          message: `${name}: Ghost presence detected on ${ghostPresenceDays[ghostPresenceDays.length - 1]} - Review activity`,
         });
       }
 

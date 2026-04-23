@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Optionally check auth — if user is signed in, link the candidate
+    // Optionally check auth - if user is signed in, link the candidate
     let linkedUserId: string | undefined;
     try {
       const session = await auth();
@@ -67,7 +67,7 @@ export async function POST(req: NextRequest) {
         }
       }
     } catch {
-      // Auth not available — that's fine for public registration
+      // Auth not available - that's fine for public registration
     }
 
     // Create candidate record
