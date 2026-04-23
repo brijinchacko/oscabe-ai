@@ -180,7 +180,7 @@ export async function searchPeople(
     }
 
     const response = await fetch(
-      `${APOLLO_BASE_URL}/v1/mixed_people/search`,
+      `${APOLLO_BASE_URL}/v1/mixed_people/api_search`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json", "X-Api-Key": getApiKey() || "" },
