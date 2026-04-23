@@ -202,38 +202,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Team */}
-      <section className="py-16 sm:py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-3xl text-center">
-            <h2 className="text-2xl font-extrabold text-white sm:text-3xl">
-              Our Team
-            </h2>
-            <p className="mt-4 text-gray-400">
-              Led by engineers, built for engineers.
-            </p>
-          </div>
-
-          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {TEAM.map((member) => (
-              <div
-                key={member.name}
-                className="group rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 backdrop-blur-sm transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.06]"
-              >
-                {/* Photo placeholder */}
-                <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full border-2 border-dashed border-yellow-500/30 bg-yellow-500/[0.05]">
-                  <User className="h-8 w-8 text-yellow-500/50" />
-                </div>
-                <p className="mt-2 text-center text-[10px] text-yellow-500/60">{"{{JBC_REPLACE_PHOTO}}"}</p>
-                <h3 className="mt-3 text-center text-base font-bold text-white">{member.name}</h3>
-                <p className="mt-1 text-center text-xs font-medium text-[#4540DB]">{member.role}</p>
-                <p className="mt-3 text-center text-xs text-gray-500">{member.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Ecosystem */}
       <section className="border-y border-white/[0.06] bg-white/[0.02] py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

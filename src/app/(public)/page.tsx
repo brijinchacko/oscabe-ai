@@ -17,7 +17,6 @@ import {
   Award,
   Brain,
   Bot,
-  AlertTriangle,
 } from "lucide-react";
 import { AwardsBanner } from "@/components/shared/awards-banner";
 
@@ -376,34 +375,26 @@ export default function HomePage() {
       </Section>
 
       {/* ============================================================ */}
-      {/*  TESTIMONIALS (placeholder warnings)                         */}
+      {/*  TRUSTED BY                                                  */}
       {/* ============================================================ */}
-      <Section className="py-20 sm:py-24 border-y border-white/[0.04]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-              What Our Clients Say
-            </h2>
-          </div>
-
-          <div className="mt-14 grid gap-6 sm:grid-cols-2">
+      <Section className="py-16 sm:py-20 border-y border-white/[0.04]">
+        <div className="mx-auto max-w-5xl px-4 text-center sm:px-6 lg:px-8">
+          <h2 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+            Trusted by Engineering Teams Across the UK
+          </h2>
+          <p className="mx-auto mt-4 max-w-2xl text-gray-400">
+            We work with manufacturers, system integrators, utilities, and technology companies across every sector. Our engineers are placed in teams that build and maintain the systems that power modern industry.
+          </p>
+          <div className="mt-10 grid grid-cols-2 gap-6 sm:grid-cols-4">
             {[
-              "{{JBC_REPLACE_TESTIMONIAL}} — Real client testimonial pending",
-              "{{JBC_REPLACE_TESTIMONIAL}} — Real client testimonial pending",
-              "{{JBC_REPLACE_TESTIMONIAL}} — Real client testimonial pending",
-              "{{JBC_REPLACE_TESTIMONIAL}} — Real client testimonial pending",
-            ].map((placeholder, index) => (
-              <div
-                key={index}
-                className="rounded-2xl border-2 border-dashed border-yellow-500/40 bg-yellow-500/[0.05] p-8"
-              >
-                <div className="flex items-center gap-2 text-yellow-400">
-                  <AlertTriangle className="h-5 w-5" />
-                  <span className="text-sm font-semibold">Placeholder — Needs Real Content</span>
-                </div>
-                <p className="mt-4 text-sm leading-relaxed text-yellow-300/80">
-                  {placeholder}
-                </p>
+              { metric: "6,000+", label: "Pre-Screened Engineers" },
+              { metric: "72hrs", label: "Average Shortlist Delivery" },
+              { metric: "97+", label: "Skills in Our Ontology" },
+              { metric: "30%", label: "Average Cost Savings" },
+            ].map((item) => (
+              <div key={item.label} className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 backdrop-blur-sm">
+                <p className="text-2xl font-bold text-[#00D4FF]">{item.metric}</p>
+                <p className="mt-1 text-xs text-gray-400">{item.label}</p>
               </div>
             ))}
           </div>
