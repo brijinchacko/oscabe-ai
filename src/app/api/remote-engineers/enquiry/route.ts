@@ -81,7 +81,7 @@ export async function POST(req: NextRequest) {
 
     // Send notification email to info@oscabe.com
     await sendEmail({
-      to: "info@oscabe.com",
+      to: ["info@oscabe.com", "info@wartens.com"],
       subject: `Remote Engineer Enquiry: ${data.roleType} — ${data.companyName}`,
       html: `
         <div style="font-family: Inter, sans-serif; max-width: 600px; margin: 0 auto;">

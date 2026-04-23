@@ -154,7 +154,7 @@ export async function POST(req: NextRequest) {
 
     // Send email notification to OSCABE team
     await sendEmail({
-      to: "info@oscabe.com",
+      to: ["info@oscabe.com", "info@wartens.com"],
       subject: `New Role Posted: ${roleTitle} at ${companyName}`,
       html: `
         <h2>New Role Submission</h2>

@@ -133,7 +133,7 @@ export async function POST(req: NextRequest) {
 
     // Also notify OSCABE team
     await sendEmail({
-      to: "info@oscabe.com",
+      to: ["info@oscabe.com", "info@wartens.com"],
       subject: `New Screening Order: ${data.candidateName} - ${data.screeningType}`,
       html: `
         <h2>New Screening Order</h2>

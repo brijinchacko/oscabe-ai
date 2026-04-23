@@ -8,6 +8,7 @@ const LEAD_TYPES = [
   "CANDIDATE_REGISTERED",
   "SCREENING_ORDER",
   "REFERRAL_SUBMITTED",
+  "REMOTE_ENGINEER_ENQUIRY",
 ];
 
 export async function GET(req: NextRequest) {

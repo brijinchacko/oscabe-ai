@@ -115,7 +115,7 @@ export async function POST(request: NextRequest) {
 
     // Send email notification to OSCABE team
     await sendEmail({
-      to: "info@oscabe.com",
+      to: ["info@oscabe.com", "info@wartens.com"],
       subject: `New Referral Submitted - ${data.candidateName} by ${data.referrerName}`,
       html: `
         <h2>New Referral Submission</h2>

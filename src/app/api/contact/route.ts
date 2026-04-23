@@ -67,7 +67,7 @@ export async function POST(req: NextRequest) {
 
     // Send email notification to OSCABE team
     await sendEmail({
-      to: "info@oscabe.com",
+      to: ["info@oscabe.com", "info@wartens.com"],
       subject: `New Contact Form Submission - ${name}`,
       html: `
         <h2>New Contact Form Submission</h2>
