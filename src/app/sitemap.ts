@@ -26,6 +26,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${baseUrl}/jobs`, lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
     { url: `${baseUrl}/remote-engineers`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
 
+    // New dual-track pages
+    { url: `${baseUrl}/uk-recruitment`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
+    { url: `${baseUrl}/remote-engineers/pricing`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
+    { url: `${baseUrl}/how-we-vet`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
+    { url: `${baseUrl}/how-we-deliver`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
+    { url: `${baseUrl}/ai-platform`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
+    { url: `${baseUrl}/specialisms`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
+    { url: `${baseUrl}/case-studies`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
+
     // Features
     { url: `${baseUrl}/screening`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
     { url: `${baseUrl}/verify`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },

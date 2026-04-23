@@ -1,0 +1,23 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Case Studies | Automation & AI Recruitment Success | OSCABE",
+  description:
+    "See how OSCABE helps organisations hire automation and AI engineers fast. Real case studies across remote and UK recruitment.",
+  alternates: {
+    canonical: "https://oscabe.com/case-studies",
+  },
+  openGraph: {
+    title: "Case Studies | Automation & AI Recruitment Success | OSCABE",
+    description:
+      "See how OSCABE helps organisations hire automation and AI engineers fast. Real case studies across remote and UK recruitment.",
+    url: "https://oscabe.com/case-studies",
+    siteName: "OSCABE",
+    locale: "en_GB",
+    type: "website",
+  },
+};
+
+export default function CaseStudiesLayout({ children }: { children: React.ReactNode }) {
+  return children;
+}

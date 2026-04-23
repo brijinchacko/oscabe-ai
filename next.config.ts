@@ -51,6 +51,11 @@ const nextConfig: NextConfig = {
       { source: "/terms-of-use/oscabe.com/privacy", destination: "/privacy", permanent: true },
       // Catch-all for any other old recruiter pages
       { source: "/recruiter-:path", destination: "/jobs", permanent: true },
+      // Restructured routes
+      { source: "/employers", destination: "/uk-recruitment", permanent: true },
+      { source: "/employers/", destination: "/uk-recruitment", permanent: true },
+      { source: "/industries", destination: "/specialisms", permanent: true },
+      { source: "/industries/", destination: "/specialisms", permanent: true },
       // Old WordPress blog posts & author pages
       { source: "/beyond-boundaries-the-global-impact-of-industrial-automation-on-manufacturing-and-beyond", destination: "/about", permanent: true },
       { source: "/beyond-boundaries-the-global-impact-of-industrial-automation-on-manufacturing-and-beyond/", destination: "/about", permanent: true },

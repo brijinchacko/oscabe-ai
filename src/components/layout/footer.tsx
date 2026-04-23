@@ -4,26 +4,25 @@ import Link from "next/link";
 import { Linkedin, Instagram, Facebook, Youtube } from "lucide-react";
 import { Logo } from "@/components/shared/logo";
 import {
-  APP_NAME,
-  COMPANY_NAME,
-  COMPANY_NUMBER,
   SOCIAL_LINKS,
 } from "@/lib/constants";
 
 const PLATFORM_LINKS = [
-  { label: "Browse Jobs", href: "/jobs" },
-  { label: "For Employers", href: "/employers" },
-  { label: "For Candidates", href: "/candidates" },
-  { label: "Specialisms", href: "/industries" },
-  { label: "Post a Role", href: "/post-a-role" },
   { label: "Remote Engineers", href: "/remote-engineers" },
+  { label: "How We Vet", href: "/how-we-vet" },
+  { label: "How We Deliver", href: "/how-we-deliver" },
+  { label: "Remote Pricing", href: "/remote-engineers/pricing" },
+  { label: "UK Recruitment", href: "/uk-recruitment" },
+  { label: "Post a Role", href: "/post-a-role" },
 ];
 
 const COMPANY_LINKS = [
   { label: "About Us", href: "/about" },
-  { label: "Contact", href: "/contact" },
-  { label: "Careers", href: "/careers" },
+  { label: "Case Studies", href: "/case-studies" },
   { label: "Blog", href: "/blog" },
+  { label: "AI Platform", href: "/ai-platform" },
+  { label: "Careers", href: "/careers" },
+  { label: "Contact", href: "/contact" },
 ];
 
 const LEGAL_LINKS = [
@@ -62,11 +61,7 @@ export function Footer() {
           <div className="sm:col-span-2 lg:col-span-1">
             <Logo variant="light" size="md" linkTo="/" />
             <p className="mt-4 max-w-xs text-sm text-gray-400">
-              The specialist recruiter for industrial automation and AI talent.
-              Chartered Engineer-led screening with 72-hour shortlists.
-            </p>
-            <p className="mt-2 max-w-xs text-xs font-medium tracking-wide text-[#4540DB]/70">
-              Industrial Automation & AI Recruitment
+              The specialist recruiter for industrial automation and AI. Remote engineers from India and UK recruitment, verified by Chartered Engineers.
             </p>
             <div className="mt-6 flex items-center gap-4">
               {SOCIAL_ICONS.map((social) => (
@@ -158,20 +153,7 @@ export function Footer() {
         <div className="my-8 h-[1px] bg-white/[0.06]" />
         <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
           <p className="text-xs text-gray-500">
-            &copy; {new Date().getFullYear()} {COMPANY_NAME}. Company No. {COMPANY_NUMBER}. Registered
-            in England &amp; Wales.
-          </p>
-          <p className="text-xs text-gray-500">
-            Powered by{" "}
-            <span
-              className="bg-clip-text font-semibold text-transparent"
-              style={{
-                backgroundImage:
-                  "linear-gradient(90deg, #4540DB, #00D4FF)",
-              }}
-            >
-              OSCABE AI
-            </span>
+            &copy; {new Date().getFullYear()} Oscabe Ltd. Company No. 15913493. Registered in England &amp; Wales. Unit 8, Lyon Road, Milton Keynes, MK1 1EX.
           </p>
         </div>
       </div>

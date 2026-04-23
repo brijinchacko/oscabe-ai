@@ -11,30 +11,13 @@ import {
   Shield,
   Zap,
   Cpu,
-  Briefcase,
   ClipboardList,
-  Star,
-  ChevronRight,
   Phone,
-  Bot,
-  Brain,
-  Eye,
-  Network,
-  Cog,
-  Wrench,
-  Factory,
-  CircuitBoard,
-  Gauge,
-  Settings,
-  Workflow,
-  Cable,
-  MonitorCog,
-  Layers,
-  BarChart3,
-  Database,
-  Server,
   Globe,
   Award,
+  Brain,
+  Bot,
+  AlertTriangle,
 } from "lucide-react";
 import { AwardsBanner } from "@/components/shared/awards-banner";
 
@@ -71,71 +54,35 @@ function Section({ children, className = "" }: { children: React.ReactNode; clas
 /* ------------------------------------------------------------------ */
 /*  DATA                                                               */
 /* ------------------------------------------------------------------ */
-
-const AUTOMATION_SPECIALISMS = [
-  "PLC Programming (Siemens, Allen-Bradley, Schneider, Beckhoff, Mitsubishi)",
-  "SCADA & HMI (WinCC, FactoryTalk, Ignition, AVEVA)",
-  "Robotics (FANUC, ABB, KUKA, Universal Robots)",
-  "Controls & Instrumentation (EC&I, DCS, Safety PLC, SIL)",
-  "Commissioning & Field Service",
-  "Panel Design & Electrical Engineering",
-];
-
-const AI_SPECIALISMS = [
-  "Machine Learning Engineering",
-  "Computer Vision & Image Processing",
-  "Data Science & Analytics",
-  "AI/ML for Manufacturing (Predictive Maintenance, Quality Control)",
-  "Industrial IoT (IIoT) & Edge Computing",
-  "Digital Twin & Simulation",
-  "Autonomous Systems & Robotics AI",
-  "Natural Language Processing",
-];
-
-const ROLES_ROW_1 = [
-  { title: "PLC Programmer", icon: Cpu, href: "/blog/top-10-plc-programming-skills-employers-want-2026" },
-  { title: "SCADA Engineer", icon: MonitorCog, href: "/blog/scada-engineer-career-guide-uk" },
-  { title: "Controls Engineer", icon: Settings, href: "/blog/controls-engineer-vs-automation-engineer" },
-  { title: "Automation Engineer", icon: Cog },
-  { title: "Robotics Engineer", icon: Bot, href: "/blog/rise-of-robotics-engineers-fanuc-abb-kuka" },
-  { title: "Commissioning Engineer", icon: Wrench },
-];
-const ROLES_ROW_2 = [
-  { title: "EC&I Engineer", icon: Cable },
-  { title: "DCS Engineer", icon: CircuitBoard },
-  { title: "Safety Engineer (SIL)", icon: Shield },
-  { title: "Panel Design Engineer", icon: Layers },
-  { title: "Field Service Engineer", icon: Wrench },
-  { title: "BMS Engineer", icon: Gauge },
-];
-const ROLES_ROW_3 = [
-  { title: "ML Engineer", icon: Brain, href: "/blog/machine-learning-manufacturing-roles-career-paths" },
-  { title: "AI Engineer", icon: Bot, href: "/blog/plc-programmer-to-ai-engineer-career-transition" },
-  { title: "Data Scientist", icon: BarChart3 },
-  { title: "Computer Vision Engineer", icon: Eye, href: "/blog/computer-vision-industry-quality-control-autonomous" },
-  { title: "NLP Engineer", icon: Globe },
-  { title: "MLOps Engineer", icon: Server },
-];
-const ROLES_ROW_4 = [
-  { title: "AI Research Scientist", icon: Brain },
-  { title: "Robotics AI Engineer", icon: Bot },
-  { title: "IoT Engineer", icon: Network },
-  { title: "Digital Twin Engineer", icon: Workflow, href: "/blog/digital-twin-engineers-most-in-demand-industry-4" },
-  { title: "Data Engineer", icon: Database },
-  { title: "Automation Architect", icon: Factory },
-];
-
-const ALL_ROLES = [ROLES_ROW_1, ROLES_ROW_2, ROLES_ROW_3, ROLES_ROW_4];
-
-const AUTOMATION_PLATFORMS = [
-  "Siemens TIA Portal", "Allen-Bradley Studio 5000", "Rockwell", "Schneider EcoStruxure",
-  "Beckhoff TwinCAT", "ABB", "Mitsubishi", "Omron", "CODESYS", "Ignition",
-  "AVEVA", "WinCC", "FactoryTalk",
-];
-
-const AI_PLATFORMS = [
-  "Python", "TensorFlow", "PyTorch", "scikit-learn", "OpenCV", "Hugging Face",
-  "AWS SageMaker", "Azure ML", "Databricks", "MLflow", "Kubernetes", "Docker",
+const SPECIALISMS_PREVIEW = [
+  {
+    title: "Industrial Automation",
+    description: "PLC, SCADA, DCS, controls, commissioning, panel design, safety systems",
+    icon: Cpu,
+    color: "#4540DB",
+    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=300&fit=crop",
+  },
+  {
+    title: "AI / ML",
+    description: "Machine learning, computer vision, NLP, MLOps, data science, predictive maintenance",
+    icon: Brain,
+    color: "#00D4FF",
+    image: "https://images.unsplash.com/photo-1555255707-c07966088b7b?w=400&h=300&fit=crop",
+  },
+  {
+    title: "Robotics",
+    description: "FANUC, ABB, KUKA, Universal Robots, autonomous systems, robotics AI",
+    icon: Bot,
+    color: "#8B5CF6",
+    image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=400&h=300&fit=crop",
+  },
+  {
+    title: "Digital Twin",
+    description: "Simulation, digital twin engineering, IoT platforms, edge computing",
+    icon: Globe,
+    color: "#22C55E",
+    image: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&h=300&fit=crop",
+  },
 ];
 
 /* ================================================================== */
@@ -178,41 +125,39 @@ export default function HomePage() {
               </span>
 
               <h1 className="text-3xl font-bold leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl">
-                The Specialist Recruiter for{" "}
+                Remote automation and AI engineers —{" "}
                 <span className="bg-gradient-to-r from-[#4540DB] to-[#00D4FF] bg-clip-text text-transparent">
-                  Industrial Automation
-                </span>{" "}
-                &{" "}
-                <span className="bg-gradient-to-r from-[#00D4FF] to-[#8B5CF6] bg-clip-text text-transparent">
-                  AI
+                  Chartered-Engineer-verified
                 </span>
+                , billed monthly
               </h1>
 
               <p className="mt-6 max-w-lg text-base leading-relaxed text-gray-400 sm:text-lg">
-                We place engineers who build, program, and optimise the systems that power modern industry — from PLC and SCADA to Machine Learning and Computer Vision.
+                UK engineering teams hire senior PLC, SCADA, AI/ML and robotics engineers from India through OSCABE. Tested on the exact platforms you use. Managed by Wartens UK. 40-60% of UK salary cost.
               </p>
 
               <div className="mt-8 flex flex-wrap gap-4">
                 <Link
-                  href="/post-a-role"
+                  href="/contact"
                   className="inline-flex items-center gap-2 rounded-xl bg-[#4540DB] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#4540DB]/25 transition-all hover:bg-[#4540DB]/90 hover:scale-105"
                 >
-                  Hire Talent
+                  Book a Call
                   <ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link
-                  href="/jobs"
+                  href="/remote-engineers"
                   className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/5 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/10"
                 >
-                  Browse Jobs
+                  Browse Engineers
                 </Link>
               </div>
 
               {/* Trust indicators */}
               <div className="mt-10 flex flex-wrap items-center gap-6 text-sm text-gray-500">
-                <span className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-[#22C55E]" />72hr shortlists</span>
-                <span className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-[#22C55E]" />Chartered Engineer-led screening</span>
-                <span className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-[#22C55E]" />6,000+ pre-screened engineers</span>
+                <span className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-[#22C55E]" />CEng Led</span>
+                <span className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-[#22C55E]" />ISO 9001:2015</span>
+                <span className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-[#22C55E]" />GDPR Compliant</span>
+                <span className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-[#22C55E]" />UK Startup National Winner 2025</span>
               </div>
             </div>
 
@@ -273,112 +218,64 @@ export default function HomePage() {
       <AwardsBanner />
 
       {/* ============================================================ */}
-      {/*  OUR SPECIALISMS                                              */}
+      {/*  TWO WAYS WE HELP                                            */}
       {/* ============================================================ */}
       <Section className="py-20 sm:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-              Our Specialisms
+              Two Ways We Help
             </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-base text-gray-400">
-              Deep expertise across both industrial automation and artificial intelligence.
-            </p>
           </div>
 
-          <div className="mt-14 grid gap-8 lg:grid-cols-2">
-            {/* Industrial Automation */}
-            <div className="rounded-2xl border border-[#4540DB]/20 bg-white/[0.02] p-8 backdrop-blur-sm transition-all hover:border-[#4540DB]/40 hover:bg-white/[0.04]">
-              <div className="flex items-center gap-4">
-                <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-[#4540DB]/15">
-                  <Cpu className="h-7 w-7 text-[#4540DB]" />
+          <div className="mt-14 grid gap-8 lg:grid-cols-5">
+            {/* Card 1 — Remote Engineers (primary, larger) */}
+            <div className="lg:col-span-3 rounded-2xl border border-[#4540DB]/30 bg-[#4540DB]/[0.04] p-8 sm:p-10 backdrop-blur-sm transition-all hover:border-[#4540DB]/50 hover:bg-[#4540DB]/[0.07]">
+              <div className="flex items-center gap-3">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#4540DB]/15">
+                  <Globe className="h-6 w-6 text-[#4540DB]" />
                 </div>
-                <h3 className="text-xl font-bold text-white">Industrial Automation</h3>
+                <span className="inline-flex rounded-full border border-[#4540DB]/40 bg-[#4540DB]/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#4540DB]">
+                  Primary Service
+                </span>
               </div>
-              <ul className="mt-6 space-y-3">
-                {AUTOMATION_SPECIALISMS.map((item) => (
-                  <li key={item} className="flex items-start gap-3 text-sm text-gray-400">
-                    <ChevronRight className="mt-0.5 h-4 w-4 shrink-0 text-[#4540DB]" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
+              <h3 className="mt-6 text-2xl font-bold text-white">Remote Engineers</h3>
+              <p className="mt-2 text-lg font-semibold text-[#22C55E]">Save 40-60% on UK engineering costs</p>
+              <p className="mt-4 text-sm leading-relaxed text-gray-400">
+                Pre-screened Indian automation and AI engineers working remotely for your UK team. Chartered Engineer verified. Managed from our Bangalore office. Monthly billing, no lock-in.
+              </p>
+              <Link
+                href="/remote-engineers"
+                className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-[#4540DB] transition-colors hover:text-white"
+              >
+                Learn more
+                <ArrowRight className="h-4 w-4" />
+              </Link>
             </div>
 
-            {/* AI & Intelligent Systems */}
-            <div className="rounded-2xl border border-[#00D4FF]/20 bg-white/[0.02] p-8 backdrop-blur-sm transition-all hover:border-[#00D4FF]/40 hover:bg-white/[0.04]">
-              <div className="flex items-center gap-4">
-                <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-[#00D4FF]/15">
-                  <Brain className="h-7 w-7 text-[#00D4FF]" />
+            {/* Card 2 — UK Recruitment (secondary) */}
+            <div className="lg:col-span-2 rounded-2xl border border-[#00D4FF]/20 bg-[#00D4FF]/[0.03] p-8 sm:p-10 backdrop-blur-sm transition-all hover:border-[#00D4FF]/40 hover:bg-[#00D4FF]/[0.06]">
+              <div className="flex items-center gap-3">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#00D4FF]/15">
+                  <Users className="h-6 w-6 text-[#00D4FF]" />
                 </div>
-                <h3 className="text-xl font-bold text-white">AI & Intelligent Systems</h3>
+                <span className="inline-flex rounded-full border border-[#00D4FF]/40 bg-[#00D4FF]/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#00D4FF]">
+                  UK Service
+                </span>
               </div>
-              <ul className="mt-6 space-y-3">
-                {AI_SPECIALISMS.map((item) => (
-                  <li key={item} className="flex items-start gap-3 text-sm text-gray-400">
-                    <ChevronRight className="mt-0.5 h-4 w-4 shrink-0 text-[#00D4FF]" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
+              <h3 className="mt-6 text-2xl font-bold text-white">UK Recruitment</h3>
+              <p className="mt-2 text-lg font-semibold text-[#00D4FF]">72-hour shortlists, no upfront fees</p>
+              <p className="mt-4 text-sm leading-relaxed text-gray-400">
+                For roles that cannot go remote: commissioning, field service, panel wiring, on-site project leads. Pre-qualified UK candidates delivered fast.
+              </p>
+              <Link
+                href="/uk-recruitment"
+                className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-[#00D4FF] transition-colors hover:text-white"
+              >
+                Learn more
+                <ArrowRight className="h-4 w-4" />
+              </Link>
             </div>
-          </div>
-        </div>
-      </Section>
-
-      {/* ============================================================ */}
-      {/*  ROLES WE PLACE                                               */}
-      {/* ============================================================ */}
-      <Section className="py-20 sm:py-24 border-y border-white/[0.04]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-              Roles We Place
-            </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-base text-gray-400">
-              From PLC programmers to AI research scientists, we recruit across the full spectrum of automation and intelligent systems.
-            </p>
-          </div>
-
-          <div className="mt-14 space-y-4">
-            {ALL_ROLES.map((row, rowIndex) => (
-              <div key={rowIndex} className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-                {row.map((role) => {
-                  const iconColorClass = rowIndex < 2 ? "text-[#4540DB]" : "text-[#00D4FF]";
-                  const cardClasses = "flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3 backdrop-blur-sm transition-all hover:border-white/[0.15] hover:bg-white/[0.05]";
-                  const inner = (
-                    <>
-                      <role.icon className={`h-4 w-4 shrink-0 ${iconColorClass}`} />
-                      <span className="text-xs font-medium text-gray-300">{role.title}</span>
-                    </>
-                  );
-
-                  if ("href" in role && role.href) {
-                    return (
-                      <Link key={role.title} href={role.href} className={cardClasses}>
-                        {inner}
-                      </Link>
-                    );
-                  }
-
-                  return (
-                    <div key={role.title} className={cardClasses}>
-                      {inner}
-                    </div>
-                  );
-                })}
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-8 text-center">
-            <Link
-              href="/industries"
-              className="inline-flex items-center gap-2 text-sm font-medium text-[#00D4FF] transition-colors hover:text-white"
-            >
-              View all specialisms by industry
-              <ArrowRight className="h-4 w-4" />
-            </Link>
           </div>
         </div>
       </Section>
@@ -386,7 +283,7 @@ export default function HomePage() {
       {/* ============================================================ */}
       {/*  WHY OSCABE                                                   */}
       {/* ============================================================ */}
-      <Section className="py-20 sm:py-24">
+      <Section className="py-20 sm:py-24 border-y border-white/[0.04]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
@@ -422,191 +319,56 @@ export default function HomePage() {
       </Section>
 
       {/* ============================================================ */}
-      {/*  OSCABE vs TRADITIONAL AGENCIES                               */}
-      {/* ============================================================ */}
-      <Section className="py-20 sm:py-24 border-y border-white/[0.04]">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-              OSCABE vs Traditional Recruitment Agencies
-            </h2>
-          </div>
-
-          <div className="mt-14 grid gap-8 sm:grid-cols-2">
-            <div className="rounded-2xl border border-red-500/15 bg-red-500/[0.02] p-8">
-              <h3 className="text-lg font-bold text-red-400">Traditional Agencies</h3>
-              <ul className="mt-6 space-y-4">
-                {[
-                  "High retainers and upfront fees",
-                  "Slow delivery timelines (weeks, not days)",
-                  "CV forwarding without technical validation",
-                  "No understanding of PLC, SCADA, or AI tech stacks",
-                  "Limited accountability on candidate quality",
-                ].map((item) => (
-                  <li key={item} className="flex items-start gap-3 text-sm text-gray-400">
-                    <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-red-500/20 text-red-400 text-xs">&#10005;</span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="rounded-2xl border border-[#22C55E]/25 bg-[#22C55E]/[0.02] p-8">
-              <h3 className="text-lg font-bold text-[#22C55E]">OSCABE</h3>
-              <ul className="mt-6 space-y-4">
-                {[
-                  "No upfront cost — pay on results",
-                  "Shortlist in 72 hours, guaranteed",
-                  "Chartered Engineer-verified candidates",
-                  "Deep expertise in automation AND AI domains",
-                  "6,000+ pre-screened engineers in our talent pool",
-                ].map((item) => (
-                  <li key={item} className="flex items-start gap-3 text-sm text-gray-300">
-                    <CheckCircle className="mt-0.5 h-5 w-5 shrink-0 text-[#22C55E]" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-      </Section>
-
-      {/* ============================================================ */}
-      {/*  HOW IT WORKS                                                 */}
+      {/*  SPECIALISMS PREVIEW                                         */}
       {/* ============================================================ */}
       <Section className="py-20 sm:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-              How It Works
+              Our Specialisms
             </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-base text-gray-500">
-              Simple, transparent, and fast.
+            <p className="mx-auto mt-4 max-w-2xl text-base text-gray-400">
+              Deep expertise across industrial automation and artificial intelligence.
             </p>
           </div>
 
-          <div className="relative mt-16">
-            <div className="absolute top-12 left-[12.5%] right-[12.5%] hidden h-[2px] lg:block" style={{ background: "linear-gradient(90deg, #4540DB, #00D4FF, #8B5CF6, #22C55E)" }} />
-
-            <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
-              {[
-                { step: 1, title: "Understand Your Requirement", description: "We learn your role, tech stack, team, and timeline — whether it is PLC, SCADA, ML, or AI.", color: "#4540DB" },
-                { step: 2, title: "Source & Pre-Screen", description: "We search our 6,000+ talent pool and technically verify candidates before you see them.", color: "#00D4FF" },
-                { step: 3, title: "Deliver Shortlist in 72 Hours", description: "You receive a curated shortlist of Chartered Engineer-verified, ready-to-interview candidates.", color: "#8B5CF6" },
-                { step: 4, title: "Support Through Hiring", description: "We manage interviews, offers, and onboarding support to get your engineer started.", color: "#22C55E" },
-              ].map((item) => (
-                <div key={item.step} className="relative flex flex-col items-center text-center">
-                  <div
-                    className="relative z-10 flex h-16 w-16 items-center justify-center rounded-full text-2xl font-bold text-white shadow-lg"
-                    style={{ background: item.color, boxShadow: `0 0 30px ${item.color}30` }}
-                  >
-                    {item.step}
+          <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {SPECIALISMS_PREVIEW.map((spec) => (
+              <div
+                key={spec.title}
+                className="group overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm transition-all hover:border-white/[0.15] hover:bg-white/[0.06]"
+              >
+                <div className="relative h-40 w-full overflow-hidden">
+                  <Image
+                    src={spec.image}
+                    alt={spec.title}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#010118] via-[#010118]/60 to-transparent" />
+                  <div className="absolute bottom-3 left-4">
+                    <div
+                      className="flex h-10 w-10 items-center justify-center rounded-lg"
+                      style={{ background: `${spec.color}30` }}
+                    >
+                      <spec.icon className="h-5 w-5" style={{ color: spec.color }} />
+                    </div>
                   </div>
-                  <h3 className="mt-6 text-lg font-semibold text-white">{item.title}</h3>
-                  <p className="mt-2 max-w-xs text-sm leading-relaxed text-gray-500">{item.description}</p>
                 </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </Section>
-
-      {/* ============================================================ */}
-      {/*  PLATFORMS & TECHNOLOGIES WE COVER                            */}
-      {/* ============================================================ */}
-      <Section className="py-20 sm:py-24 border-y border-white/[0.04]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-              Platforms & Technologies We Cover
-            </h2>
-          </div>
-
-          <div className="mt-14 space-y-10">
-            {/* Automation Platforms */}
-            <div>
-              <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-[#4540DB]">Automation Platforms</h3>
-              <div className="flex flex-wrap gap-3">
-                {AUTOMATION_PLATFORMS.map((platform) => (
-                  <span
-                    key={platform}
-                    className="rounded-lg border border-[#4540DB]/20 bg-[#4540DB]/[0.06] px-4 py-2 text-xs font-medium text-gray-300 transition-all hover:border-[#4540DB]/40 hover:text-white"
-                  >
-                    {platform}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            {/* AI/ML Technologies */}
-            <div>
-              <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-[#00D4FF]">AI / ML Technologies</h3>
-              <div className="flex flex-wrap gap-3">
-                {AI_PLATFORMS.map((platform) => (
-                  <span
-                    key={platform}
-                    className="rounded-lg border border-[#00D4FF]/20 bg-[#00D4FF]/[0.06] px-4 py-2 text-xs font-medium text-gray-300 transition-all hover:border-[#00D4FF]/40 hover:text-white"
-                  >
-                    {platform}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </Section>
-
-      {/* ============================================================ */}
-      {/*  CASE STUDY                                                   */}
-      {/* ============================================================ */}
-      <Section className="py-20 sm:py-24">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <span className="inline-flex items-center gap-2 rounded-full border border-[#4540DB]/40 bg-[#4540DB]/10 px-4 py-1.5 text-xs font-medium tracking-wide text-[#4540DB]">
-              Case Study
-            </span>
-            <h2 className="mt-4 text-3xl font-bold tracking-tight text-white sm:text-4xl">
-              Automation & AI Hiring
-            </h2>
-          </div>
-
-          <div className="mt-12 grid gap-6 sm:grid-cols-3">
-            <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 backdrop-blur-sm">
-              <h3 className="text-sm font-semibold uppercase tracking-wider text-red-400">Challenge</h3>
-              <p className="mt-3 text-sm leading-relaxed text-gray-400">
-                Manufacturing client needed 3 PLC programmers and 1 ML engineer for a predictive maintenance project, with a 2-week deadline.
-              </p>
-            </div>
-            <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 backdrop-blur-sm">
-              <h3 className="text-sm font-semibold uppercase tracking-wider text-[#00D4FF]">Solution</h3>
-              <ul className="mt-3 space-y-2 text-sm text-gray-400">
-                <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-[#00D4FF]" />Chartered Engineer-led screening</li>
-                <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-[#00D4FF]" />AI-matched candidate sourcing</li>
-                <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-[#00D4FF]" />Shortlist delivered in 48 hours</li>
-              </ul>
-            </div>
-            <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 backdrop-blur-sm">
-              <h3 className="text-sm font-semibold uppercase tracking-wider text-[#22C55E]">Result</h3>
-              <div className="mt-3 space-y-3">
-                <div>
-                  <p className="text-2xl font-bold text-[#22C55E]">4 positions</p>
-                  <p className="text-sm text-gray-400">Filled within 10 days</p>
-                </div>
-                <div>
-                  <p className="text-2xl font-bold text-[#22C55E]">40%</p>
-                  <p className="text-sm text-gray-400">Reduction in hiring time</p>
+                <div className="p-5">
+                  <h3 className="text-lg font-bold text-white">{spec.title}</h3>
+                  <p className="mt-2 text-sm text-gray-400">{spec.description}</p>
                 </div>
               </div>
-            </div>
+            ))}
           </div>
 
-          <div className="mt-6 text-center">
+          <div className="mt-8 text-center">
             <Link
-              href="/employers"
+              href="/specialisms"
               className="inline-flex items-center gap-2 text-sm font-medium text-[#00D4FF] transition-colors hover:text-white"
             >
-              See how we help employers
+              View all specialisms by industry
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
@@ -614,7 +376,7 @@ export default function HomePage() {
       </Section>
 
       {/* ============================================================ */}
-      {/*  TESTIMONIALS                                                 */}
+      {/*  TESTIMONIALS (placeholder warnings)                         */}
       {/* ============================================================ */}
       <Section className="py-20 sm:py-24 border-y border-white/[0.04]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -626,24 +388,22 @@ export default function HomePage() {
 
           <div className="mt-14 grid gap-6 sm:grid-cols-2">
             {[
-              { quote: "OSCABE understood our Siemens TIA Portal requirements instantly. No hand-holding needed. The shortlist was technically spot-on.", name: "Meredith Decker", title: "Engineering Director, Manufacturing" },
-              { quote: "We needed an ML engineer who also understood industrial data pipelines. OSCABE found us the perfect candidate in 3 days.", name: "Ezekiel Palmer", title: "Head of AI, Industry 4.0 Firm" },
-              { quote: "Finally, a recruiter who knows the difference between a PLC and a PID loop. The candidates were pre-screened to a level I have never seen.", name: "Tiffany Cameron", title: "Controls Manager, Pharma" },
-              { quote: "No upfront fees, 48-hour turnaround, and candidates who could actually discuss Allen-Bradley architecture. Exceptional service.", name: "Adam Lamp", title: "CTO, Automation Integrator" },
-            ].map((t) => (
-              <div key={t.name} className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-8 backdrop-blur-sm">
-                <div className="flex gap-1">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                  ))}
+              "{{JBC_REPLACE_TESTIMONIAL}} — Real client testimonial pending",
+              "{{JBC_REPLACE_TESTIMONIAL}} — Real client testimonial pending",
+              "{{JBC_REPLACE_TESTIMONIAL}} — Real client testimonial pending",
+              "{{JBC_REPLACE_TESTIMONIAL}} — Real client testimonial pending",
+            ].map((placeholder, index) => (
+              <div
+                key={index}
+                className="rounded-2xl border-2 border-dashed border-yellow-500/40 bg-yellow-500/[0.05] p-8"
+              >
+                <div className="flex items-center gap-2 text-yellow-400">
+                  <AlertTriangle className="h-5 w-5" />
+                  <span className="text-sm font-semibold">Placeholder — Needs Real Content</span>
                 </div>
-                <blockquote className="mt-4 text-sm leading-relaxed text-gray-300 sm:text-base">
-                  &ldquo;{t.quote}&rdquo;
-                </blockquote>
-                <div className="mt-5">
-                  <p className="text-sm font-semibold text-white">{t.name}</p>
-                  <p className="text-xs text-gray-500">{t.title}</p>
-                </div>
+                <p className="mt-4 text-sm leading-relaxed text-yellow-300/80">
+                  {placeholder}
+                </p>
               </div>
             ))}
           </div>
@@ -651,55 +411,9 @@ export default function HomePage() {
       </Section>
 
       {/* ============================================================ */}
-      {/*  REMOTE ENGINEERS PROMO                                       */}
+      {/*  AWARDS BANNER (compact)                                     */}
       {/* ============================================================ */}
-      <Section className="py-20 sm:py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="rounded-3xl border border-[#00D4FF]/20 bg-[#00D4FF]/[0.03] p-8 sm:p-12">
-            <div className="flex flex-col items-center gap-8 lg:flex-row lg:justify-between">
-              <div className="text-center lg:text-left">
-                <span className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#00D4FF]/40 bg-[#00D4FF]/10 px-4 py-1.5 text-xs font-medium tracking-wide text-[#00D4FF]">
-                  <Globe className="h-3.5 w-3.5" />
-                  New Service
-                </span>
-                <h2 className="mt-2 text-2xl font-bold tracking-tight text-white sm:text-3xl">
-                  Remote Engineers from{" "}
-                  <span className="text-[#22C55E]">{"\u00A3"}22,000/year</span>
-                </h2>
-                <p className="mt-3 max-w-lg text-sm text-gray-400">
-                  Pre-screened Indian automation and AI engineers working remotely for your UK team. Same Chartered Engineer verification, 50-65% lower cost.
-                </p>
-              </div>
-              <div className="flex flex-wrap items-center justify-center gap-4">
-                {[
-                  { role: "PLC Engineer", saving: "\u00A326,000" },
-                  { role: "ML Engineer", saving: "\u00A340,000" },
-                  { role: "SCADA Engineer", saving: "\u00A333,000" },
-                ].map((card) => (
-                  <div
-                    key={card.role}
-                    className="rounded-xl border border-white/[0.08] bg-white/[0.04] px-5 py-3 text-center"
-                  >
-                    <p className="text-xs text-gray-400">{card.role}</p>
-                    <p className="mt-1 text-lg font-bold text-[#22C55E]">
-                      Save {card.saving}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="mt-8 text-center lg:text-left">
-              <Link
-                href="/remote-engineers"
-                className="inline-flex items-center gap-2 text-sm font-medium text-[#00D4FF] transition-colors hover:text-white"
-              >
-                Explore Remote Engineers
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </Section>
+      <AwardsBanner compact />
 
       {/* ============================================================ */}
       {/*  CTA                                                          */}
@@ -708,25 +422,25 @@ export default function HomePage() {
         <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
           <div className="rounded-3xl border border-white/[0.06] bg-white/[0.02] px-8 py-16 backdrop-blur-sm sm:px-16">
             <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-              Ready to hire automation & AI talent?
+              Start with a 20-minute conversation
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-lg text-gray-400">
-              Get Chartered Engineer-verified shortlists in 72 hours. No upfront fees.
+              Tell us your engineering challenge. We will tell you whether remote, UK, or a blend is the right fit — no obligation.
             </p>
             <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
               <Link
-                href="/post-a-role"
-                className="inline-flex items-center gap-2 rounded-xl bg-[#4540DB] px-8 py-4 text-sm font-semibold text-white shadow-lg shadow-[#4540DB]/25 transition-all hover:bg-[#4540DB]/90 hover:scale-105"
-              >
-                Submit a Requirement
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-              <Link
                 href="/contact"
-                className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/5 px-8 py-4 text-sm font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/10"
+                className="inline-flex items-center gap-2 rounded-xl bg-[#4540DB] px-8 py-4 text-sm font-semibold text-white shadow-lg shadow-[#4540DB]/25 transition-all hover:bg-[#4540DB]/90 hover:scale-105"
               >
                 <Phone className="h-4 w-4" />
                 Book a Call
+              </Link>
+              <Link
+                href="/post-a-role"
+                className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/5 px-8 py-4 text-sm font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/10"
+              >
+                Submit a Requirement
+                <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
           </div>
