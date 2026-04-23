@@ -524,6 +524,35 @@ export default function EmployersPage() {
       </section>
 
       {/* ============================================================ */}
+      {/*  REMOTE ENGINEERS CROSS-PROMO                                 */}
+      {/* ============================================================ */}
+      <section className="py-16 sm:py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="rounded-2xl border border-[#00D4FF]/20 bg-[#00D4FF]/[0.04] p-8 sm:p-10">
+            <div className="flex flex-col items-center gap-6 sm:flex-row sm:justify-between">
+              <div>
+                <h3 className="text-xl font-bold text-white sm:text-2xl">
+                  Save 50%+ with Remote Engineers
+                </h3>
+                <p className="mt-2 max-w-lg text-sm text-gray-400">
+                  Access pre-screened Indian automation and AI engineers from{" "}
+                  <span className="font-semibold text-[#22C55E]">{"\u00A3"}22,000/year</span>.
+                  Chartered Engineer verified, GDPR compliant, monthly billing.
+                </p>
+              </div>
+              <Link
+                href="/remote-engineers"
+                className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-[#00D4FF] px-6 py-3 text-sm font-semibold text-[#010118] shadow-lg shadow-[#00D4FF]/20 transition-all hover:bg-[#00D4FF]/90 hover:scale-105"
+              >
+                Explore Remote Engineers
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================================ */}
       {/*  CASE STUDY                                                   */}
       {/* ============================================================ */}
       <section className="py-16 sm:py-20">

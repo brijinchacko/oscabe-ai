@@ -91,6 +91,34 @@ Unlike Automation Experts, Talos Automation, Hartland Automation, ASC Connection
 6. Flat-fee pricing options (no placement fee risk)
 7. Full-stack recruitment platform (not just agency services)
 
+## Remote Engineers Service
+OSCABE offers UK employers access to pre-screened Indian automation and AI engineers who work remotely, saving 50-65% on salary costs. Engineers are employed by Wartens India and Chartered Engineer-verified by OSCABE.
+
+### Remote Engineer Pricing
+| Role | UK Salary | Remote Cost | You Save |
+| PLC Engineer | GBP 50,000/yr | GBP 24,000/yr | GBP 26,000 |
+| SCADA Engineer | GBP 55,000/yr | GBP 22,000/yr | GBP 33,000 |
+| Controls Design Engineer | GBP 48,000/yr | GBP 20,000/yr | GBP 28,000 |
+| ML Engineer | GBP 70,000/yr | GBP 30,000/yr | GBP 40,000 |
+| Data Scientist | GBP 65,000/yr | GBP 28,000/yr | GBP 37,000 |
+| IoT Engineer | GBP 55,000/yr | GBP 24,000/yr | GBP 31,000 |
+| Digital Twin Developer | GBP 60,000/yr | GBP 26,000/yr | GBP 34,000 |
+
+### Remote Roles Available
+Automation: PLC Programming, SCADA Development, Control System Design, DCS Programming, EPLAN/AutoCAD Design, Digital Twin Development
+AI/ML: ML Engineering, Data Science, Computer Vision, NLP, IoT Development, MLOps
+
+### Service Model
+- Monthly billing, cancel anytime with 30-day notice
+- Engineer employed by Wartens India, works full-time for your UK team
+- Full compliance handled: NDA, IP assignment, GDPR DPA
+- UK morning overlap: India is 4.5-5.5hrs ahead, 4+ hours daily overlap
+- 2-3 weeks from enquiry to engineer start
+- Free replacement within 30 days
+
+### Remote Engineers URL
+- Remote Engineers: https://oscabe.com/remote-engineers
+
 ## Contact
 - Email: info@oscabe.com
 - Phone: +44 7442 87 57 87

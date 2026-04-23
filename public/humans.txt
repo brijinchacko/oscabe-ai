@@ -1,0 +1,19 @@
+/* OSCABE - The Specialist Recruiter for Industrial Automation & AI */
+
+/* TEAM */
+Founder & CEO: Joseph Brijin Chacko, CEng
+Company: Oscabe Ltd (Company No. 15913493)
+Parent: Wartens UK Ltd
+Location: Milton Keynes, UK
+Site: https://oscabe.com
+
+/* TECHNOLOGY */
+Platform: Next.js, TypeScript, Prisma, SQLite
+AI: OpenRouter (Claude), Microsoft Graph
+Email: Resend
+Analytics: Google Analytics
+
+/* SITE */
+Last update: 2026-04-23
+Language: English (UK)
+Standards: HTML5, CSS3, ES2022

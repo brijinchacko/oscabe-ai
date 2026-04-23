@@ -8,7 +8,7 @@ import "./globals.css";
 
 const APP_NAME = "OSCABE";
 const APP_DESCRIPTION =
-  "Connect with pre-screened PLC, SCADA, controls & robotics engineers. OSCABE uses AI to match verified automation talent with UK employers. 48-hour shortlists.";
+  "The UK's specialist recruitment agency for industrial automation and AI talent. We place PLC, SCADA, Robotics, ML, Computer Vision engineers. Chartered Engineer-verified. 72-hour shortlists.";
 const SITE_URL = "https://oscabe.com";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
@@ -16,17 +16,25 @@ const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mon
 
 export const metadata: Metadata = {
   title: {
-    default: "OSCABE | AI-Powered Recruitment for Automation Engineers UK",
+    default: "OSCABE | Industrial Automation & AI Recruitment Agency UK",
     template: `%s | ${APP_NAME}`,
   },
   description: APP_DESCRIPTION,
   keywords: [
+    "automation recruitment agency UK",
+    "AI recruitment agency",
+    "PLC engineer recruitment",
+    "SCADA engineer jobs",
+    "robotics recruitment",
+    "machine learning recruitment",
+    "controls engineer jobs UK",
+    "industrial automation jobs",
+    "AI engineer jobs UK",
     "automation engineer recruitment UK",
     "PLC programmer jobs",
     "SCADA engineer recruitment",
-    "controls engineer jobs UK",
     "robotics engineer hiring",
-    "industrial automation recruitment",
+    "computer vision recruitment",
     "EC&I engineer jobs",
     "commissioning engineer recruitment",
     "Siemens PLC programmer",
@@ -36,13 +44,15 @@ export const metadata: Metadata = {
     "automation talent UK",
     "hire PLC engineers",
     "SCADA developer jobs",
+    "data science recruitment UK",
+    "industrial automation recruitment agency",
   ],
   icons: { icon: "/favicon.svg" },
   alternates: {
     canonical: SITE_URL,
   },
   openGraph: {
-    title: "OSCABE | AI-Powered Recruitment for Automation Engineers UK",
+    title: "OSCABE | Industrial Automation & AI Recruitment Agency UK",
     description: APP_DESCRIPTION,
     url: SITE_URL,
     siteName: APP_NAME,
@@ -50,18 +60,18 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: `${SITE_URL}/og-image.png`,
+        url: `${SITE_URL}/logo-indigo.png`,
         width: 1200,
         height: 630,
-        alt: "OSCABE - AI-Powered Automation Engineer Recruitment",
+        alt: "OSCABE - Industrial Automation & AI Recruitment Agency UK",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "OSCABE | AI-Powered Recruitment for Automation Engineers UK",
+    title: "OSCABE | Industrial Automation & AI Recruitment Agency UK",
     description: APP_DESCRIPTION,
-    images: [`${SITE_URL}/og-image.png`],
+    images: [`${SITE_URL}/logo-indigo.png`],
   },
   robots: { index: true, follow: true },
 };
@@ -70,15 +80,17 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@graph": [
     {
-      "@type": "EmploymentAgency",
+      "@type": ["EmploymentAgency", "Organization"],
       "@id": `${SITE_URL}/#organization`,
       name: "OSCABE",
-      alternateName: "Oscabe Ltd",
+      alternateName: ["Oscabe Ltd", "OSCABE AI", "Oscabe Recruitment"],
       url: SITE_URL,
       logo: `${SITE_URL}/logo-indigo.png`,
-      image: `${SITE_URL}/og-image.png`,
-      description: "The UK's first AI-native recruitment platform for industrial automation engineering. AI-powered matching of PLC, SCADA, Controls, Robotics, EC&I and Commissioning engineers with technically verified skill assessments.",
+      image: `${SITE_URL}/logo-indigo.png`,
+      description: "The UK's specialist recruitment agency for industrial automation and AI engineering talent. Chartered Engineer-led technical screening with 72-hour shortlists. We place PLC, SCADA, Controls, Robotics, Machine Learning, Computer Vision, and Data Science engineers.",
+      slogan: "The Specialist Recruiter for Industrial Automation & AI",
       foundingDate: "2024",
+      numberOfEmployees: { "@type": "QuantitativeValue", value: 60 },
       legalName: "Oscabe Ltd",
       taxID: "15913493",
       areaServed: [
@@ -104,11 +116,16 @@ const jsonLd = {
         availableLanguage: "English",
       },
       knowsAbout: [
+        "Industrial Automation Recruitment", "AI Engineer Recruitment", "PLC Programmer Recruitment UK",
+        "SCADA Engineer Recruitment", "Robotics Engineer Recruitment", "Machine Learning Recruitment",
+        "Computer Vision Recruitment", "Controls Engineer Recruitment UK", "Automation Recruitment Agency",
+        "AI Recruitment Agency UK", "Engineering Recruitment UK",
         "PLC Programming", "SCADA Systems", "Industrial Automation", "Controls Engineering",
         "Robotics Engineering", "EC&I Engineering", "Commissioning", "Siemens TIA Portal",
         "Allen-Bradley Studio 5000", "Rockwell Automation", "Schneider Electric",
         "Beckhoff TwinCAT", "ABB Robotics", "FANUC", "KUKA", "Functional Safety SIL",
         "DCS Systems", "MES/MIS", "BMS/BEMS", "Process Control",
+        "TensorFlow", "PyTorch", "Computer Vision", "NLP", "Data Science",
       ],
       award: "National Manufacturing & Engineering Startup of the Year 2025",
       parentOrganization: {
@@ -119,6 +136,10 @@ const jsonLd = {
         "@type": "OfferCatalog",
         name: "Recruitment Services",
         itemListElement: [
+          { "@type": "Offer", name: "PLC Engineer Recruitment", description: "Siemens, Allen-Bradley, Schneider PLC programmers" },
+          { "@type": "Offer", name: "SCADA Engineer Recruitment", description: "WinCC, FactoryTalk, Ignition, AVEVA specialists" },
+          { "@type": "Offer", name: "AI/ML Engineer Recruitment", description: "TensorFlow, PyTorch, Computer Vision, NLP engineers" },
+          { "@type": "Offer", name: "Robotics Engineer Recruitment", description: "FANUC, ABB, KUKA, Universal Robots programmers" },
           { "@type": "Offer", name: "Contingency Recruitment", description: "12-18% of annual salary" },
           { "@type": "Offer", name: "Flat-Fee Shortlist Package", description: "From GBP 1,500 for 3 technically verified candidates" },
           { "@type": "Offer", name: "Employer Subscription", description: "From GBP 999 per month for ongoing access" },
@@ -134,6 +155,11 @@ const jsonLd = {
       description: APP_DESCRIPTION,
       publisher: { "@id": `${SITE_URL}/#organization` },
       inLanguage: "en-GB",
+      potentialAction: {
+        "@type": "SearchAction",
+        target: `${SITE_URL}/jobs?search={search_term_string}`,
+        "query-input": "required name=search_term_string",
+      },
     },
   ],
 };

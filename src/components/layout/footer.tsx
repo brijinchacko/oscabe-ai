@@ -16,6 +16,7 @@ const PLATFORM_LINKS = [
   { label: "For Candidates", href: "/candidates" },
   { label: "Specialisms", href: "/industries" },
   { label: "Post a Role", href: "/post-a-role" },
+  { label: "Remote Engineers", href: "/remote-engineers" },
 ];
 
 const COMPANY_LINKS = [

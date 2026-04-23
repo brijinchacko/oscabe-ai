@@ -35,8 +35,9 @@ const MODE_CONFIG: Record<SiteMode, {
     nav: [
       { label: "Home", href: "/" },
       { label: "Specialisms", href: "/industries" },
+      { label: "Pricing", href: "/remote-engineers" },
       { label: "Post a Role", href: "/post-a-role" },
-      { label: "Pricing", href: "/pricing" },
+      { label: "Case Studies", href: "/pricing" },
       { label: "Blog", href: "/blog" },
       { label: "About", href: "/about" },
       { label: "Contact", href: "/contact" },

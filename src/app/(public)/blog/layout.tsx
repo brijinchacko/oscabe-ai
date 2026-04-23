@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Blog | Insights & Resources",
+  title: "Blog | Industrial Automation & AI Recruitment Insights | OSCABE",
   description:
     "Expert perspectives on industrial automation and AI recruitment. Career guides, salary data, skills advice, and industry trends from OSCABE's Chartered Engineer-led team.",
   keywords: [
@@ -13,9 +13,12 @@ export const metadata: Metadata = {
     "controls engineer guide",
     "robotics engineer blog UK",
     "Industry 4.0 careers",
+    "machine learning career guide",
+    "computer vision jobs blog",
+    "digital twin engineer insights",
   ],
   openGraph: {
-    title: "Blog | Insights & Resources | OSCABE",
+    title: "Blog | Industrial Automation & AI Recruitment Insights | OSCABE",
     description:
       "Expert perspectives on industrial automation and AI recruitment. Career guides, salary data, and industry trends.",
     type: "website",
@@ -25,7 +28,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Blog | Insights & Resources | OSCABE",
+    title: "Blog | Industrial Automation & AI Recruitment Insights | OSCABE",
     description:
       "Expert perspectives on industrial automation and AI recruitment.",
   },

@@ -931,6 +931,243 @@ You do not need to quit your current role to begin the transition. Many successf
 
 At [OSCABE](/about), we recruit across both industrial automation and AI. We understand the career transition because our team has lived it. [Register with us](/register) and let our Chartered Engineer-led team help you navigate the move from PLC to AI — whether you are just starting to explore or ready to make the leap.`,
   },
+  {
+    slug: "remote-automation-engineers-uk-companies-save-50-percent",
+    title: "Remote Automation Engineers: How UK Companies Save 50%+ on PLC and SCADA Talent",
+    excerpt:
+      "Discover how UK manufacturers and engineering firms are accessing pre-screened Indian automation engineers remotely, saving 50-65% on salary costs without compromising quality.",
+    category: "Industry",
+    date: "2026-04-22",
+    readTime: "6 min read",
+    image:
+      "https://images.unsplash.com/photo-1555255707-c07966088b7b?w=800&h=450&fit=crop",
+    imageAlt: "Remote engineer working on automation systems from India",
+    author: "Joseph Brijin Chacko, CEng",
+    authorTitle: "Founder & Director, OSCABE",
+    keywords: [
+      "remote automation engineers",
+      "remote PLC engineers India",
+      "offshore SCADA engineers UK",
+      "save on automation engineering costs",
+      "remote controls engineers",
+      "Wartens India engineers",
+    ],
+    metaTitle: "Remote Automation Engineers: How UK Companies Save 50%+ on PLC and SCADA Talent",
+    metaDescription:
+      "UK employers can save 50-65% on automation engineering costs by hiring pre-screened remote engineers from India. Chartered Engineer verified, GDPR compliant. Learn how.",
+    ctaText: "Explore Remote Engineers",
+    ctaHref: "/remote-engineers",
+    relatedSlugs: [
+      "which-automation-roles-can-be-done-remotely",
+      "uk-manufacturers-struggling-hire-automation-engineers",
+      "top-10-plc-programming-skills-employers-want-2026",
+    ],
+    content: `The UK's automation engineering talent shortage is well documented. With 78% of manufacturers reporting difficulty recruiting for automation and controls roles, companies are looking for creative solutions. One approach that is gaining significant traction is hiring pre-screened remote automation engineers from India — and the savings are substantial.
+
+## The Cost Reality
+
+A senior PLC engineer in the UK commands a salary of £45,000 to £65,000. A SCADA engineer with Ignition or AVEVA experience earns £50,000 to £70,000. These figures do not include employer National Insurance, pension contributions, equipment, office space, and recruitment fees — which can add 25-35% to the total cost of employment.
+
+By contrast, an equivalently skilled automation engineer in India — pre-screened and Chartered Engineer-verified — costs £20,000 to £30,000 per year on a fully managed basis. That includes their salary, equipment, management overhead, compliance, and OSCABE's service fee. The saving is genuine and significant: 50-65% on like-for-like roles.
+
+## Why India for Automation Engineering?
+
+India has a mature and deep engineering talent pool. The country produces over 1.5 million engineering graduates annually, and its industrial automation sector has been growing rapidly alongside manufacturing investment from global OEMs. Indian engineers work with the same platforms that UK manufacturers use:
+
+- **Siemens TIA Portal** — widely taught and used across Indian automotive and pharmaceutical plants
+- **Allen-Bradley / Rockwell Studio 5000** — prevalent in FMCG and food processing
+- **Schneider EcoStruxure** — common in energy and utilities
+- **AVEVA and Ignition** — increasingly adopted for SCADA projects
+
+The key differentiator is not just availability — it is that these engineers have real project experience on real platforms, not just theoretical knowledge.
+
+## How Remote Automation Work Actually Functions
+
+The most common concern employers raise is: "How can a PLC engineer work remotely?" The answer depends on the type of work.
+
+### What Works Remotely
+
+- **PLC programming** using simulation environments (PLCSIM Advanced, emulation)
+- **SCADA and HMI development** — entirely software-based
+- **Control system design** — P&ID review, functional design specifications, control narratives
+- **DCS programming** — virtual environments for ABB, Honeywell, Emerson
+- **EPLAN and AutoCAD electrical design** — fully remote-capable
+- **Digital twin development** — inherently a remote-first discipline
+
+### What Does Not Work Remotely
+
+- Physical commissioning and site work
+- Panel wiring and hardware installation
+- Field service and maintenance
+- On-site safety testing
+
+The practical approach is to use remote engineers for the 60-70% of project work that is design and software, then bring in local engineers for the on-site phases. This hybrid model delivers the best cost-quality balance.
+
+## The Time Zone Advantage
+
+India is 4.5 to 5.5 hours ahead of the UK (depending on BST/GMT). This creates a natural overlap window of 4+ hours each morning — typically 6:00 AM to 10:30 AM India time overlaps with 10:30 AM to 3:00 PM UK time. This is sufficient for daily stand-ups, design reviews, and collaborative work.
+
+The remaining hours operate asynchronously. Engineers commit code, update documentation, and progress tasks during their afternoon — which means UK teams often arrive to find completed work waiting for them each morning.
+
+## Quality Assurance: The OSCABE Difference
+
+The critical factor in remote hiring is quality verification. OSCABE applies the same Chartered Engineer-led screening process to remote candidates as it does to UK placements:
+
+1. **Platform verification** — practical assessments on the actual software platforms (not just CV claims)
+2. **Technical interviews** — conducted by engineers who understand the difference between ladder logic and structured text
+3. **Project portfolio review** — examining real project work, not academic exercises
+4. **Communication assessment** — English proficiency and ability to work with UK teams
+
+This screening eliminates the quality risk that plagues generic offshore staffing arrangements.
+
+## The Commercial Model
+
+OSCABE's remote engineer service operates on a simple monthly fee basis:
+
+- **No upfront costs** — you pay monthly from the engineer's start date
+- **No long-term contracts** — cancel with 30 days notice
+- **All-inclusive pricing** — salary, equipment, management, compliance, and OSCABE's fee
+- **Free replacement** — if the engineer does not work out within the first 30 days
+
+The engineer is legally employed by Wartens India (OSCABE's parent company's India subsidiary), which handles all local employment law, tax, and benefits. Your company signs a simple service agreement with OSCABE UK.
+
+## Getting Started
+
+If you are interested in exploring remote automation engineers for your team, [visit our Remote Engineers page](/remote-engineers) for detailed pricing by role, or [submit an enquiry](/remote-engineers#enquiry) for a free consultation. We typically have engineers ready to start within 2-3 weeks of an approved enquiry.`,
+  },
+  {
+    slug: "which-automation-roles-can-be-done-remotely",
+    title: "Which Automation Roles Can Be Done Remotely? A Practical Guide",
+    excerpt:
+      "A practical breakdown of which industrial automation and AI engineering roles are suitable for remote work, and which require on-site presence.",
+    category: "Automation",
+    date: "2026-04-20",
+    readTime: "5 min read",
+    image:
+      "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=450&fit=crop",
+    imageAlt: "Industrial automation control systems and remote engineering setup",
+    author: "Joseph Brijin Chacko, CEng",
+    authorTitle: "Founder & Director, OSCABE",
+    keywords: [
+      "remote automation jobs",
+      "remote PLC programming",
+      "remote SCADA development",
+      "automation engineer remote work",
+      "which engineering roles are remote",
+      "remote controls engineering",
+    ],
+    metaTitle: "Which Automation Roles Can Be Done Remotely? A Practical Guide",
+    metaDescription:
+      "Practical guide to which industrial automation roles work remotely: PLC programming, SCADA development, controls design, AI/ML engineering. Expert analysis from OSCABE.",
+    ctaText: "Explore Remote Engineers",
+    ctaHref: "/remote-engineers",
+    relatedSlugs: [
+      "remote-automation-engineers-uk-companies-save-50-percent",
+      "controls-engineer-vs-automation-engineer",
+      "top-10-plc-programming-skills-employers-want-2026",
+    ],
+    content: `The question of whether automation engineers can work remotely is nuanced. The answer is not a simple yes or no — it depends entirely on the specific role, the phase of the project, and the tools available. This guide provides a practical, experience-based assessment of which automation and AI roles are genuinely suited to remote work.
+
+## Roles That Work Well Remotely
+
+### PLC Programming (High Suitability)
+
+Modern PLC programming is increasingly remote-capable thanks to simulation tools. Siemens PLCSIM Advanced allows engineers to develop and test programmes without physical hardware. Rockwell's emulation tools serve a similar purpose. Engineers can write, debug, and validate control logic from anywhere in the world.
+
+**What works remotely:** Programme development, logic design, structured text coding, simulation testing, code reviews, documentation.
+
+**What still needs on-site:** Final commissioning, I/O testing with physical devices, safety system validation.
+
+**Remote suitability: 70-80% of the work**
+
+### SCADA and HMI Development (Very High Suitability)
+
+SCADA development is almost entirely a software discipline. Engineers develop screens, configure alarms, set up historian tags, and build reports — all on a computer. Platforms like Ignition, WinCC, AVEVA, and FactoryTalk View are standard desktop applications that work perfectly over remote access.
+
+**What works remotely:** Screen design, alarm configuration, historian setup, report building, database integration, scripting, testing.
+
+**What still needs on-site:** Final network commissioning, integration testing with live PLCs (though even this can often be done via VPN).
+
+**Remote suitability: 85-95% of the work**
+
+### Control System Design (High Suitability)
+
+Design work — functional design specifications, control narratives, P&ID reviews, and control philosophy documents — is inherently desk-based. An experienced controls design engineer can produce complete design packages remotely, provided they have access to project documentation and can participate in design review meetings.
+
+**What works remotely:** Functional specifications, control narratives, electrical schematics (EPLAN, AutoCAD Electrical), panel layout design, safety documentation.
+
+**Remote suitability: 80-90% of the work**
+
+### DCS Programming (Moderate-High Suitability)
+
+DCS platforms from ABB, Honeywell, Emerson, and Yokogawa all have virtual simulation environments. Engineers can develop control strategies, configure operator displays, and test logic without physical hardware. However, DCS projects often involve closer integration with process engineering, which may require more on-site collaboration.
+
+**Remote suitability: 65-80% of the work**
+
+### EPLAN and Electrical Design (Very High Suitability)
+
+Electrical design using EPLAN, AutoCAD Electrical, or SOLIDWORKS Electrical is fully computer-based. Engineers produce schematics, panel layouts, cable schedules, and bill of materials entirely from their workstation.
+
+**Remote suitability: 90-95% of the work**
+
+### Digital Twin Development (Very High Suitability)
+
+Digital twin work is inherently remote-first. Engineers use simulation platforms, cloud services, and software development tools that are location-independent by design.
+
+**Remote suitability: 95-100% of the work**
+
+## AI and ML Roles: Almost Entirely Remote
+
+AI and machine learning engineering is overwhelmingly remote-compatible. The tools, platforms, and workflows are designed for distributed work:
+
+- **ML Engineering** — model development, training, and deployment using cloud platforms. **95-100% remote.**
+- **Data Science** — analysis, modelling, and visualisation. **95-100% remote.**
+- **Computer Vision** — model training and testing (though camera setup and lighting design may need on-site visits). **85-95% remote.**
+- **NLP** — entirely software-based. **100% remote.**
+- **IoT Development** — firmware and cloud platform development. Hardware prototyping may need physical access. **80-90% remote.**
+- **MLOps** — infrastructure, CI/CD, monitoring. **95-100% remote.**
+
+## Roles That Do Not Work Remotely
+
+Some automation roles fundamentally require physical presence:
+
+### Commissioning Engineering
+Commissioning involves physically testing, tuning, and validating systems on site. You cannot commission a conveyor system or a safety interlocked robot cell from a desk. This role is inherently on-site.
+
+### Field Service Engineering
+Break-fix maintenance, routine servicing, and emergency call-outs require the engineer to be at the equipment. No amount of remote access can replace turning a spanner or swapping a sensor.
+
+### Panel Wiring and Assembly
+Physical assembly of control panels — wiring, termination, testing — must be done in a workshop or on site.
+
+### On-Site Installation
+Running cables, installing sensors, mounting equipment, and connecting field devices are hands-on tasks.
+
+## The Hybrid Model
+
+The most effective approach for most automation projects is a hybrid model:
+
+1. **Remote engineers** handle design, programming, SCADA development, and documentation (60-70% of project effort)
+2. **Local engineers** handle commissioning, field service, and physical installation (30-40% of project effort)
+
+This model delivers significant cost savings on the majority of project work while maintaining quality and safety for on-site activities.
+
+## Making Remote Work Effective
+
+For remote automation engineering to succeed, employers need:
+
+- **Remote access infrastructure** — VPN, remote desktop, or platform-specific remote connections
+- **Simulation environments** — PLCSIM Advanced, Rockwell emulation, or equivalent
+- **Communication tools** — Teams/Slack for daily collaboration, video for design reviews
+- **Clear specifications** — well-documented requirements reduce the need for constant clarification
+- **Version control** — proper management of PLC programmes, SCADA projects, and design files
+
+Companies that invest in these foundations find that remote engineers integrate quickly and deliver high-quality work.
+
+## Explore OSCABE Remote Engineers
+
+OSCABE offers UK employers access to pre-screened, Chartered Engineer-verified remote automation and AI engineers from India at 50-65% lower cost than UK market rates. [Learn more about our Remote Engineers service](/remote-engineers) or [submit an enquiry](/remote-engineers#enquiry) for a free consultation.`,
+  },
 ];
 
 export function getBlogBySlug(slug: string): BlogPost | undefined {

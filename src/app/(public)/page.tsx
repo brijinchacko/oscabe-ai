@@ -93,11 +93,11 @@ const AI_SPECIALISMS = [
 ];
 
 const ROLES_ROW_1 = [
-  { title: "PLC Programmer", icon: Cpu },
-  { title: "SCADA Engineer", icon: MonitorCog },
-  { title: "Controls Engineer", icon: Settings },
+  { title: "PLC Programmer", icon: Cpu, href: "/blog/top-10-plc-programming-skills-employers-want-2026" },
+  { title: "SCADA Engineer", icon: MonitorCog, href: "/blog/scada-engineer-career-guide-uk" },
+  { title: "Controls Engineer", icon: Settings, href: "/blog/controls-engineer-vs-automation-engineer" },
   { title: "Automation Engineer", icon: Cog },
-  { title: "Robotics Engineer", icon: Bot },
+  { title: "Robotics Engineer", icon: Bot, href: "/blog/rise-of-robotics-engineers-fanuc-abb-kuka" },
   { title: "Commissioning Engineer", icon: Wrench },
 ];
 const ROLES_ROW_2 = [
@@ -109,10 +109,10 @@ const ROLES_ROW_2 = [
   { title: "BMS Engineer", icon: Gauge },
 ];
 const ROLES_ROW_3 = [
-  { title: "ML Engineer", icon: Brain },
-  { title: "AI Engineer", icon: Bot },
+  { title: "ML Engineer", icon: Brain, href: "/blog/machine-learning-manufacturing-roles-career-paths" },
+  { title: "AI Engineer", icon: Bot, href: "/blog/plc-programmer-to-ai-engineer-career-transition" },
   { title: "Data Scientist", icon: BarChart3 },
-  { title: "Computer Vision Engineer", icon: Eye },
+  { title: "Computer Vision Engineer", icon: Eye, href: "/blog/computer-vision-industry-quality-control-autonomous" },
   { title: "NLP Engineer", icon: Globe },
   { title: "MLOps Engineer", icon: Server },
 ];
@@ -120,7 +120,7 @@ const ROLES_ROW_4 = [
   { title: "AI Research Scientist", icon: Brain },
   { title: "Robotics AI Engineer", icon: Bot },
   { title: "IoT Engineer", icon: Network },
-  { title: "Digital Twin Engineer", icon: Workflow },
+  { title: "Digital Twin Engineer", icon: Workflow, href: "/blog/digital-twin-engineers-most-in-demand-industry-4" },
   { title: "Data Engineer", icon: Database },
   { title: "Automation Architect", icon: Factory },
 ];
@@ -343,15 +343,30 @@ export default function HomePage() {
           <div className="mt-14 space-y-4">
             {ALL_ROLES.map((row, rowIndex) => (
               <div key={rowIndex} className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-                {row.map((role) => (
-                  <div
-                    key={role.title}
-                    className="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3 backdrop-blur-sm transition-all hover:border-white/[0.15] hover:bg-white/[0.05]"
-                  >
-                    <role.icon className={`h-4 w-4 shrink-0 ${rowIndex < 2 ? "text-[#4540DB]" : "text-[#00D4FF]"}`} />
-                    <span className="text-xs font-medium text-gray-300">{role.title}</span>
-                  </div>
-                ))}
+                {row.map((role) => {
+                  const iconColorClass = rowIndex < 2 ? "text-[#4540DB]" : "text-[#00D4FF]";
+                  const cardClasses = "flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3 backdrop-blur-sm transition-all hover:border-white/[0.15] hover:bg-white/[0.05]";
+                  const inner = (
+                    <>
+                      <role.icon className={`h-4 w-4 shrink-0 ${iconColorClass}`} />
+                      <span className="text-xs font-medium text-gray-300">{role.title}</span>
+                    </>
+                  );
+
+                  if ("href" in role && role.href) {
+                    return (
+                      <Link key={role.title} href={role.href} className={cardClasses}>
+                        {inner}
+                      </Link>
+                    );
+                  }
+
+                  return (
+                    <div key={role.title} className={cardClasses}>
+                      {inner}
+                    </div>
+                  );
+                })}
               </div>
             ))}
           </div>
@@ -631,6 +646,57 @@ export default function HomePage() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </Section>
+
+      {/* ============================================================ */}
+      {/*  REMOTE ENGINEERS PROMO                                       */}
+      {/* ============================================================ */}
+      <Section className="py-20 sm:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="rounded-3xl border border-[#00D4FF]/20 bg-[#00D4FF]/[0.03] p-8 sm:p-12">
+            <div className="flex flex-col items-center gap-8 lg:flex-row lg:justify-between">
+              <div className="text-center lg:text-left">
+                <span className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#00D4FF]/40 bg-[#00D4FF]/10 px-4 py-1.5 text-xs font-medium tracking-wide text-[#00D4FF]">
+                  <Globe className="h-3.5 w-3.5" />
+                  New Service
+                </span>
+                <h2 className="mt-2 text-2xl font-bold tracking-tight text-white sm:text-3xl">
+                  Remote Engineers from{" "}
+                  <span className="text-[#22C55E]">{"\u00A3"}22,000/year</span>
+                </h2>
+                <p className="mt-3 max-w-lg text-sm text-gray-400">
+                  Pre-screened Indian automation and AI engineers working remotely for your UK team. Same Chartered Engineer verification, 50-65% lower cost.
+                </p>
+              </div>
+              <div className="flex flex-wrap items-center justify-center gap-4">
+                {[
+                  { role: "PLC Engineer", saving: "\u00A326,000" },
+                  { role: "ML Engineer", saving: "\u00A340,000" },
+                  { role: "SCADA Engineer", saving: "\u00A333,000" },
+                ].map((card) => (
+                  <div
+                    key={card.role}
+                    className="rounded-xl border border-white/[0.08] bg-white/[0.04] px-5 py-3 text-center"
+                  >
+                    <p className="text-xs text-gray-400">{card.role}</p>
+                    <p className="mt-1 text-lg font-bold text-[#22C55E]">
+                      Save {card.saving}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="mt-8 text-center lg:text-left">
+              <Link
+                href="/remote-engineers"
+                className="inline-flex items-center gap-2 text-sm font-medium text-[#00D4FF] transition-colors hover:text-white"
+              >
+                Explore Remote Engineers
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
           </div>
         </div>
       </Section>
