@@ -91,7 +91,14 @@ export async function POST(
       select: { id: true, email: true },
     });
 
-    if (prospects.length === 0) {
+    // Also process already-queued emails from manual prospect additions
+    const queuedEmails = await prisma.outreachEmail.findMany({
+      where: { campaignId: id, status: "QUEUED" },
+      include: { prospect: true },
+      take: campaign.dailyLimit,
+    });
+
+    if (prospects.length === 0 && queuedEmails.length === 0) {
       return NextResponse.json(
         { error: "No eligible prospects found for this campaign segment." },
         { status: 400 }
@@ -107,7 +114,7 @@ export async function POST(
     const suppressedEmails = new Set(suppressed.map((s) => s.email));
     const eligibleProspects = prospects.filter((p) => !suppressedEmails.has(p.email));
 
-    if (eligibleProspects.length === 0) {
+    if (eligibleProspects.length === 0 && queuedEmails.length === 0) {
       return NextResponse.json(
         { error: "All matching prospects are on the suppression list." },
         { status: 400 }
@@ -155,9 +162,10 @@ export async function POST(
 
     return NextResponse.json({
       success: true,
-      queued: eligibleProspects.length,
+      newlyQueued: eligibleProspects.length,
+      alreadyQueued: queuedEmails.length,
       suppressed: suppressedEmails.size,
-      total: prospects.length,
+      total: eligibleProspects.length + queuedEmails.length,
       sendVia,
     });
   } catch (error) {
