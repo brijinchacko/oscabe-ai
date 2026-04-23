@@ -242,13 +242,16 @@ async function cronOutreach() {
 
 async function cronFollowup() {
   const now = new Date();
+  let processed = 0;
+  let completed = 0;
+  let campaignFollowups = 0;
+
+  // 1. Process Follow-Up Sequence enrollments
   const due = await prisma.sequenceEnrollment.findMany({
     where: { status: "ACTIVE", nextActionAt: { lte: now } },
     include: { sequence: { include: { steps: { orderBy: { stepOrder: "asc" } } } } },
   });
 
-  let processed = 0;
-  let completed = 0;
   for (const enrollment of due) {
     try {
       const steps = enrollment.sequence.steps;
@@ -289,12 +292,107 @@ async function cronFollowup() {
     } catch { /* skip */ }
   }
 
-  if (processed > 0) {
+  // 2. Process Outreach Campaign follow-ups (Steps 2, 3, 4)
+  const activeCampaigns = await prisma.outreachCampaign.findMany({
+    where: { status: "ACTIVE" },
+    include: { templates: { orderBy: { stepNumber: "asc" } } },
+  });
+
+  for (const campaign of activeCampaigns) {
+    if (campaign.templates.length <= 1) continue;
+
+    // Find prospects who received step 1+ and are due for next step
+    const sentEmails = await prisma.outreachEmail.findMany({
+      where: { campaignId: campaign.id, status: "SENT" },
+      include: { prospect: true },
+    });
+
+    // Group by prospect to find their latest step
+    const prospectSteps = new Map<string, { maxStep: number; lastSentAt: Date; prospect: { email: string; firstName: string; lastName: string; company: string | null; location: string | null; industry: string | null } }>();
+    for (const email of sentEmails) {
+      if (!email.prospectId || !email.prospect) continue;
+      const current = prospectSteps.get(email.prospectId);
+      if (!current || email.sequenceStep > current.maxStep) {
+        prospectSteps.set(email.prospectId, {
+          maxStep: email.sequenceStep,
+          lastSentAt: email.sentAt || email.createdAt,
+          prospect: email.prospect,
+        });
+      }
+    }
+
+    // Check which prospects are due for next step
+    for (const [prospectId, data] of prospectSteps) {
+      const nextStepNum = data.maxStep + 1;
+      const nextTemplate = campaign.templates.find((t) => t.stepNumber === nextStepNum);
+      if (!nextTemplate) continue;
+
+      // Check if enough days have passed (use template delayDays or default 4)
+      const delayDays = 4;
+      const daysSinceLast = (now.getTime() - data.lastSentAt.getTime()) / 86400000;
+      if (daysSinceLast < delayDays) continue;
+
+      // Check if already sent this step
+      const alreadySent = await prisma.outreachEmail.findFirst({
+        where: { campaignId: campaign.id, prospectId, sequenceStep: nextStepNum },
+      });
+      if (alreadySent) continue;
+
+      // Check suppression
+      const suppressed = await prisma.suppressionList.findFirst({ where: { email: data.prospect.email } });
+      if (suppressed) continue;
+
+      // Send follow-up
+      try {
+        const tokens: Record<string, string> = {
+          firstName: data.prospect.firstName || "there",
+          lastName: data.prospect.lastName || "",
+          company: data.prospect.company || "your company",
+          location: data.prospect.location || "the UK",
+          industry: data.prospect.industry || "your industry",
+          senderName: "Joseph Brijin Chacko",
+        };
+        const subject = replaceTokens(nextTemplate.subject, tokens);
+        const body = replaceTokens(nextTemplate.body, tokens);
+
+        const result = await sendEmail({ to: data.prospect.email, subject, html: wrapEmailHtml(body.replace(/\n/g, "<br>"), subject) });
+
+        await prisma.outreachEmail.create({
+          data: {
+            campaignId: campaign.id,
+            prospectId,
+            sequenceStep: nextStepNum,
+            templateId: nextTemplate.id,
+            subject,
+            body,
+            status: result.success ? "SENT" : "FAILED",
+            sentAt: result.success ? now : undefined,
+            sentVia: campaign.sendVia || "resend",
+            sentFrom: "noreply@oscabe.com",
+          },
+        });
+
+        if (result.success) {
+          campaignFollowups++;
+          await prisma.outreachCampaign.update({
+            where: { id: campaign.id },
+            data: { totalSent: { increment: 1 } },
+          });
+        }
+      } catch { /* skip */ }
+    }
+  }
+
+  if (processed > 0 || campaignFollowups > 0) {
     await prisma.activity.create({
-      data: { type: "AUTOMATION", title: "Cron: Follow-ups", content: `Processed ${processed}, completed ${completed}` },
+      data: {
+        type: "AUTOMATION",
+        title: "Cron: Follow-ups",
+        content: `Sequences: ${processed} processed, ${completed} completed. Campaign follow-ups: ${campaignFollowups} sent.`,
+      },
     });
   }
-  return { processed, completed };
+  return { sequenceProcessed: processed, sequenceCompleted: completed, campaignFollowups };
 }
 
 async function cronClassify() {
