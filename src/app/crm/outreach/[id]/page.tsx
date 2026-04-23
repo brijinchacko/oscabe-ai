@@ -63,6 +63,7 @@ interface Campaign {
   openRate: number;
   replyRate: number;
   prospectCount: number;
+  sendVia: string | null;
   createdAt: string;
   templates: Template[];
   metrics: Metric[];
@@ -615,6 +616,95 @@ function RepliesTab({ campaignId }: { campaignId: string }) {
 // Main Page
 // ---------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------
+// Settings Tab
+// ---------------------------------------------------------------------------
+
+function SettingsTab({ campaign, onRefresh }: { campaign: Campaign; onRefresh: () => void }) {
+  const [saving, setSaving] = useState(false);
+  const [name, setName] = useState(campaign.name);
+  const [description, setDescription] = useState(campaign.description || "");
+  const [dailyLimit, setDailyLimit] = useState(String(campaign.dailyLimit || 30));
+  const [sendVia, setSendVia] = useState(campaign.sendVia || "resend");
+
+  async function handleSave() {
+    setSaving(true);
+    try {
+      const res = await fetch(`/api/outreach/campaigns/${campaign.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          description,
+          dailyLimit: parseInt(dailyLimit) || 30,
+          sendVia,
+        }),
+      });
+      if (res.ok) {
+        toast.success("Campaign settings saved");
+        onRefresh();
+      } else {
+        toast.error("Failed to save settings");
+      }
+    } catch {
+      toast.error("Failed to save settings");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className="space-y-6 max-w-xl">
+      <div>
+        <h3 className="text-sm font-semibold text-gray-900 mb-4">Campaign Settings</h3>
+        <div className="space-y-4">
+          <div>
+            <Label className="text-xs">Campaign Name</Label>
+            <Input value={name} onChange={(e) => setName(e.target.value)} className="mt-1" />
+          </div>
+          <div>
+            <Label className="text-xs">Description</Label>
+            <Textarea value={description} onChange={(e) => setDescription(e.target.value)} className="mt-1" rows={3} />
+          </div>
+          <div>
+            <Label className="text-xs">Daily Email Limit</Label>
+            <Input type="number" value={dailyLimit} onChange={(e) => setDailyLimit(e.target.value)} className="mt-1 w-32" />
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-sm font-semibold text-gray-900 mb-3">Sending Account</h3>
+        <div className="space-y-2">
+          <label className={`flex items-center gap-3 rounded-lg border p-3 cursor-pointer transition-colors ${sendVia === "resend" ? "border-indigo-500 bg-indigo-50" : "border-gray-200 hover:bg-gray-50"}`}>
+            <input type="radio" name="sendVia" value="resend" checked={sendVia === "resend"} onChange={() => setSendVia("resend")} className="accent-indigo-600" />
+            <div>
+              <p className="text-sm font-medium text-gray-900">OSCABE (noreply@oscabe.com)</p>
+              <p className="text-xs text-gray-500">Shared sending via Resend. Good for bulk campaigns.</p>
+            </div>
+          </label>
+          <label className={`flex items-center gap-3 rounded-lg border p-3 cursor-pointer transition-colors ${sendVia === "outlook" ? "border-indigo-500 bg-indigo-50" : "border-gray-200 hover:bg-gray-50"}`}>
+            <input type="radio" name="sendVia" value="outlook" checked={sendVia === "outlook"} onChange={() => setSendVia("outlook")} className="accent-indigo-600" />
+            <div>
+              <p className="text-sm font-medium text-gray-900">Your Outlook (connected Microsoft 365)</p>
+              <p className="text-xs text-gray-500">Personal sending. Better deliverability. Replies go to your inbox. Limited to 30/min.</p>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <Button onClick={handleSave} disabled={saving} className="bg-indigo-600 text-white hover:bg-indigo-700">
+        {saving ? <Loader2 className="mr-2 size-4 animate-spin" /> : null}
+        Save Settings
+      </Button>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Main Page
+// ---------------------------------------------------------------------------
+
 export default function CampaignDetailPage() {
   const router = useRouter();
   const { id } = useParams<{ id: string }>();
@@ -781,6 +871,7 @@ export default function CampaignDetailPage() {
             Prospects ({campaign.prospectCount})
           </TabsTrigger>
           <TabsTrigger value="replies">Replies</TabsTrigger>
+          <TabsTrigger value="settings">Settings</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="mt-4">
@@ -797,6 +888,10 @@ export default function CampaignDetailPage() {
 
         <TabsContent value="replies" className="mt-4">
           <RepliesTab campaignId={campaign.id} />
+        </TabsContent>
+
+        <TabsContent value="settings" className="mt-4">
+          <SettingsTab campaign={campaign} onRefresh={fetchCampaign} />
         </TabsContent>
       </Tabs>
     </div>
