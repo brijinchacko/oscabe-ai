@@ -43,6 +43,7 @@ import {
   Contact,
   Repeat,
   TrendingUp,
+  Bot,
 } from "lucide-react";
 
 type NavItem = { label: string; href: string; icon: React.ComponentType<{ className?: string }> };
@@ -101,6 +102,12 @@ const NAV_GROUPS: { label: string; items: NavItem[] }[] = [
     items: [
       { label: "Attendance", href: "/crm/attendance", icon: Clock },
       { label: "Referrals", href: "/crm/referrals", icon: Gift },
+    ],
+  },
+  {
+    label: "AUTOMATION",
+    items: [
+      { label: "Automation", href: "/crm/automation", icon: Bot },
     ],
   },
   {
