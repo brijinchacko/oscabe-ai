@@ -156,7 +156,7 @@ export async function searchPeople(
 
   try {
     const body: Record<string, unknown> = {
-      api_key: getApiKey(),
+      // api_key sent via X-Api-Key header
       page: filters.page ?? 1,
       per_page: filters.per_page ?? 25,
     };
@@ -183,7 +183,7 @@ export async function searchPeople(
       `${APOLLO_BASE_URL}/v1/mixed_people/search`,
       {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "X-Api-Key": getApiKey() || "" },
         body: JSON.stringify(body),
       }
     );
@@ -253,9 +253,9 @@ export async function enrichPerson(
   try {
     const response = await fetch(`${APOLLO_BASE_URL}/v1/people/match`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", "X-Api-Key": getApiKey() || "" },
       body: JSON.stringify({
-        api_key: getApiKey(),
+        // api_key sent via X-Api-Key header
         email,
       }),
     });
@@ -324,9 +324,9 @@ export async function verifyEmail(
       `${APOLLO_BASE_URL}/v1/email_accounts/verify`,
       {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "X-Api-Key": getApiKey() || "" },
         body: JSON.stringify({
-          api_key: getApiKey(),
+          // api_key sent via X-Api-Key header
           email,
         }),
       }
