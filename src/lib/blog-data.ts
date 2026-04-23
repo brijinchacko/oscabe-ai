@@ -1168,6 +1168,269 @@ Companies that invest in these foundations find that remote engineers integrate 
 
 OSCABE offers UK employers access to pre-screened, Chartered Engineer-verified remote automation and AI engineers from India at 50-65% lower cost than UK market rates. [Learn more about our Remote Engineers service](/remote-engineers) or [submit an enquiry](/remote-engineers#enquiry) for a free consultation.`,
   },
+  {
+    slug: "automation-engineer-salary-guide-uk-2026",
+    title: "Automation Engineer Salary Guide UK 2026: What to Expect",
+    excerpt: "Complete salary breakdown for automation engineers in the UK in 2026, from junior to senior roles across PLC, SCADA, controls, and robotics.",
+    category: "Careers",
+    date: "2026-04-15",
+    readTime: "7 min read",
+    image: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=800&h=400&fit=crop",
+    imageAlt: "Salary benchmarking for automation engineers",
+    author: "Joseph Brijin Chacko, CEng",
+    authorTitle: "Founder & CEO, OSCABE",
+    keywords: ["automation engineer salary UK", "PLC engineer salary 2026", "SCADA engineer pay", "controls engineer salary UK", "robotics engineer salary"],
+    metaTitle: "Automation Engineer Salary Guide UK 2026 | OSCABE",
+    metaDescription: "How much do automation engineers earn in the UK in 2026? Complete salary guide covering PLC, SCADA, Controls, Robotics, and AI/ML engineering roles.",
+    ctaText: "Browse Automation Jobs",
+    ctaHref: "/jobs",
+    relatedSlugs: ["scada-engineer-career-guide-uk", "controls-engineer-vs-automation-engineer", "top-10-plc-programming-skills-employers-want-2026"],
+    content: `The UK automation engineering market in 2026 is experiencing strong demand driven by Industry 4.0 adoption, AI integration, and the ongoing skills shortage. Whether you are a graduate considering a career in automation or a senior engineer benchmarking your package, this guide provides the latest salary data across all major automation disciplines.
+
+## PLC Engineer Salaries
+
+PLC programming remains the backbone of industrial automation. Salaries vary significantly based on platform expertise and experience.
+
+**Junior PLC Engineer (0-2 years):** £28,000 - £35,000
+**Mid-Level PLC Engineer (3-5 years):** £38,000 - £48,000
+**Senior PLC Engineer (5-10 years):** £48,000 - £60,000
+**Lead/Principal PLC Engineer (10+ years):** £60,000 - £75,000
+
+Engineers with Siemens TIA Portal or Allen-Bradley Studio 5000 expertise command a 10-15% premium. Safety PLC experience (SIL rated) can add another £5,000-£8,000.
+
+**Contract rates:** £300 - £500 per day depending on platform and location.
+
+## SCADA Engineer Salaries
+
+SCADA engineers are in high demand, particularly those with Ignition, AVEVA, or WinCC experience.
+
+**Junior SCADA Engineer:** £30,000 - £38,000
+**Mid-Level SCADA Engineer:** £40,000 - £52,000
+**Senior SCADA Engineer:** £52,000 - £65,000
+**SCADA Architect/Lead:** £65,000 - £80,000
+
+Remote SCADA roles are increasingly common, which can affect salary ranges. Engineers willing to work on-site for critical infrastructure projects (water, energy) often earn more.
+
+## Controls Engineer Salaries
+
+Controls engineers who combine hardware and software knowledge are among the most versatile professionals in automation.
+
+**Junior Controls Engineer:** £28,000 - £34,000
+**Mid-Level Controls Engineer:** £36,000 - £48,000
+**Senior Controls Engineer:** £48,000 - £60,000
+**Controls Engineering Manager:** £60,000 - £80,000
+
+## Robotics Engineer Salaries
+
+With FANUC, ABB, KUKA, and Universal Robots experience all in demand, robotics engineers command strong salaries.
+
+**Junior Robotics Engineer:** £30,000 - £38,000
+**Mid-Level Robotics Engineer:** £40,000 - £55,000
+**Senior Robotics Engineer:** £55,000 - £70,000
+**Robotics Team Lead:** £70,000 - £90,000
+
+## AI/ML in Automation Salaries
+
+The convergence of AI and industrial automation has created a new category of highly paid roles.
+
+**ML Engineer (Manufacturing):** £50,000 - £75,000
+**Computer Vision Engineer:** £55,000 - £80,000
+**Data Scientist (Industrial):** £48,000 - £70,000
+**AI/Automation Architect:** £75,000 - £100,000+
+
+These roles typically require Python, TensorFlow or PyTorch, plus domain knowledge of manufacturing processes.
+
+## Factors Affecting Salary
+
+**Location:** London and the South East pay 10-20% more than the North. However, remote work is narrowing this gap.
+
+**Certifications:** Chartered Engineer (CEng) status, TUV Functional Safety, and vendor certifications (Siemens Certified Professional) all boost earning potential.
+
+**Industry Sector:** Oil and gas, pharma, and nuclear pay the highest premiums. Food and beverage and general manufacturing tend to pay at the lower end.
+
+## What Employers Should Know
+
+If you are hiring automation or AI engineers, understanding market rates is critical to attracting top talent. Offering below-market salaries results in longer time-to-fill and higher turnover.
+
+OSCABE can provide detailed salary benchmarking for any automation or AI role. [Contact us](/contact) for a free market analysis, or [browse our available candidates](/employers).`,
+  },
+  {
+    slug: "industry-4-jobs-uk-complete-guide",
+    title: "Industry 4.0 Jobs in the UK: The Complete Guide for 2026",
+    excerpt: "Everything you need to know about Industry 4.0 careers in the UK — roles, skills, salaries, and how to break into the sector.",
+    category: "Industry",
+    date: "2026-04-18",
+    readTime: "8 min read",
+    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=400&fit=crop",
+    imageAlt: "Industry 4.0 smart factory with robotics",
+    author: "Joseph Brijin Chacko, CEng",
+    authorTitle: "Founder & CEO, OSCABE",
+    keywords: ["Industry 4.0 jobs UK", "smart factory careers", "automation jobs 2026", "IIoT jobs", "digital manufacturing careers"],
+    metaTitle: "Industry 4.0 Jobs UK 2026: Complete Career Guide | OSCABE",
+    metaDescription: "Discover the top Industry 4.0 jobs in the UK for 2026. Learn about smart factory roles, required skills, salaries, and how to start your career in digital manufacturing.",
+    ctaText: "Browse Industry 4.0 Jobs",
+    ctaHref: "/jobs",
+    relatedSlugs: ["digital-twin-engineers-most-in-demand-industry-4", "machine-learning-manufacturing-roles-career-paths", "automation-engineer-salary-guide-uk-2026"],
+    content: `Industry 4.0 — the fourth industrial revolution — is transforming UK manufacturing. Smart factories, connected systems, AI-driven quality control, and digital twins are creating entirely new job categories while evolving traditional engineering roles. This guide covers everything you need to know about Industry 4.0 careers in 2026.
+
+## What Is Industry 4.0?
+
+Industry 4.0 refers to the integration of digital technologies into manufacturing and industrial processes. Key technologies include:
+
+- **Industrial IoT (IIoT):** Connected sensors and devices across the factory floor
+- **AI and Machine Learning:** Predictive maintenance, quality control, demand forecasting
+- **Digital Twins:** Virtual replicas of physical systems for simulation and optimisation
+- **Edge Computing:** Processing data at the source rather than the cloud
+- **Advanced Robotics:** Collaborative robots (cobots), autonomous mobile robots
+- **Additive Manufacturing:** 3D printing for prototyping and production
+
+## Top Industry 4.0 Roles in 2026
+
+### 1. Automation Engineer
+The foundational role of Industry 4.0. Automation engineers design, program, and maintain automated systems using PLC, SCADA, and DCS technologies. **Salary: £38,000 - £65,000**
+
+### 2. Digital Twin Engineer
+Creating virtual models of physical systems for testing, optimisation, and predictive analysis. Requires skills in simulation software, data modelling, and often Python. **Salary: £50,000 - £75,000**
+
+### 3. IIoT Engineer
+Designing and deploying connected sensor networks, MQTT/OPC UA protocols, and edge computing solutions. **Salary: £45,000 - £70,000**
+
+### 4. ML Engineer (Manufacturing)
+Applying machine learning to manufacturing challenges: predictive maintenance, anomaly detection, process optimisation. **Salary: £55,000 - £80,000**
+
+### 5. Computer Vision Engineer
+Implementing vision-based quality inspection, defect detection, and measurement systems. **Salary: £50,000 - £75,000**
+
+### 6. Robotics Integration Engineer
+Programming and integrating industrial robots (FANUC, ABB, KUKA) and collaborative robots into production lines. **Salary: £42,000 - £65,000**
+
+### 7. OT Cybersecurity Engineer
+Protecting operational technology (OT) networks from cyber threats. Critical role as factories become more connected. **Salary: £55,000 - £85,000**
+
+### 8. MES/MOM Specialist
+Manufacturing Execution System specialists who bridge the gap between shop floor operations and enterprise systems. **Salary: £48,000 - £70,000**
+
+## Skills You Need
+
+**Essential technical skills:**
+- PLC programming (Siemens, Allen-Bradley)
+- Python for data analysis and ML
+- Networking (Ethernet/IP, Profinet, OPC UA)
+- Cloud platforms (AWS IoT, Azure IoT)
+- SQL and data management
+
+**Valuable certifications:**
+- Chartered Engineer (CEng)
+- Siemens Certified Professional
+- Rockwell Automation Certifications
+- AWS/Azure IoT Certifications
+- ISA/IEC 62443 (OT Cybersecurity)
+
+## How to Break Into Industry 4.0
+
+**For graduates:** Look for graduate schemes with large manufacturers or system integrators. OSCABE regularly posts graduate-level automation and AI roles. [Register with us](/register) to get matched.
+
+**For experienced engineers:** If you are already in traditional automation (PLC, SCADA), upskilling in Python, ML, and cloud technologies will open Industry 4.0 doors. Your domain knowledge of manufacturing processes is extremely valuable.
+
+**For career changers:** Software developers with Python and ML skills can transition into manufacturing AI roles. Understanding basic automation concepts will accelerate your move.
+
+## The UK Industry 4.0 Job Market
+
+The UK government's Made Smarter initiative is driving Industry 4.0 adoption across the Midlands, North West, and North East. Key sectors investing heavily include automotive (EV manufacturing), pharma, food and beverage, and aerospace.
+
+Demand consistently outstrips supply, meaning salaries are rising and employers are increasingly open to remote work and flexible arrangements.
+
+[Browse Industry 4.0 jobs on OSCABE](/jobs) or [contact us](/contact) for career advice from our Chartered Engineer team.`,
+  },
+  {
+    slug: "how-to-hire-plc-engineers-uk-fast",
+    title: "How to Hire PLC Engineers in the UK Fast (Without Wasting Time on Bad CVs)",
+    excerpt: "A practical guide for UK employers struggling to find qualified PLC engineers. Learn why traditional recruitment fails and what works instead.",
+    category: "Industry",
+    date: "2026-04-22",
+    readTime: "6 min read",
+    image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=800&h=400&fit=crop",
+    imageAlt: "PLC engineer programming Siemens controller",
+    author: "Joseph Brijin Chacko, CEng",
+    authorTitle: "Founder & CEO, OSCABE",
+    keywords: ["hire PLC engineers UK", "PLC recruitment", "find PLC programmers", "Siemens engineer recruitment", "Allen-Bradley programmer hiring"],
+    metaTitle: "How to Hire PLC Engineers UK Fast | Recruitment Guide | OSCABE",
+    metaDescription: "Struggling to hire PLC engineers in the UK? This guide explains why traditional recruitment fails for technical roles and how to find qualified Siemens, Allen-Bradley, and Schneider programmers fast.",
+    ctaText: "Post a Role",
+    ctaHref: "/post-a-role",
+    relatedSlugs: ["top-10-plc-programming-skills-employers-want-2026", "uk-manufacturers-struggling-hire-automation-engineers", "automation-engineer-salary-guide-uk-2026"],
+    content: `If you have tried hiring a PLC engineer through a traditional recruitment agency, you probably know the frustration: weeks of waiting, CVs from candidates who cannot tell a TIA Portal from a text editor, and interview after interview with people who oversold their skills. You are not alone. The UK PLC engineer shortage is real, and conventional recruitment methods are failing.
+
+## Why Traditional Recruitment Fails for PLC Roles
+
+**The core problem:** Most recruitment consultants do not understand the difference between a Siemens S7-1200 and an S7-1500, or why Allen-Bradley ControlLogix experience does not automatically mean someone can work with CompactLogix. They keyword-match CVs and hope for the best.
+
+The result? You waste time interviewing candidates who:
+- Claim "PLC experience" but have only done basic HMI programming
+- List platforms they used once during a training course
+- Cannot explain structured text vs ladder logic
+- Have no experience with the specific safety standards your industry requires
+
+## What Works Instead
+
+### 1. Technical Pre-Screening by Engineers
+
+The single most effective filter is having an actual engineer assess candidates before they reach you. At OSCABE, every candidate is screened by a Chartered Engineer who asks platform-specific questions:
+
+- "Walk me through a project where you used TIA Portal V18 with Safety Integrated"
+- "How do you handle PID loop tuning in Studio 5000?"
+- "Describe your approach to Profinet network diagnostics"
+
+This instantly eliminates 70-80% of candidates who look good on paper but lack genuine hands-on experience.
+
+### 2. Platform-Specific Shortlists
+
+Instead of searching for "PLC engineers" generically, specify exactly what you need:
+
+- **Siemens specialists:** TIA Portal version, S7 series, WinCC, Safety F-CPU
+- **Rockwell specialists:** Studio 5000 version, ControlLogix vs CompactLogix, FactoryTalk
+- **Schneider specialists:** EcoStruxure, Unity Pro, M340/M580
+- **Multi-platform:** Engineers who genuinely work across platforms (rare and valuable)
+
+### 3. Realistic Salary Benchmarking
+
+Underpaying is the number one reason roles stay unfilled. Current UK market rates for PLC engineers:
+
+- Junior (0-2 years): £28,000 - £35,000
+- Mid (3-5 years): £38,000 - £48,000
+- Senior (5-10 years): £48,000 - £60,000
+- Lead (10+ years): £60,000 - £75,000
+- Contract: £300 - £500/day
+
+If you are offering £35,000 for a "Senior PLC Engineer with 8 years Siemens experience," you will not find one. The market has moved.
+
+### 4. Consider Remote PLC Engineers
+
+Modern PLC development is increasingly software-based. Engineers can write, test, and simulate PLC code remotely using platform simulation tools:
+
+- Siemens PLCSIM Advanced
+- Rockwell Emulate
+- Schneider Machine Expert
+
+On-site presence is only essential for commissioning and hardware integration. OSCABE offers [remote PLC engineers](/remote-engineers) who can handle the software development phase at 30% lower cost.
+
+### 5. Speed Matters
+
+Top PLC engineers are off the market within 2-3 weeks. If your recruitment process takes 6-8 weeks from job posting to offer, you will consistently lose the best candidates to faster-moving employers.
+
+OSCABE delivers shortlists within 72 hours because we maintain a pre-screened talent pool of 6,000+ engineers. When you post a role, we are not starting from scratch — we are matching against candidates we have already verified.
+
+## The OSCABE Approach
+
+1. **You tell us what you need** — platform, experience level, industry, location
+2. **We deliver a shortlist in 72 hours** — 3-5 Chartered Engineer-verified candidates
+3. **You interview the best** — every candidate genuinely matches your requirements
+4. **You hire with confidence** — average time to placement: 10 days
+
+No upfront fees. No retainers. You only pay when you successfully hire.
+
+[Post a role now](/post-a-role) or [contact our team](/contact) for a free consultation. We will tell you honestly whether we can fill your role and how long it will take.`,
+  },
 ];
 
 export function getBlogBySlug(slug: string): BlogPost | undefined {
