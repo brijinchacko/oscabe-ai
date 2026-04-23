@@ -12,8 +12,9 @@ import {
   Bot,
   Layers,
   Trophy,
+  Brain,
+  Shield,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import {
   COMPANY_NAME,
   COMPANY_NUMBER,
@@ -22,7 +23,7 @@ import {
 } from "@/lib/constants";
 
 const WARTENS_BRANDS = [
-  { name: "OSCABE", description: "AI-powered recruitment for automation engineers", icon: Users },
+  { name: "OSCABE", description: "Specialist recruiter for industrial automation & AI engineers", icon: Users },
   { name: "TraininginPLC.com", description: "Online PLC and SCADA training platform", icon: GraduationCap },
   { name: "edWartens", description: "Structured industrial training and certifications", icon: Layers },
   { name: "roboTED", description: "Subscription-based robotics services", icon: Bot },
@@ -54,17 +55,17 @@ export default function AboutPage() {
                 Part of the Wartens Ecosystem
               </span>
               <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-white sm:text-4xl lg:text-5xl">
-                About OSCABE
+                Where Automation Expertise Meets AI Innovation
               </h1>
               <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-400 lg:mx-0">
-                The AI recruiter built for industrial automation. Part of Wartens, a global automation ecosystem serving 30,000+ companies across the UK, USA, UAE, and India.
+                The specialist recruiter for industrial automation and AI talent. Founded by a Chartered Engineer with 13+ years of hands-on automation experience, now expanding into the AI frontier.
               </p>
             </div>
             <div className="relative mx-auto w-full max-w-lg lg:mx-0">
               <div className="overflow-hidden rounded-2xl border border-white/[0.08]">
                 <Image
-                  src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&h=400&fit=crop"
-                  alt="Modern office workspace"
+                  src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&h=400&fit=crop"
+                  alt="Industrial automation and AI engineering"
                   width={600}
                   height={400}
                   className="h-auto w-full object-cover"
@@ -83,8 +84,8 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             <div className="overflow-hidden rounded-xl border border-white/[0.08]">
               <Image
-                src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=250&fit=crop"
-                alt="Office environment"
+                src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=400&h=250&fit=crop"
+                alt="Robotics and automation"
                 width={400}
                 height={250}
                 className="h-48 w-full object-cover transition-transform duration-300 hover:scale-105"
@@ -92,8 +93,8 @@ export default function AboutPage() {
             </div>
             <div className="overflow-hidden rounded-xl border border-white/[0.08]">
               <Image
-                src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&h=250&fit=crop"
-                alt="Team collaboration"
+                src="https://images.unsplash.com/photo-1555255707-c07966088b7b?w=400&h=250&fit=crop"
+                alt="AI and machine learning"
                 width={400}
                 height={250}
                 className="h-48 w-full object-cover transition-transform duration-300 hover:scale-105"
@@ -101,8 +102,8 @@ export default function AboutPage() {
             </div>
             <div className="overflow-hidden rounded-xl border border-white/[0.08]">
               <Image
-                src="https://images.unsplash.com/photo-1560472355-536de3962603?w=400&h=250&fit=crop"
-                alt="Corporate building"
+                src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&h=250&fit=crop"
+                alt="Control systems engineering"
                 width={400}
                 height={250}
                 className="h-48 w-full object-cover transition-transform duration-300 hover:scale-105"
@@ -122,22 +123,25 @@ export default function AboutPage() {
               </h2>
               <div className="mt-6 space-y-4 text-gray-400 leading-relaxed">
                 <p>
-                  OSCABE was born from a simple observation: recruitment in industrial automation was fundamentally broken. Too many generic recruiters who could not tell a PLC from a PID loop, and too many talented engineers slipping through the cracks.
+                  OSCABE was founded by Joseph Brijin Chacko, CEng, a Chartered Engineer with 13+ years of hands-on experience in industrial automation. After years of watching talented PLC, SCADA, and controls engineers struggle with recruiters who could not tell a PLC from a PID loop, he built something better.
                 </p>
                 <p>
-                  Founded as part of Wartens, a global automation ecosystem that brings together training, recruitment, robotics, and next-generation technology solutions, OSCABE was built with an unfair advantage. We are not just recruiters who learned automation. We are automation specialists who built a recruitment platform.
+                  As part of Wartens UK Ltd, a global automation ecosystem that brings together training, recruitment, robotics, and next-generation technology solutions, OSCABE was built with an unfair advantage. We are not just recruiters who learned automation. We are automation specialists who built a recruitment platform.
                 </p>
                 <p>
-                  With 13+ years of sector expertise and the power of 3BOX AI, we created the first AI-driven recruitment platform purpose-built for PLC, SCADA, controls, robotics, and EC&I engineers. Every candidate is technically verified. Every match is AI-powered. Every placement is engineer-reviewed.
+                  Now, we are expanding into AI and intelligent systems recruitment. The convergence of industrial automation and artificial intelligence — predictive maintenance, computer vision for quality control, digital twins, and autonomous systems — demands a recruiter who understands both worlds. That is OSCABE.
+                </p>
+                <p>
+                  With 6,000+ pre-screened engineers in our talent pool and the power of 3BOX AI, we deliver Chartered Engineer-verified shortlists in 72 hours. Every candidate is technically assessed. Every match is AI-powered. Every placement is engineer-reviewed.
                 </p>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
               {[
-                { icon: Cpu, value: "13+", label: "Years of sector expertise", color: "#4540DB" },
-                { icon: Users, value: "30k+", label: "Companies served globally", color: "#00D4FF" },
-                { icon: Building2, value: "20+", label: "PLC platforms covered", color: "#4540DB" },
-                { icon: Award, value: "48hr", label: "Average time to shortlist", color: "#00D4FF" },
+                { icon: Cpu, value: "13+", label: "Years of automation expertise", color: "#4540DB" },
+                { icon: Users, value: "6,000+", label: "Pre-screened engineers", color: "#00D4FF" },
+                { icon: Brain, value: "30+", label: "Automation & AI platforms covered", color: "#4540DB" },
+                { icon: Award, value: "72hr", label: "Shortlist delivery guarantee", color: "#00D4FF" },
               ].map((stat) => (
                 <div key={stat.label} className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 text-center backdrop-blur-sm transition-all hover:border-white/[0.15] hover:bg-white/[0.06]">
                   <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl" style={{ background: `${stat.color}15` }}>
@@ -157,13 +161,13 @@ export default function AboutPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-3xl text-center">
             <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[#4540DB]/15">
-              <Wrench className="h-6 w-6 text-[#4540DB]" />
+              <Shield className="h-6 w-6 text-[#4540DB]" />
             </div>
             <h2 className="text-2xl font-extrabold text-white sm:text-3xl">
-              Engineer-Led, AI-Powered
+              Chartered Engineer-Led, AI-Powered
             </h2>
             <p className="mt-4 text-gray-400 leading-relaxed">
-              Our team includes chartered engineers who speak the language of PLC, SCADA, and controls. When we assess a candidate or discuss a role, we understand the technical nuances that generic recruiters miss. This engineering DNA runs through everything we do, from our AI matching algorithms to our candidate verification process.
+              Our team is led by Chartered Engineers who speak the language of PLC, SCADA, controls, robotics, and now AI/ML. When we assess a candidate or discuss a role, we understand the technical nuances that generic recruiters miss — whether it is Siemens TIA Portal, Allen-Bradley Studio 5000, TensorFlow, or PyTorch. This engineering DNA runs through everything we do, from our AI matching algorithms to our candidate verification process.
             </p>
           </div>
         </div>
@@ -181,7 +185,7 @@ export default function AboutPage() {
               The Wartens Group
             </h2>
             <p className="mt-4 text-gray-400 leading-relaxed">
-              Wartens is a global automation ecosystem operating under the philosophy of Innovate, Educate, Automate. With operations in the UK, USA, UAE, and India, Wartens brings together training, recruitment, robotics, and next-generation solutions to prepare industries for Industry 4.0 and beyond.
+              OSCABE is part of Wartens UK Ltd, a global automation ecosystem operating under the philosophy of Innovate, Educate, Automate. With operations in the UK, USA, UAE, and India, Wartens brings together training, recruitment, robotics, and next-generation solutions to prepare industries for Industry 4.0 and beyond.
             </p>
           </div>
 
@@ -215,10 +219,10 @@ export default function AboutPage() {
               Award-Winning
             </div>
             <h2 className="mt-4 text-2xl font-extrabold text-white sm:text-3xl">
-              Recognised for Excellence
+              National Manufacturing & Engineering Startup of the Year 2025
             </h2>
             <p className="mt-4 text-gray-400 leading-relaxed">
-              Our parent company Wartens has been recognised nationally and internationally for innovation, entrepreneurship, and excellence in industrial automation.
+              Our parent company Wartens has been recognised nationally and internationally for innovation, entrepreneurship, and excellence in industrial automation. This award validates our unique position at the intersection of automation expertise and recruitment innovation.
             </p>
           </div>
 
@@ -268,7 +272,11 @@ export default function AboutPage() {
               </div>
               <div className="flex gap-4">
                 <span className="w-40 shrink-0 font-medium text-white">Parent Company</span>
-                <span>Wartens Ltd (wartens.com)</span>
+                <span>Wartens UK Ltd (wartens.com)</span>
+              </div>
+              <div className="flex gap-4">
+                <span className="w-40 shrink-0 font-medium text-white">Founder</span>
+                <span>Joseph Brijin Chacko, CEng</span>
               </div>
               <div className="flex gap-4">
                 <span className="w-40 shrink-0 font-medium text-white">Global Presence</span>
@@ -289,18 +297,20 @@ export default function AboutPage() {
             Want to Work With Us?
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-lg text-gray-400">
-            Whether you are hiring automation engineers or looking for your next role, we would love to hear from you.
+            Whether you are hiring automation and AI engineers or looking for your next role in the field, we would love to hear from you.
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Link href="/employers">
-              <Button size="lg" className="bg-[#4540DB] text-white hover:bg-[#4540DB]/80 px-8 shadow-lg shadow-[#4540DB]/25">
-                For Employers
-              </Button>
+            <Link
+              href="/employers"
+              className="inline-flex items-center gap-2 rounded-xl bg-[#4540DB] px-8 py-4 text-sm font-semibold text-white shadow-lg shadow-[#4540DB]/25 transition-all hover:bg-[#4540DB]/90 hover:scale-105"
+            >
+              For Employers
             </Link>
-            <Link href="/candidates">
-              <Button variant="outline" size="lg" className="border-white/[0.15] text-white hover:bg-white/[0.06] hover:text-white">
-                For Candidates
-              </Button>
+            <Link
+              href="/candidates"
+              className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/5 px-8 py-4 text-sm font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/10"
+            >
+              For Candidates
             </Link>
           </div>
         </div>

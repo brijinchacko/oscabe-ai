@@ -13,12 +13,20 @@ import {
   ShieldCheck,
   PoundSterling,
   Sparkles,
-  Briefcase,
-  Code2,
   Cpu,
+  Brain,
   MessageSquare,
+  Bot,
+  Eye,
+  Cog,
+  Wrench,
+  Shield,
+  BarChart3,
+  Network,
+  Database,
+  Server,
+  Settings,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { AwardsBanner } from "@/components/shared/awards-banner";
 
 /* ------------------------------------------------------------------ */
@@ -27,22 +35,22 @@ import { AwardsBanner } from "@/components/shared/awards-banner";
 
 const BENEFITS = [
   {
+    icon: ShieldCheck,
+    title: "Chartered Engineer-Led Screening",
+    description:
+      "Every candidate is technically assessed by a Chartered Engineer who understands PLC, SCADA, controls, robotics, and AI tech stacks. Not just CV forwarding.",
+  },
+  {
     icon: Clock,
     title: "72-Hour Shortlists",
     description:
-      "From brief to shortlist in 72 hours. Our pre-qualified talent pool means you get quality candidates faster than any traditional agency.",
+      "From brief to shortlist in 72 hours. Our 6,000+ pre-screened talent pool means you get quality automation and AI candidates faster than any agency.",
   },
   {
     icon: PoundSterling,
     title: "No Upfront Fees",
     description:
       "Zero risk to get started. You only pay when we deliver results, with flexible models to suit your hiring volume and budget.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Pre-Screened Candidates",
-    description:
-      "Every candidate is technically assessed and validated before you see them. You receive qualified professionals, not just CVs.",
   },
   {
     icon: Sparkles,
@@ -52,55 +60,40 @@ const BENEFITS = [
   },
   {
     icon: Target,
-    title: "Domain Expertise",
+    title: "Deep Automation & AI Expertise",
     description:
-      "Our recruiters specialise across operations, technology, and engineering, so they understand the roles they are hiring for.",
+      "13+ years of industrial automation expertise, now expanded into AI/ML recruitment. We speak the language of Siemens, Rockwell, TensorFlow, and PyTorch.",
   },
 ];
 
-const ROLE_CATEGORIES = [
-  {
-    icon: Briefcase,
-    title: "Business & Operations",
-    color: "#4540DB",
-    image:
-      "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=600&h=400&fit=crop",
-    roles: [
-      "Office & Admin",
-      "Business Analysts",
-      "Project Managers",
-      "HR & People",
-      "Finance & Procurement",
-    ],
-  },
-  {
-    icon: Code2,
-    title: "Technology",
-    color: "#00D4FF",
-    image:
-      "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&h=400&fit=crop",
-    roles: [
-      "Software Developers",
-      "QA Engineers",
-      "Data & AI Specialists",
-      "DevOps & Cloud",
-      "IT Support & Infrastructure",
-    ],
-  },
-  {
-    icon: Cpu,
-    title: "Engineering",
-    color: "#22C55E",
-    image:
-      "https://images.unsplash.com/photo-1581091226033-d5c48150dbaa?w=600&h=400&fit=crop",
-    roles: [
-      "Automation Engineers",
-      "PLC / SCADA / Controls",
-      "Electrical & Mechanical",
-      "Design Engineers",
-      "Commissioning Engineers",
-    ],
-  },
+const AUTOMATION_ROLES = [
+  "PLC Programmer",
+  "SCADA Engineer",
+  "Controls Engineer",
+  "Automation Engineer",
+  "Robotics Engineer",
+  "Commissioning Engineer",
+  "EC&I Engineer",
+  "DCS Engineer",
+  "Safety Engineer (SIL)",
+  "Panel Design Engineer",
+  "Field Service Engineer",
+  "BMS Engineer",
+];
+
+const AI_ROLES = [
+  "ML Engineer",
+  "AI Engineer",
+  "Data Scientist",
+  "Computer Vision Engineer",
+  "NLP Engineer",
+  "MLOps Engineer",
+  "AI Research Scientist",
+  "Robotics AI Engineer",
+  "IoT Engineer",
+  "Digital Twin Engineer",
+  "Data Engineer",
+  "Automation Architect",
 ];
 
 const STEPS = [
@@ -109,28 +102,28 @@ const STEPS = [
     icon: MessageSquare,
     title: "Understand Your Requirement",
     description:
-      "We learn about the role, your team, must-have skills, and timeline so we target the right candidates from day one.",
+      "We learn about the role, your tech stack, must-have skills, and timeline — whether it is Siemens TIA Portal or PyTorch.",
   },
   {
     step: 2,
     icon: FileSearch,
     title: "Source & Pre-Screen",
     description:
-      "We search our talent network and the wider market, then technically screen every candidate before they reach your desk.",
+      "We search our 6,000+ automation and AI talent pool, then technically screen every candidate with Chartered Engineer verification.",
   },
   {
     step: 3,
     icon: Send,
     title: "Deliver Shortlist in 72 Hours",
     description:
-      "You receive a curated shortlist of pre-qualified professionals, complete with screening notes and availability.",
+      "You receive a curated shortlist of technically verified professionals, complete with screening notes and availability.",
   },
   {
     step: 4,
     icon: Users,
     title: "Support Through Hiring",
     description:
-      "We coordinate interviews, manage offers, and support onboarding so you stay focused on your business.",
+      "We coordinate interviews, manage offers, and support onboarding so you stay focused on your projects.",
   },
 ];
 
@@ -145,7 +138,7 @@ const PRICING_MODELS = [
     features: [
       "Pay only when you hire",
       "90-day replacement guarantee",
-      "Full screening included",
+      "Chartered Engineer screening included",
     ],
   },
   {
@@ -189,34 +182,6 @@ const PRICING_MODELS = [
   },
 ];
 
-const SECTOR_IMAGES = [
-  {
-    src: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=400&h=300&fit=crop",
-    alt: "Business meeting",
-    label: "Operations",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=400&h=300&fit=crop",
-    alt: "Team collaboration",
-    label: "Technology",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1581091226033-d5c48150dbaa?w=400&h=300&fit=crop",
-    alt: "Engineering work",
-    label: "Engineering",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1560472355-536de3962603?w=400&h=300&fit=crop",
-    alt: "Interview session",
-    label: "Hiring",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400&h=300&fit=crop",
-    alt: "Office building",
-    label: "Workplaces",
-  },
-];
-
 /* ------------------------------------------------------------------ */
 /*  PAGE                                                               */
 /* ------------------------------------------------------------------ */
@@ -228,7 +193,6 @@ export default function EmployersPage() {
       {/*  HERO                                                        */}
       {/* ============================================================ */}
       <section className="relative overflow-hidden py-20 sm:py-28">
-        {/* Grid pattern */}
         <div
           className="pointer-events-none absolute inset-0 opacity-[0.03]"
           style={{
@@ -237,53 +201,42 @@ export default function EmployersPage() {
             backgroundSize: "60px 60px",
           }}
         />
-        {/* Gradient orbs */}
         <div className="pointer-events-none absolute -top-40 -left-40 h-[500px] w-[500px] rounded-full bg-[#4540DB]/20 blur-[120px]" />
         <div className="pointer-events-none absolute -bottom-40 -right-40 h-[400px] w-[400px] rounded-full bg-[#4540DB]/15 blur-[120px]" />
-        <div className="pointer-events-none absolute top-1/2 left-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#4540DB]/10 blur-[120px]" />
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid items-center gap-12 lg:grid-cols-2">
-            {/* Left column - text */}
             <div className="text-center lg:text-left">
               <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
-                Hire High-Performing Talent, Fast
+                Hire Verified Automation & AI Engineers
               </h1>
               <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-400 lg:mx-0">
-                Pre-qualified candidates across operations, technology, and
-                engineering — delivered in 72 hours, with no upfront fees.
+                Chartered Engineer-screened candidates across PLC, SCADA, Controls, Robotics, Machine Learning, and Computer Vision — delivered in 72 hours, with no upfront fees.
               </p>
               <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row lg:justify-start">
-                <Link href="/post-a-role">
-                  <Button
-                    size="lg"
-                    className="bg-[#4540DB] hover:bg-[#4540DB]/90 text-white px-8 transition-transform hover:scale-105"
-                    style={{ boxShadow: "0 0 30px rgba(69,64,219,0.4)" }}
-                  >
-                    Submit a Role
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
+                <Link
+                  href="/post-a-role"
+                  className="inline-flex items-center gap-2 rounded-xl bg-[#4540DB] px-8 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#4540DB]/25 transition-all hover:bg-[#4540DB]/90 hover:scale-105"
+                >
+                  Submit a Role
+                  <ArrowRight className="h-4 w-4" />
                 </Link>
-                <Link href="/pricing">
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    className="border border-white/20 bg-white/5 backdrop-blur-sm text-white hover:bg-white/10 hover:text-white"
-                  >
-                    View Pricing
-                  </Button>
+                <Link
+                  href="/pricing"
+                  className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/5 px-8 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/10"
+                >
+                  View Pricing
                 </Link>
               </div>
             </div>
 
-            {/* Right column - image grid */}
             <div className="hidden lg:block">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-4">
                   <div className="overflow-hidden rounded-2xl border border-white/[0.08]">
                     <Image
-                      src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=600&h=400&fit=crop"
-                      alt="Business meeting"
+                      src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&h=400&fit=crop"
+                      alt="Industrial automation engineering"
                       width={600}
                       height={400}
                       className="h-48 w-full object-cover transition-transform duration-500 hover:scale-105"
@@ -291,8 +244,8 @@ export default function EmployersPage() {
                   </div>
                   <div className="overflow-hidden rounded-2xl border border-white/[0.08]">
                     <Image
-                      src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=600&h=400&fit=crop"
-                      alt="Office discussion"
+                      src="https://images.unsplash.com/photo-1555255707-c07966088b7b?w=600&h=400&fit=crop"
+                      alt="AI and machine learning development"
                       width={600}
                       height={400}
                       className="h-32 w-full object-cover transition-transform duration-500 hover:scale-105"
@@ -302,8 +255,8 @@ export default function EmployersPage() {
                 <div className="space-y-4 pt-8">
                   <div className="overflow-hidden rounded-2xl border border-white/[0.08]">
                     <Image
-                      src="https://images.unsplash.com/photo-1542744173-8e7e91415657?w=600&h=400&fit=crop"
-                      alt="Professional at work"
+                      src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=600&h=400&fit=crop"
+                      alt="Robotics and automation"
                       width={600}
                       height={400}
                       className="h-32 w-full object-cover transition-transform duration-500 hover:scale-105"
@@ -311,8 +264,8 @@ export default function EmployersPage() {
                   </div>
                   <div className="overflow-hidden rounded-2xl border border-white/[0.08]">
                     <Image
-                      src="https://images.unsplash.com/photo-1560472355-536de3962603?w=600&h=400&fit=crop"
-                      alt="Interview session"
+                      src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&h=400&fit=crop"
+                      alt="Control systems and SCADA"
                       width={600}
                       height={400}
                       className="h-48 w-full object-cover transition-transform duration-500 hover:scale-105"
@@ -321,31 +274,6 @@ export default function EmployersPage() {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ============================================================ */}
-      {/*  SECTOR IMAGE STRIP                                           */}
-      {/* ============================================================ */}
-      <section className="border-y border-white/[0.06] bg-white/[0.02] py-10">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-            {SECTOR_IMAGES.map((img) => (
-              <div key={img.label} className="group relative overflow-hidden rounded-xl border border-white/[0.08]">
-                <Image
-                  src={img.src}
-                  alt={img.alt}
-                  width={400}
-                  height={300}
-                  className="h-36 w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-                <span className="absolute bottom-3 left-3 text-sm font-semibold text-white">
-                  {img.label}
-                </span>
-              </div>
-            ))}
           </div>
         </div>
       </section>
@@ -360,8 +288,7 @@ export default function EmployersPage() {
               Why Employers Choose OSCABE
             </h2>
             <p className="mx-auto mt-3 max-w-2xl text-gray-400">
-              Built for hiring managers who need quality candidates, not piles of
-              CVs. We combine domain expertise with speed.
+              Built for hiring managers who need verified automation and AI engineers, not piles of unscreened CVs.
             </p>
           </div>
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -406,71 +333,45 @@ export default function EmployersPage() {
               Roles We Fill
             </h2>
             <p className="mx-auto mt-3 max-w-2xl text-gray-400">
-              From office operations to complex engineering, we recruit across
-              three core disciplines.
+              From PLC programmers to AI research scientists, we recruit across the full spectrum of automation and intelligent systems.
             </p>
           </div>
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {ROLE_CATEGORIES.map((cat) => (
-              <div
-                key={cat.title}
-                className="group rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm overflow-hidden transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.06]"
-                style={{
-                  transition:
-                    "box-shadow 0.3s, border-color 0.3s, background 0.3s",
-                }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLDivElement).style.boxShadow = `0 0 30px ${cat.color}15`;
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLDivElement).style.boxShadow = "none";
-                }}
-              >
-                {/* Category image */}
-                <div className="relative h-40 w-full overflow-hidden">
-                  <Image
-                    src={cat.image}
-                    alt={cat.title}
-                    width={600}
-                    height={400}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#010118] via-[#010118]/40 to-transparent" />
-                  <div className="absolute bottom-3 left-4 flex items-center gap-2">
-                    <div
-                      className="flex h-9 w-9 items-center justify-center rounded-lg"
-                      style={{ backgroundColor: `${cat.color}30` }}
-                    >
-                      <cat.icon
-                        className="h-4 w-4"
-                        style={{ color: cat.color }}
-                      />
-                    </div>
-                    <h3 className="text-lg font-semibold text-white">
-                      {cat.title}
-                    </h3>
-                  </div>
+          <div className="mt-12 grid gap-8 lg:grid-cols-2">
+            {/* Automation Roles */}
+            <div className="rounded-2xl border border-[#4540DB]/20 bg-white/[0.02] p-8 backdrop-blur-sm">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#4540DB]/15">
+                  <Cpu className="h-5 w-5 text-[#4540DB]" />
                 </div>
-
-                {/* Roles list */}
-                <div className="p-6 pt-4">
-                  <ul className="space-y-2">
-                    {cat.roles.map((role) => (
-                      <li
-                        key={role}
-                        className="flex items-center gap-2 text-sm text-gray-400"
-                      >
-                        <CheckCircle
-                          className="h-3.5 w-3.5 shrink-0"
-                          style={{ color: cat.color }}
-                        />
-                        {role}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                <h3 className="text-lg font-semibold text-white">Industrial Automation</h3>
               </div>
-            ))}
+              <div className="grid grid-cols-2 gap-2">
+                {AUTOMATION_ROLES.map((role) => (
+                  <div key={role} className="flex items-center gap-2 text-sm text-gray-400">
+                    <CheckCircle className="h-3.5 w-3.5 shrink-0 text-[#4540DB]" />
+                    {role}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* AI Roles */}
+            <div className="rounded-2xl border border-[#00D4FF]/20 bg-white/[0.02] p-8 backdrop-blur-sm">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#00D4FF]/15">
+                  <Brain className="h-5 w-5 text-[#00D4FF]" />
+                </div>
+                <h3 className="text-lg font-semibold text-white">AI & Intelligent Systems</h3>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                {AI_ROLES.map((role) => (
+                  <div key={role} className="flex items-center gap-2 text-sm text-gray-400">
+                    <CheckCircle className="h-3.5 w-3.5 shrink-0 text-[#00D4FF]" />
+                    {role}
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -481,12 +382,11 @@ export default function EmployersPage() {
       <section className="py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid items-center gap-12 lg:grid-cols-2">
-            {/* Left - image */}
             <div className="hidden lg:block">
               <div className="relative overflow-hidden rounded-2xl border border-white/[0.08]">
                 <Image
-                  src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&h=600&fit=crop"
-                  alt="Team working together"
+                  src="https://images.unsplash.com/photo-1581091226033-d5c48150dbaa?w=800&h=600&fit=crop"
+                  alt="Automation engineers at work"
                   width={800}
                   height={600}
                   className="h-[420px] w-full object-cover"
@@ -498,14 +398,13 @@ export default function EmployersPage() {
                       From brief to hire in four simple steps
                     </p>
                     <p className="mt-1 text-xs text-gray-400">
-                      Our streamlined process keeps things moving fast
+                      Chartered Engineer verification at every stage
                     </p>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Right - steps */}
             <div>
               <h2 className="text-center text-2xl font-bold text-white sm:text-3xl lg:text-left">
                 How It Works
@@ -560,8 +459,7 @@ export default function EmployersPage() {
               Choose Your Hiring Model
             </h2>
             <p className="mx-auto mt-3 max-w-2xl text-gray-400">
-              Flexible pricing that fits your hiring volume and budget. No hidden
-              fees.
+              Flexible pricing that fits your hiring volume and budget. No hidden fees.
             </p>
           </div>
 
@@ -635,31 +533,28 @@ export default function EmployersPage() {
               Case Study
             </span>
             <h2 className="mt-4 text-2xl font-bold tracking-tight text-white sm:text-3xl">
-              Engineering / Technical Hiring
+              Automation & AI Hiring for Industry 4.0
             </h2>
           </div>
 
           <div className="mt-12 grid items-stretch gap-6 lg:grid-cols-4">
-            {/* Case study image */}
             <div className="hidden overflow-hidden rounded-2xl border border-white/[0.08] lg:block">
               <Image
-                src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=600&h=800&fit=crop"
-                alt="Professional in office"
+                src="https://images.unsplash.com/photo-1581091226033-d5c48150dbaa?w=600&h=800&fit=crop"
+                alt="Automation engineering in factory"
                 width={600}
                 height={800}
                 className="h-full w-full object-cover"
               />
             </div>
 
-            {/* Case study cards */}
             <div className="grid gap-6 sm:grid-cols-3 lg:col-span-3">
               <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 backdrop-blur-sm">
                 <h3 className="text-sm font-semibold uppercase tracking-wider text-red-400">
                   Challenge
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-gray-400">
-                  Client needed urgent hiring support with limited time and budget
-                  constraints for critical technical positions.
+                  Manufacturing client implementing predictive maintenance needed 3 PLC programmers (Siemens) and 1 ML engineer within 2 weeks.
                 </p>
               </div>
               <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 backdrop-blur-sm">
@@ -669,15 +564,15 @@ export default function EmployersPage() {
                 <ul className="mt-3 space-y-2 text-sm text-gray-400">
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-[#00D4FF]" />
-                    Rapid sourcing
+                    Chartered Engineer screening
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-[#00D4FF]" />
-                    Pre-screening & validation
+                    AI-powered candidate matching
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-[#00D4FF]" />
-                    Delivered shortlist in 3 days
+                    Shortlist delivered in 48 hours
                   </li>
                 </ul>
               </div>
@@ -688,7 +583,7 @@ export default function EmployersPage() {
                 <div className="mt-3 space-y-3">
                   <div>
                     <p className="text-2xl font-bold text-[#22C55E]">
-                      2 positions
+                      4 positions
                     </p>
                     <p className="text-sm text-gray-400">Filled within 10 days</p>
                   </div>
@@ -715,31 +610,24 @@ export default function EmployersPage() {
         <div className="pointer-events-none absolute -top-20 left-1/2 h-[400px] w-[600px] -translate-x-1/2 rounded-full bg-[#4540DB]/20 blur-[120px]" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-2xl font-bold text-white sm:text-3xl">
-            Ready to Hire?
+            Ready to Hire Automation & AI Engineers?
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-lg text-gray-400">
-            Let&apos;s find your next great team member. Submit your requirement
-            and receive a shortlist of pre-qualified candidates within 72 hours.
+            Submit your requirement and receive a Chartered Engineer-verified shortlist of automation and AI candidates within 72 hours.
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Link href="/post-a-role">
-              <Button
-                size="lg"
-                className="bg-[#4540DB] text-white hover:bg-[#4540DB]/90 px-8 transition-transform hover:scale-105"
-                style={{ boxShadow: "0 0 30px rgba(69,64,219,0.4)" }}
-              >
-                Submit a Requirement
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
+            <Link
+              href="/post-a-role"
+              className="inline-flex items-center gap-2 rounded-xl bg-[#4540DB] px-8 py-4 text-sm font-semibold text-white shadow-lg shadow-[#4540DB]/25 transition-all hover:bg-[#4540DB]/90 hover:scale-105"
+            >
+              Submit a Requirement
+              <ArrowRight className="h-4 w-4" />
             </Link>
-            <Link href="/contact">
-              <Button
-                variant="outline"
-                size="lg"
-                className="border border-white/20 bg-white/5 backdrop-blur-sm text-white hover:bg-white/10 hover:text-white"
-              >
-                Book a Call
-              </Button>
+            <Link
+              href="/contact"
+              className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/5 px-8 py-4 text-sm font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/10"
+            >
+              Book a Call
             </Link>
           </div>
         </div>

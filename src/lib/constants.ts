@@ -22,6 +22,7 @@ export const AWARDS = [
 ];
 
 export const ROLES_WE_RECRUIT = [
+  // Industrial Automation
   "PLC Programmer",
   "Controls Engineer",
   "SCADA Engineer",
@@ -40,9 +41,23 @@ export const ROLES_WE_RECRUIT = [
   "BMS Engineer",
   "Panel Design Engineer",
   "Field Service Engineer",
+  // AI & Intelligent Systems
+  "ML Engineer",
+  "AI Engineer",
+  "Data Scientist",
+  "Computer Vision Engineer",
+  "NLP Engineer",
+  "MLOps Engineer",
+  "Robotics AI Engineer",
+  "IoT Engineer",
+  "Digital Twin Engineer",
+  "Data Engineer",
+  "Automation Architect",
+  "AI Research Scientist",
 ];
 
 export const PLATFORMS = [
+  // Automation Platforms
   "Siemens (TIA Portal / S7)",
   "Allen-Bradley (Rockwell / Studio 5000)",
   "Schneider (EcoStruxure / Unity Pro)",
@@ -63,14 +78,25 @@ export const PLATFORMS = [
   "GE Proficy / iFIX",
   "Aveva System Platform",
   "EPLAN",
+  // AI / ML Technologies
+  "Python",
+  "TensorFlow",
+  "PyTorch",
+  "scikit-learn",
+  "OpenCV",
+  "AWS SageMaker",
+  "Azure ML",
+  "Databricks",
+  "Kubernetes",
 ];
 
 export const INDUSTRIES = [
-  "Automotive",
+  "Manufacturing & Industry 4.0",
+  "Automotive & EV",
   "Food & Beverage",
-  "Pharmaceuticals",
+  "Pharmaceuticals & Life Sciences",
   "Water & Wastewater",
-  "Oil & Gas",
+  "Oil, Gas & Petrochemical",
   "Energy & Renewables",
   "Mining & Metals",
   "Packaging",
@@ -78,10 +104,12 @@ export const INDUSTRIES = [
   "Logistics & Warehousing",
   "Building Automation",
   "Chemicals",
-  "Aerospace & Defence",
+  "Defence & Aerospace",
   "Semiconductor",
   "Data Centres",
   "Marine & Offshore",
+  "Technology & SaaS",
+  "Robotics & Autonomous Systems",
 ];
 
 export const CLIENT_PIPELINE_STAGES = [

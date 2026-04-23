@@ -14,7 +14,7 @@ const PLATFORM_LINKS = [
   { label: "Browse Jobs", href: "/jobs" },
   { label: "For Employers", href: "/employers" },
   { label: "For Candidates", href: "/candidates" },
-  { label: "For Agencies", href: "/agencies" },
+  { label: "Specialisms", href: "/industries" },
   { label: "Post a Role", href: "/post-a-role" },
 ];
 
@@ -22,6 +22,7 @@ const COMPANY_LINKS = [
   { label: "About Us", href: "/about" },
   { label: "Contact", href: "/contact" },
   { label: "Careers", href: "/careers" },
+  { label: "Blog", href: "/blog" },
 ];
 
 const LEGAL_LINKS = [
@@ -60,11 +61,11 @@ export function Footer() {
           <div className="sm:col-span-2 lg:col-span-1">
             <Logo variant="light" size="md" linkTo="/" />
             <p className="mt-4 max-w-xs text-sm text-gray-400">
-              Connecting exceptional talent with outstanding opportunities.
-              AI-powered recruitment for the modern workforce.
+              The specialist recruiter for industrial automation and AI talent.
+              Chartered Engineer-led screening with 72-hour shortlists.
             </p>
             <p className="mt-2 max-w-xs text-xs font-medium tracking-wide text-[#4540DB]/70">
-              The Future of Automation Recruitment
+              Industrial Automation & AI Recruitment
             </p>
             <div className="mt-6 flex items-center gap-4">
               {SOCIAL_ICONS.map((social) => (
