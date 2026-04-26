@@ -38,7 +38,7 @@ export default function BlogIndexPage() {
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-base text-gray-400 sm:text-lg">
             Expert perspectives on industrial automation and AI recruitment.
-            Career guides, salary data, and industry trends from our Chartered
+            Career guides, salary data, and industry trends from our
             Engineer-led team.
           </p>
         </div>
@@ -108,7 +108,7 @@ export default function BlogIndexPage() {
             Looking for your next role in automation or AI?
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-base text-gray-400">
-            Register with OSCABE to access exclusive opportunities, Chartered
+            Register with OSCABE to access exclusive opportunities,
             Engineer-led career guidance, and AI-powered job matching.
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
