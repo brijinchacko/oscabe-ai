@@ -20,13 +20,23 @@ import { wrapEmailHtml } from "@/lib/email-html";
 type TaskName = "discover" | "verify" | "outreach" | "followup" | "classify" | "report";
 
 function determineTask(now: Date): TaskName | null {
-  // Convert to UK time
-  const ukTime = new Date(
-    now.toLocaleString("en-GB", { timeZone: "Europe/London" })
-  );
-  const hour = ukTime.getHours();
-  const minute = ukTime.getMinutes();
-  const dayOfWeek = ukTime.getDay(); // 0=Sun, 1=Mon...6=Sat
+  // Extract UK time components via Intl.DateTimeFormat.
+  // (toLocaleString + new Date round-trips an unparseable dd/mm/yyyy string,
+  // producing Invalid Date and silently bypassing every task window.)
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Europe/London",
+    hour: "2-digit",
+    minute: "2-digit",
+    weekday: "short",
+    hour12: false,
+  }).formatToParts(now);
+  const hour = parseInt(parts.find((p) => p.type === "hour")!.value, 10);
+  const minute = parseInt(parts.find((p) => p.type === "minute")!.value, 10);
+  const weekday = parts.find((p) => p.type === "weekday")!.value;
+  const dayMap: Record<string, number> = {
+    Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6,
+  };
+  const dayOfWeek = dayMap[weekday] ?? -1;
   const isWeekday = dayOfWeek >= 1 && dayOfWeek <= 5;
   const isMonday = dayOfWeek === 1;
 
