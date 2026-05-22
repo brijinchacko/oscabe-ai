@@ -22,6 +22,421 @@ export interface BlogPost {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: "hire-allen-bradley-rockwell-engineers-uk",
+    title:
+      "Hire Allen-Bradley & Rockwell Engineers in the UK: Studio 5000, ControlLogix & FactoryTalk Specialists",
+    excerpt:
+      "Why UK Rockwell roles take longer to fill than Siemens, the screening questions that separate real Studio 5000 engineers from CV-padded ones, and 2026 salary plus day-rate benchmarks.",
+    category: "Industry",
+    date: "2026-05-22",
+    readTime: "6 min read",
+    image:
+      "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=450&fit=crop",
+    imageAlt: "Allen-Bradley ControlLogix PLC and FactoryTalk SCADA in a UK automotive plant",
+    author: "Joseph Brijin Chacko",
+    authorTitle: "Founder & Director, OSCABE",
+    keywords: [
+      "hire Allen-Bradley engineers UK",
+      "Rockwell programmer hire UK",
+      "Studio 5000 engineer UK",
+      "ControlLogix specialist UK",
+      "FactoryTalk View SE developer",
+      "CompactLogix engineer UK",
+    ],
+    metaTitle:
+      "Hire Allen-Bradley & Rockwell Engineers UK 2026 | Studio 5000 | OSCABE",
+    metaDescription:
+      "How to hire genuine Allen-Bradley and Rockwell engineers in the UK. Studio 5000, ControlLogix, CompactLogix, FactoryTalk screening, 2026 rates, and 72-hour verified shortlists.",
+    ctaText: "Get a Shortlist in 72 Hours",
+    ctaHref: "/post-a-role",
+    relatedSlugs: [
+      "hire-siemens-tia-portal-engineer-uk-fast",
+      "how-to-hire-plc-engineers-uk-fast",
+      "top-10-plc-programming-skills-employers-want-2026",
+    ],
+    content: `Allen-Bradley sits second to Siemens in UK installed base, but in three sectors it is dominant: automotive, FMCG, and food and beverage. If you operate a Rockwell estate, you already know that finding Studio 5000 engineers who genuinely know what they are doing is harder than the recruitment market suggests. This guide explains why, what to screen for, and what to pay in 2026.
+
+## Why UK Rockwell Roles Are Harder to Fill Than Siemens
+
+The UK Allen-Bradley talent pool is roughly 60% the size of the Siemens pool. Two reasons:
+
+1. **Training pipeline.** UK colleges and apprenticeships have historically taught more Siemens. Younger engineers gravitate toward TIA Portal.
+2. **Industry concentration.** Rockwell strength is concentrated in automotive (JLR, BMW Hams Hall, Nissan Sunderland), large FMCG sites, and pharma packaging. If your site is not within 90 minutes of one of those clusters, the local pool is small.
+
+The consequence: Rockwell roles routinely sit open for 10 to 14 weeks through generic recruitment channels. The candidates who do apply often padded their CV with one Studio 5000 training course and no production project experience.
+
+## What to Screen For (Beyond the CV)
+
+Generic "Rockwell experience" filters miss the candidates who can actually deliver. The questions that predict on-the-job performance are platform-specific and scenario-based:
+
+- "Which Studio 5000 version did you most recently commission on, and how did you handle the firmware revision lock?"
+- "Walk me through a ControlLogix to CompactLogix migration where you preserved Add-On Instructions and UDTs."
+- "How do you diagnose a slow scan on a production ControlLogix L8 with 12 partial-import routines?"
+- "Describe how you would architect FactoryTalk View SE for a 200-screen distributed system with redundant HMI servers."
+- "What is your approach to EtherNet/IP topology when adding a Stratix 5700 to an existing PRP ring?"
+
+A candidate who can answer these clearly has done real Rockwell work. A candidate who pivots to generic PLC theory has not.
+
+## UK Market Rates 2026
+
+| Role | Permanent Salary | Day Rate (Inside IR35) |
+|------|------------------|------------------------|
+| Rockwell Engineer (Mid) | £42,000 to £52,000 | £325 to £400 |
+| Rockwell Engineer (Senior) | £52,000 to £68,000 | £400 to £475 |
+| ControlLogix Lead | £68,000 to £82,000 | £475 to £575 |
+| GuardLogix Safety Specialist | £58,000 to £80,000 | £450 to £575 |
+| PlantPAx DCS Engineer | £62,000 to £85,000 | £500 to £625 |
+
+Automotive contract rates run 5 to 10% higher than the table due to shutdown pressure. Pharmaceutical Rockwell roles attract a similar premium for GAMP 5 documentation experience.
+
+## Specialism Splintering
+
+Rockwell engineers are not interchangeable. Make sure your spec is specific:
+
+- **ControlLogix vs CompactLogix.** Architecture and licensing differ. A CompactLogix specialist may not be productive on a redundant ControlLogix L8.
+- **FactoryTalk View ME vs SE.** ME is for local panel-mount HMIs. SE is the distributed SCADA product. They are different skills.
+- **GuardLogix safety.** Requires understanding of SIL determination, TÜV certification, and ISO 13849 documentation.
+- **PlantPAx.** Rockwell's process automation system. Larger architecture, different work cadence, used in pharma and oil and gas.
+- **Kinetix motion.** Servo and motion specialism, often combined with packaging or printing applications.
+
+If your role needs PlantPAx and you advertise for "Rockwell engineer," you will mostly receive ControlLogix CVs.
+
+## Common UK Rockwell Industries We Place Engineers Into
+
+- Automotive (welding lines, body shop, paint shop, final assembly)
+- Pharmaceutical packaging (high-speed bottle and blister)
+- Food and beverage (palletising, case packing, brewing, dairy)
+- FMCG (high-volume filling and packaging)
+- Logistics and warehousing (sortation, conveyor control)
+- Energy and renewables (battery manufacturing lines)
+
+## Where the Time Is Lost in a 12-Week Hiring Cycle
+
+A standard UK Rockwell hiring cycle through a generic agency typically breaks down as:
+
+- Job specification and approval: 1 week
+- Agency scoping and CV trawl: 2 weeks
+- CV submission and review: 2 weeks
+- First-round interviews: 2 weeks
+- Technical assessment: 1 to 2 weeks
+- Final interview and offer: 1 week
+- Notice period: 4 to 8 weeks
+
+The biggest time loss is in the CV throughput and assessment phase. Compress that and you compress the whole cycle.
+
+## How OSCABE Fills Rockwell Roles in Under 14 Days
+
+We maintain a pool of more than 1,800 pre-screened Rockwell engineers across UK and remote talent. Each candidate has been:
+
+- **Technically verified by a Senior Engineer** on Studio 5000, ControlLogix, CompactLogix, and where relevant GuardLogix and PlantPAx
+- **Assessed on a real project task** during onboarding, not on multiple-choice questions
+- **Reference-checked** with previous UK or European employers
+- **Trained on UK regulatory expectations** for the target industry
+
+When a role comes in, we are matching against verified candidates, not starting from scratch. The first shortlist arrives within 72 hours.
+
+## Consider Remote Rockwell Engineers for Software-Heavy Phases
+
+Modern Rockwell development is largely software-based. Studio 5000 Emulate, FactoryTalk Logix Emulate, and Rockwell Cloud Engineering Hub let teams develop and validate ControlLogix and CompactLogix code without on-site hardware. We routinely place [remote Rockwell engineers](/remote-engineers) at 30 to 40% of UK contractor cost for the development phase, with on-site UK presence reserved for FAT, SAT, and commissioning.
+
+For a 12-week project requiring one senior Rockwell engineer:
+
+| Model | Cost |
+|-------|------|
+| UK day-rate contractor at £450/day | £27,000 plus VAT |
+| Remote engineer plus 2 weeks UK commissioning | £10,500 to £14,000 |
+
+## A Typical OSCABE Rockwell Engagement
+
+1. **Day 0** - You [post a role](/post-a-role) describing Studio 5000 version, industry, and location.
+2. **Day 1** - We come back with three to five Engineer-verified candidates.
+3. **Days 2 to 7** - You interview your shortlist.
+4. **Days 8 to 14** - Offer accepted. Average time to accepted offer is 12 days for Rockwell roles.
+
+## Next Steps
+
+If your Rockwell role has been open for more than four weeks, it is worth a conversation. We will tell you honestly whether your budget will fill the role, what the realistic timeline is, and which model (permanent, contract, or remote) makes most sense.
+
+[Post a Rockwell role](/post-a-role) or [contact our team](/contact) for a free consultation. Initial calls are free and there is no obligation.`,
+  },
+  {
+    slug: "hire-ot-cybersecurity-engineers-uk-iec-62443-nis2",
+    title:
+      "Hire OT & Industrial Cybersecurity Engineers in the UK: IEC 62443, NIS 2 & Cyber Resilience Hiring Guide",
+    excerpt:
+      "Why the NIS 2 Directive and Cyber Resilience Act are driving an OT cybersecurity hiring crunch in 2026, what to screen for, and how to tell genuine ICS security engineers from repurposed IT consultants.",
+    category: "Industry",
+    date: "2026-05-21",
+    readTime: "7 min read",
+    image:
+      "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&h=450&fit=crop",
+    imageAlt: "OT cybersecurity engineer reviewing IEC 62443 network segmentation",
+    author: "Joseph Brijin Chacko",
+    authorTitle: "Founder & Director, OSCABE",
+    keywords: [
+      "hire OT cybersecurity engineer UK",
+      "industrial cybersecurity recruitment",
+      "IEC 62443 specialist UK",
+      "NIS 2 compliance engineer",
+      "ICS security engineer hire",
+      "SCADA cybersecurity UK",
+    ],
+    metaTitle:
+      "Hire OT Cybersecurity Engineers UK 2026: IEC 62443 & NIS 2 | OSCABE",
+    metaDescription:
+      "UK OT and industrial cybersecurity hiring guide for 2026. IEC 62443, NIS 2, Cyber Resilience Act, salary benchmarks, and screening questions that catch repurposed IT consultants.",
+    ctaText: "Post a Cybersecurity Role",
+    ctaHref: "/post-a-role",
+    relatedSlugs: [
+      "uk-manufacturers-struggling-hire-automation-engineers",
+      "hire-scada-engineers-uk-ignition-aveva-factorytalk",
+      "automation-engineer-salary-guide-uk-2026",
+    ],
+    content: `Two regulatory shifts have created a UK OT cybersecurity hiring crunch in 2026: the NIS 2 Directive (which the UK has aligned with through the upcoming Cyber Security and Resilience Bill) and the EU Cyber Resilience Act for products sold into Europe. Both push real, audited industrial cybersecurity controls into manufacturing, utilities, energy, transport, and healthcare. The result: every UK operator of essential services now needs OT cybersecurity capability, and most cannot find it.
+
+This guide explains what genuine OT cybersecurity competence looks like, where to find it, and what to pay.
+
+## OT Cybersecurity Is Not IT Cybersecurity
+
+The single most expensive recruitment mistake in 2026 is hiring an IT security consultant for an OT role. The two disciplines overlap but the skills, mindset, and constraints are fundamentally different.
+
+| Dimension | IT Security | OT Security |
+|-----------|-------------|-------------|
+| Priority order | Confidentiality, Integrity, Availability | Safety, Availability, Integrity, Confidentiality |
+| Patch cadence | Weekly or daily | Quarterly or annually, after change control |
+| Asset lifecycle | 3 to 5 years | 15 to 25 years |
+| Acceptable downtime | Scheduled maintenance | Minimal to none, even for security |
+| Reference standard | ISO 27001, NIST CSF | IEC 62443, NIST 800-82, ISA-99 |
+| Threat model focus | Data exfiltration | Process disruption, safety compromise |
+
+A candidate who treats an HMI like a workstation, or who proposes monthly patch cycles for a 25-year-old PLC, has not done OT work.
+
+## What to Screen For
+
+Real OT cybersecurity engineers can talk through:
+
+- "Explain Purdue Model levels 0 to 5 and where you would place an IEC 62443 conduit boundary in a typical food and beverage site."
+- "How do you handle credential rotation on legacy Modicon Quantum or S5 controllers that do not support modern auth?"
+- "Describe your last asset discovery exercise. What tooling did you use and why not just Nessus?"
+- "Walk me through a SIL-rated safety system architecture and how you would assess its cybersecurity exposure under IEC 62443-3-3."
+- "What is your view on IDS placement in OT networks? Span ports, network taps, or in-line?"
+
+Candidates who quickly reach for "I would just deploy an EDR agent" are IT consultants in OT clothing.
+
+## UK Salary and Day-Rate Benchmarks 2026
+
+OT cybersecurity is one of the best-paid specialisms in industrial engineering today. The supply-demand gap drives premium rates.
+
+| Role | Permanent Salary | Day Rate (Inside IR35) |
+|------|------------------|------------------------|
+| OT Security Analyst (Mid) | £52,000 to £68,000 | £450 to £550 |
+| OT Security Engineer (Senior) | £68,000 to £90,000 | £550 to £700 |
+| OT Security Architect | £90,000 to £125,000 | £700 to £900 |
+| OT SOC Lead | £85,000 to £115,000 | £650 to £825 |
+| ICS Penetration Tester | £75,000 to £105,000 | £600 to £850 |
+
+Defence, nuclear, and CNI roles add 10 to 25% for SC or DV clearance.
+
+## Where the Demand Is Coming From in 2026
+
+The hiring pressure is concentrated in five UK sectors:
+
+1. **Water utilities** - NIS 2 designation, Ofwat scrutiny, and recent high-profile incidents at peers
+2. **Energy and grid** - Increasing renewables connection points, IEC 61850 substation modernisation
+3. **Pharmaceutical and life sciences** - GAMP 5 plus FDA 21 CFR Part 11 plus IEC 62443 overlap
+4. **Food and beverage** - Insurance underwriting now requires demonstrable OT controls
+5. **Manufacturing OEMs** - Cyber Resilience Act compliance for products shipped into the EU
+
+If you operate in any of these, the talent market is moving against you. Roles open for over three months are now common.
+
+## What "Engineer-Verified" Means for OT Security
+
+We use Senior Engineers with field experience to screen candidates, not generic recruiters. Every OT security candidate at OSCABE is assessed on:
+
+- **IEC 62443** practical application across levels (62443-2-1, 62443-3-2, 62443-3-3, 62443-4-1)
+- **NIS 2 / NIS Regulations** mapping to operational controls
+- **Asset inventory and segmentation** approach in mixed-vendor environments
+- **Vendor experience** with Claroty, Nozomi, Dragos, Tenable OT, or equivalent
+- **Incident response** experience on real OT events, not table-top exercises
+- **Safety system integration** under IEC 61511 alongside cybersecurity controls
+- **Documentation discipline** for audit and regulatory examination
+
+Only Tier 1 and Tier 2 candidates reach client shortlists.
+
+## How to Engage OSCABE for OT Cybersecurity Recruitment
+
+1. **Tell us what you need.** Sector, plant scale, IEC 62443 SL target, clearance, location.
+2. **We deliver a shortlist in 72 hours.** Three to five Engineer-verified candidates.
+3. **You interview.** Every candidate genuinely matches your requirements.
+4. **You hire with confidence.** Average time to placement is 18 days for OT security roles.
+
+There are no upfront fees and no retainers. You only pay when you successfully hire.
+
+## Consider Remote OT Cybersecurity Engineers for Assessment Phases
+
+Asset inventory, network architecture review, IEC 62443 gap assessments, and documentation work can be done remotely under controlled access. On-site presence is needed for physical audits, IDS deployment, and incident response. We place [remote OT cybersecurity engineers](/remote-engineers) for assessment and documentation phases at 35 to 50% of UK contractor cost, with on-site UK engineers brought in for the active deployment phase.
+
+## Common OT Cybersecurity Hiring Mistakes
+
+- **Hiring on certification alone.** GICSP, ISA/IEC 62443 Cybersecurity Expert, and similar credentials confirm knowledge but not project judgement. Screen for both.
+- **Treating IT security CVs as OT-ready.** A CISSP without OT field experience is a high-risk hire.
+- **Underweighting safety system knowledge.** Modern OT security cannot ignore IEC 61511 functional safety overlap.
+- **Ignoring regulatory deadlines.** NIS 2 compliance dates and Cyber Resilience Act timelines should drive hiring urgency.
+
+## Next Steps
+
+If you have an OT cybersecurity role open and the standard recruitment channels are returning IT-only candidates, it is worth a conversation. We will tell you honestly whether your scope, budget, and timeline are realistic, and what the right hiring model looks like.
+
+[Post an OT cybersecurity role](/post-a-role) or [contact our team](/contact) for a free consultation.`,
+  },
+  {
+    slug: "hire-functional-safety-engineers-uk-iec-61508",
+    title:
+      "Hire Functional Safety Engineers in the UK: IEC 61508, 61511 & TÜV CFSE Specialists",
+    excerpt:
+      "Why functional safety engineers attract a 15 to 25% salary premium in the UK, what TÜV certification actually means, and how to find SIL-competent engineers without a 16-week wait.",
+    category: "Industry",
+    date: "2026-05-20",
+    readTime: "6 min read",
+    image:
+      "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=800&h=450&fit=crop",
+    imageAlt: "Functional safety engineer documenting a SIL 3 safety instrumented function",
+    author: "Joseph Brijin Chacko",
+    authorTitle: "Founder & Director, OSCABE",
+    keywords: [
+      "hire functional safety engineer UK",
+      "IEC 61508 specialist UK",
+      "IEC 61511 SIS engineer",
+      "TÜV CFSE engineer hire",
+      "SIL determination consultant",
+      "functional safety recruitment UK",
+    ],
+    metaTitle:
+      "Hire Functional Safety Engineers UK 2026: IEC 61508, 61511, TÜV | OSCABE",
+    metaDescription:
+      "UK functional safety hiring guide for 2026. IEC 61508, 61511, 62061 specialists, TÜV CFSE certification, SIL determination, salary premium, and verified shortlists.",
+    ctaText: "Get a Shortlist in 72 Hours",
+    ctaHref: "/post-a-role",
+    relatedSlugs: [
+      "hire-siemens-tia-portal-engineer-uk-fast",
+      "hire-allen-bradley-rockwell-engineers-uk",
+      "top-10-plc-programming-skills-employers-want-2026",
+    ],
+    content: `Functional safety engineers are among the hardest people to recruit in UK industry. They sit at the intersection of electrical, instrumentation, software, and risk engineering, and the certification path takes years. The UK pool of genuinely competent IEC 61508 and IEC 61511 practitioners is small, and demand from oil and gas, pharma, chemicals, nuclear, rail, and battery manufacturing has never been higher.
+
+This guide explains how to find them, what to pay, and how to screen for genuine competence.
+
+## What Functional Safety Engineers Actually Do
+
+The job spans the entire safety lifecycle:
+
+- **Hazard and Operability Studies (HAZOP)** participation and follow-through
+- **Layers of Protection Analysis (LOPA)** to determine required SIL levels
+- **Safety Instrumented Function (SIF) design** using sensors, logic solvers, and final elements
+- **Safety PLC programming** on Siemens F-CPU, Rockwell GuardLogix, HIMA HIMatrix, Triconex, or Yokogawa ProSafe
+- **Failure rate calculations** using PFDavg, PFH, and Beta-factor methods
+- **Proof testing schedules** and procedures
+- **Safety Requirement Specifications (SRS)** writing and version control
+- **Functional Safety Assessments (FSA)** at each lifecycle stage
+- **Documentation** to audit and regulatory standards
+
+A "PLC programmer with some safety experience" is not a functional safety engineer. The distinction matters when HSE or regulators audit your operation.
+
+## UK Salary and Day-Rate Benchmarks 2026
+
+The supply-demand gap drives a 15 to 25% premium over standard PLC engineers. Day rates for SIS specialists are some of the highest in industrial engineering.
+
+| Role | Permanent Salary | Day Rate (Inside IR35) |
+|------|------------------|------------------------|
+| Functional Safety Engineer (Mid) | £55,000 to £68,000 | £475 to £575 |
+| Functional Safety Engineer (Senior) | £68,000 to £85,000 | £575 to £700 |
+| Functional Safety Lead | £85,000 to £105,000 | £700 to £850 |
+| TÜV CFSE Specialist | £75,000 to £100,000 | £650 to £825 |
+| SIS Architect (oil and gas) | £95,000 to £130,000 | £775 to £950 |
+
+Oil and gas, nuclear, and rail roles attract additional clearance or industry premiums.
+
+## Understanding TÜV and Other Certifications
+
+Buyers often see "TÜV certified" on a CV and treat it as a single credential. It is not. There are several distinct certifications:
+
+- **TÜV Rheinland CFSE (Certified Functional Safety Expert)** - the highest practical credential, requires significant project experience and a four-day exam
+- **TÜV Rheinland FS Engineer** - mid-level credential, broader pool
+- **TÜV SÜD FSCP / FSCE** - alternative recognised programme
+- **exida CFSE / CFSP** - widely accepted in oil and gas, equivalent rigour to TÜV
+- **IFSP (International Functional Safety Practitioner)** - newer programme, growing recognition
+
+A candidate listing "TÜV" without specifying the certification is usually trading on ambiguity. Ask for the exact title and certificate number.
+
+## What to Screen For (Beyond the Certificate)
+
+The screening questions that predict on-the-job performance are scenario-based:
+
+- "Walk me through a LOPA exercise where the initial SIL target was different from the final implemented SIL. What changed and why?"
+- "How do you handle a 1oo2 voted final element when the failure mode of each device is different?"
+- "Describe your last proof test schedule. What drove the interval, and how did you defend it to the regulator?"
+- "Explain how you handle Common Cause Failure in a triplicated logic solver architecture."
+- "What is your approach to managing SIS during a turnaround when permit-to-work systems intersect with safety lifecycle?"
+
+A candidate who can answer these has done the work. A candidate who reaches for textbook definitions has not.
+
+## Industries Driving 2026 Demand
+
+- **Oil, gas, and petrochemicals** - turnaround peaks, ageing assets, IEC 61511 lifecycle reviews
+- **Pharmaceutical** - GAMP 5 plus IEC 61511 overlap, biopharma fermentation safety
+- **Chemicals and process** - COMAH compliance, HSE major incident scrutiny
+- **Nuclear** - new build (Hinkley, Sizewell), decommissioning safety
+- **Battery manufacturing** - emerging UK gigafactory pipeline, hazardous process safety
+- **Rail** - CENELEC EN 50126, 50128, 50129 compliance
+- **Energy infrastructure** - hydrogen, CCUS, large heat pumps
+
+If you operate in any of these, expect a 12 to 16-week recruitment cycle through generic agencies. OSCABE delivers a verified shortlist in 72 hours from a pool of 900-plus functional safety specialists across UK and remote talent.
+
+## Where the Time Is Lost in a 16-Week Hiring Cycle
+
+A standard UK functional safety hiring cycle typically breaks down as:
+
+- Job specification and approval: 2 weeks
+- Agency search and CV trawl: 3 weeks
+- CV submission and review: 2 weeks
+- First-round interviews: 2 weeks
+- Technical assessment: 2 weeks
+- Reference and certification verification: 1 week
+- Offer and notice period: 4 to 8 weeks
+
+The biggest waste is in CV trawl and certification verification. We hold pre-screened TÜV and exida certificate copies on file for every candidate.
+
+## What "Engineer-Verified" Means for Functional Safety
+
+We use Senior Engineers with field experience to screen candidates. Every functional safety candidate at OSCABE is assessed on:
+
+- **Lifecycle phase competence** across analysis, realisation, and operation
+- **Standard fluency** in IEC 61508, IEC 61511, IEC 62061, ISO 13849, and where relevant EN 50129
+- **Logic solver experience** on Siemens F-CPU, GuardLogix, HIMA, Triconex, ProSafe, or equivalent
+- **Documentation discipline** for HAZOP, LOPA, SRS, SIL verification, and FSA reports
+- **Certification verification** including direct copies of TÜV or exida certificates
+- **Sector experience** matched to your industry
+
+Only Tier 1 and Tier 2 candidates reach client shortlists.
+
+## Consider Remote Functional Safety Engineers for Analysis Phases
+
+LOPA, SIL determination, SRS writing, PFDavg calculations, and documentation review can be done remotely. On-site presence is needed for HAZOP facilitation, FAT, SAT, and proof test execution. We place [remote functional safety engineers](/remote-engineers) for analysis and documentation phases at 40 to 55% of UK contractor cost.
+
+## A Typical OSCABE Functional Safety Engagement
+
+1. **Day 0** - You [post a role](/post-a-role) describing standard (61508, 61511, 62061), sector, and clearance.
+2. **Day 1** - We come back with three to five Engineer-verified candidates with certificate verification attached.
+3. **Days 2 to 10** - You interview your shortlist.
+4. **Days 11 to 18** - Offer accepted. Average time to accepted offer is 16 days for functional safety roles.
+
+## Next Steps
+
+If you have a functional safety role that has been open for more than six weeks, it is worth a conversation. We will tell you honestly whether your budget will fill the role, what the realistic timeline is, and which model (permanent, contract, or remote) suits your project.
+
+[Post a functional safety role](/post-a-role) or [contact our team](/contact) for a free consultation. Initial calls are free and there is no obligation.`,
+  },
+  {
     slug: "remote-plc-engineers-uk-hiring-guide-2026",
     title: "Remote PLC Engineers in the UK: Complete Hiring Guide for 2026",
     excerpt:
