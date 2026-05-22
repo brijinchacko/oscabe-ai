@@ -844,3 +844,54 @@ model Booking {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }
+
+// ======== REMOTE ENGINEER PORTAL ========
+// Net-new models for the public-facing engineer portal.
+// Additive only - existing models untouched.
+
+model EngineerProfile {
+  id              String   @id @default(cuid())
+  slug            String   @unique
+  displayName     String   // First name + last initial only: "Rajesh M."
+  title           String   // e.g. "Senior PLC & SCADA Engineer"
+  bio             String?
+  location        String   // e.g. "Bangalore, India"
+  seniority       String   // e.g. "9 years"
+  seniorityBucket String   // "3-5" | "5-8" | "8+" | "lead"
+  category        String   // RoleCategory enum value
+  platforms       String   // JSON-encoded string array
+  industries      String   // JSON-encoded string array
+  availability    String   // "available" | "2-weeks" | "part-time"
+  availableFrom   String?  // Display string for available date
+  monthlyRateLow  Int      // GBP
+  monthlyRateHigh Int      // GBP
+  ukOverlap       String?  // e.g. "9am-2pm UK daily"
+  timezone        String?  // e.g. "IST (GMT+5:30)"
+  verified        Boolean  @default(false)
+  featured        Boolean  @default(false)
+  isPublished     Boolean  @default(false)
+  photoUrl        String?
+  videoUrl        String?
+  avatarInitials  String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model EngagementRequest {
+  id              String   @id @default(cuid())
+  type            String   // "engineer-request" | "general-requirement" | "call-request"
+  engineerSlug    String?
+  companyName     String
+  contactName     String
+  contactEmail    String
+  contactPhone    String?
+  roleTitle       String?
+  platforms       String?  // Free-text or JSON
+  startDate       String?
+  duration        String?  // "short-term" | "long-term" | "part-time"
+  message         String?
+  status          String   @default("new") // "new" | "contacted" | "qualified" | "closed"
+  source          String?  // Originating page path
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}

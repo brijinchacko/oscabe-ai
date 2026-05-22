@@ -8,10 +8,12 @@ import {
 } from "@/lib/constants";
 
 const PLATFORM_LINKS = [
+  { label: "Browse Engineers", href: "/engineers" },
+  { label: "How It Works", href: "/how-it-works" },
+  { label: "Pricing", href: "/pricing" },
   { label: "Remote Engineers", href: "/remote-engineers" },
   { label: "How We Vet", href: "/how-we-vet" },
   { label: "How We Deliver", href: "/how-we-deliver" },
-  { label: "Remote Pricing", href: "/remote-engineers/pricing" },
   { label: "UK Recruitment", href: "/uk-recruitment" },
   { label: "Post a Role", href: "/post-a-role" },
 ];

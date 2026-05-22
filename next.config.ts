@@ -75,6 +75,11 @@ const nextConfig: NextConfig = {
       { source: "/wpr_job_listing/data-verification/", destination: "/jobs", permanent: true },
       { source: "/wpr_job_listing/mail-convertor", destination: "/jobs", permanent: true },
       { source: "/wpr_job_listing/mail-convertor/", destination: "/jobs", permanent: true },
+      // Remote Engineer Portal aliases
+      { source: "/hire", destination: "/engineers", permanent: false },
+      { source: "/portal", destination: "/engineers", permanent: true },
+      { source: "/browse", destination: "/engineers", permanent: true },
+      { source: "/remote-engineers/how-it-works", destination: "/how-it-works", permanent: true },
     ];
   },
 };

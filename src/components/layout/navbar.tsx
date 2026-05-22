@@ -33,14 +33,14 @@ const MODE_CONFIG: Record<SiteMode, {
     icon: Building2,
     color: "#4540DB",
     nav: [
-      { label: "Remote Engineers", href: "/remote-engineers" },
+      { label: "Browse Engineers", href: "/engineers" },
+      { label: "How It Works", href: "/how-it-works" },
+      { label: "Pricing", href: "/pricing" },
       { label: "UK Recruitment", href: "/uk-recruitment" },
       { label: "Specialisms", href: "/specialisms" },
-      { label: "Case Studies", href: "/case-studies" },
-      { label: "AI Platform", href: "/ai-platform" },
       { label: "About", href: "/about" },
     ],
-    cta: { label: "Book a Call", href: "/contact" },
+    cta: { label: "Browse Engineers", href: "/engineers" },
   },
   candidates: {
     label: "For Candidates",
