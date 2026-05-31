@@ -44,8 +44,8 @@ next-env.d.ts
 
 # Local files
 dev.db
-Awards/
-Logo/
+/Awards/
+/Logo/
 .claude/
 prisma/dev.db
 dev.db
